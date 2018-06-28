@@ -60,14 +60,11 @@ namespace VRInteraction
 					var oldJointHold = holdType.enumValueIndex;
 					holdType.enumValueIndex = (int)(VRInteractableItem.HoldType)EditorGUILayout.EnumPopup("Hold Type", (VRInteractableItem.HoldType)holdType.enumValueIndex);
 					if (oldJointHold != holdType.enumValueIndex) changed = true;
-					if ((VRInteractableItem.HoldType)holdType.enumValueIndex == VRInteractableItem.HoldType.FIXED_POSITION)
+					if (GUILayout.Button("Setup Held Position"))
 					{
-						if (GUILayout.Button("Setup Held Position"))
-						{
-							HeldPositionWindow newWindow = (HeldPositionWindow)EditorWindow.GetWindow(typeof(HeldPositionWindow), true, "Held Position", true);
-							newWindow.interactableItem = (VRInteractableItem)interactableItem.targetObject;
-							newWindow.Init();
-						}
+						HeldPositionWindow newWindow = (HeldPositionWindow)EditorWindow.GetWindow(typeof(HeldPositionWindow), true, "Held Position", true);
+						newWindow.interactableItem = (VRInteractableItem)interactableItem.targetObject;
+						newWindow.Init();
 					}
 
 					SerializedProperty followForce = interactableItem.FindProperty("followForce");
@@ -95,6 +92,13 @@ namespace VRInteraction
 					var oldToggleToPickup = toggleToPickup.boolValue;
 					toggleToPickup.boolValue = false;
 					if (toggleToPickup.boolValue != oldToggleToPickup) changed = true;
+
+					if (GUILayout.Button("Setup Held Position"))
+					{
+						HeldPositionWindow newWindow = (HeldPositionWindow)EditorWindow.GetWindow(typeof(HeldPositionWindow), true, "Held Position", true);
+						newWindow.interactableItem = (VRInteractableItem)interactableItem.targetObject;
+						newWindow.Init();
+					}
 				}
 
 				SerializedProperty useBreakDistance = interactableItem.FindProperty("useBreakDistance");

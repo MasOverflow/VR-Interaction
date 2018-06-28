@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Callbacks;
+using UnityEngine.SceneManagement;
+using UnityEditor.SceneManagement;
 
 public class DependencyChecker : EditorWindow
 {
@@ -60,6 +62,14 @@ public class DependencyChecker : EditorWindow
 		if (doingNothing)
 		{
 			ClearProgressBar();
+		} else
+		{
+			string weaponFolderPath = "Assets/VRWeaponInteractor";
+			if (AssetDatabase.IsValidFolder(weaponFolderPath)) AssetDatabase.ImportAsset(weaponFolderPath, ImportAssetOptions.ImportRecursive);	
+			string teleportFolderPath = "Assets/VRArcTeleporter";
+			if (AssetDatabase.IsValidFolder(teleportFolderPath)) AssetDatabase.ImportAsset(teleportFolderPath, ImportAssetOptions.ImportRecursive);
+			string userInterfaceFolderPath = "Assets/VRUserInterfaces";
+			if (AssetDatabase.IsValidFolder(userInterfaceFolderPath)) AssetDatabase.ImportAsset(userInterfaceFolderPath, ImportAssetOptions.ImportRecursive);
 		}
 		if (action != "") Debug.Log(action);
 		if (!hasOculusSDK && !hasSteamVR)
