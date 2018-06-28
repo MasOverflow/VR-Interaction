@@ -34,3 +34,7 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+Assets/Plugins/RootMotion/
+Assets/Plugins/RootMotion.meta
+Assets/VRInteraction/Integration/FinalIK/
+Assets/VRInteraction/Integration/FinalIK.meta
