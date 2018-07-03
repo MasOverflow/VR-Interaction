@@ -653,7 +653,7 @@ namespace VRInteraction
 				#if Int_Oculus
 				if (!isSteamVR())
 				{
-					return OVRInput.Get(OVRInput.Button.Three, controllerHand);
+					return OVRInput.Get(OVRInput.Button.One, controllerHand);
 				}
 				#endif
 				return false;
