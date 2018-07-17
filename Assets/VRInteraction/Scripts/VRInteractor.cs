@@ -94,6 +94,7 @@ namespace VRInteraction
 				if (!vrInput.isSteamVR())
 				{
 					if (_vrRigRoot == null) _vrRigRoot = GetComponentInParent<OvrAvatar>().transform;
+					if (_vrRigRoot.parent != null) _vrRigRoot = _vrRigRoot.parent;
 					return _vrRigRoot;
 				}
 				#endif
@@ -480,7 +481,10 @@ namespace VRInteraction
 			VRInteractableItem item = null;
 			if (heldItem != null) item = heldItem;
 			else if (hoverItem != null) item = hoverItem;
-			if (item != null) item.gameObject.SendMessage(method, this, SendMessageOptions.DontRequireReceiver);
+			if (item != null && item.CanAcceptMethod(method))
+			{
+				item.gameObject.SendMessage(method, this, SendMessageOptions.DontRequireReceiver);
+			}
 		}
 	}
 

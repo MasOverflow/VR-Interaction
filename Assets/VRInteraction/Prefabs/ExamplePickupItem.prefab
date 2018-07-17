@@ -97,7 +97,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1543637538443550}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.1778, y: 0.898, z: -0.365}
+  m_LocalPosition: {x: -0.1742, y: 1.0704, z: -0.365}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4737331906039034}
@@ -217,10 +217,14 @@ MonoBehaviour:
   triggerColliders: []
   leftHandIKAnchor: {fileID: 0}
   rightHandIKAnchor: {fileID: 0}
+  leftHandIKPoseName: 
+  rightHandIkPoseName: 
   parents: []
   canBeHeld: 1
   interactionDisabled: 0
   holdType: 1
+  useBreakDistance: 0
+  breakDistance: 0.1
   linkedLeftAndRightHeldPositions: 1
   heldPosition: {x: 0, y: 0, z: 0}
   heldRotation: {x: 0, y: 0, z: 0, w: 1}

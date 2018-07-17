@@ -43,6 +43,8 @@ namespace VRInteraction
 		public List<Collider> triggerColliders = new List<Collider>();
 		public Transform leftHandIKAnchor;
 		public Transform rightHandIKAnchor;
+		public string leftHandIKPoseName;
+		public string rightHandIkPoseName;
 
 		//Set parent if this item can't be interacted with unless the parent is being held
 		public List<VRInteractableItem> parents = new List<VRInteractableItem>();
@@ -74,6 +76,7 @@ namespace VRInteraction
 		public UnityEvent dropEvent;
 
 		//Sounds
+		public AudioSource audioSource;
 		public AudioClip enterHover;
 		public AudioClip exitHover;
 		public AudioClip pickupSound;
@@ -333,13 +336,12 @@ namespace VRInteraction
 					break;
 				}
 
-				CheckIK(true, hand);
-
 				if (Vector3.Distance(hand.getControllerAnchorOffset.position, item.position) < interactionDistance)
 					PlaySound(pickupSound);
 				else PlaySound(forceGrabSound, hand.getControllerAnchorOffset.position);
 			}
 			if (pickupEvent != null) pickupEvent.Invoke();
+			CheckIK(true, hand);
 			heldBy = hand;
 			return true;
 		}
@@ -418,9 +420,9 @@ namespace VRInteraction
 					if (controllerBody != null) Destroy(controllerBody);
 					break;
 				}
-				CheckIK(false, hand);
 				PlaySound(dropSound);
 			}
+			CheckIK(false, hand);
 			if (dropEvent != null) dropEvent.Invoke();
 			heldBy = null;
 		}
@@ -479,8 +481,22 @@ namespace VRInteraction
 			{
 				Transform handIKAnchor = hand.vrInput.LeftHand ? leftHandIKAnchor : rightHandIKAnchor;
 				if (handIKAnchor != null) hand.SetIKTarget(handIKAnchor);
+				if ((hand.vrInput.LeftHand && leftHandIKPoseName != "") ||
+					(!hand.vrInput.LeftHand && rightHandIkPoseName != ""))
+				{
+					//	Method is in HandPoseController.cs, found in the FinalIK integrations folder (make sure to open the FinalIK package in VRInteraction first).
+					hand.GetVRRigRoot.BroadcastMessage(hand.vrInput.LeftHand ? "ApplyPoseLeftHand" : "ApplyPoseRightHand", hand.vrInput.LeftHand ? leftHandIKPoseName : rightHandIkPoseName, SendMessageOptions.DontRequireReceiver);
+				}
 			} else
+			{
 				hand.SetIKTarget(null);
+				if ((hand.vrInput.LeftHand && leftHandIKPoseName != "") ||
+					(!hand.vrInput.LeftHand && rightHandIkPoseName != ""))
+				{
+					//	Method is in HandPoseController.cs, found in the FinalIK integrations folder (make sure to open the FinalIK package in VRInteraction first).
+					hand.GetVRRigRoot.BroadcastMessage("ClearPose", hand.vrInput.LeftHand, SendMessageOptions.DontRequireReceiver);
+				}
+			}
 		}
 
 		virtual public Vector3 GetControllerPosition(VRInteractor hand)
@@ -776,7 +792,12 @@ namespace VRInteraction
 		public void PlaySound(AudioClip clip, Vector3 worldPosition)
 		{
 			if (clip == null) return;
-			AudioSource.PlayClipAtPoint(clip, worldPosition);
+			if (audioSource != null) 
+			{
+				audioSource.clip = clip;
+				audioSource.Play();
+			} else
+				AudioSource.PlayClipAtPoint(clip, worldPosition);
 		}
 	}
 

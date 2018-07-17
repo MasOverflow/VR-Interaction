@@ -53,7 +53,6 @@ namespace VRInteraction
 				}
 
 				SerializedProperty canBeHeld = interactableItem.FindProperty("canBeHeld");
-				SerializedProperty toggleToPickup = interactableItem.FindProperty("toggleToPickup");
 				if (showPickupVars)
 				{
 					SerializedProperty holdType = interactableItem.FindProperty("holdType");
@@ -80,18 +79,11 @@ namespace VRInteraction
 					var oldCanBeHeld = canBeHeld.boolValue;
 					EditorGUILayout.PropertyField(canBeHeld);
 					if (canBeHeld.boolValue != oldCanBeHeld) changed = true;
-
-					var oldToggleToPickup = toggleToPickup.boolValue;
-					toggleToPickup.boolValue = EditorGUILayout.Toggle("Toggle To Pickup", toggleToPickup.boolValue);
-					if (toggleToPickup.boolValue != oldToggleToPickup) changed = true;
 				} else
 				{
 					var oldCanBeHeld = canBeHeld.boolValue;
 					canBeHeld.boolValue = false;
 					if (canBeHeld.boolValue != oldCanBeHeld) changed = true;
-					var oldToggleToPickup = toggleToPickup.boolValue;
-					toggleToPickup.boolValue = false;
-					if (toggleToPickup.boolValue != oldToggleToPickup) changed = true;
 
 					if (GUILayout.Button("Setup Held Position"))
 					{
@@ -100,6 +92,11 @@ namespace VRInteraction
 						newWindow.Init();
 					}
 				}
+
+				SerializedProperty toggleToPickup = interactableItem.FindProperty("toggleToPickup");
+				var oldToggleToPickup = toggleToPickup.boolValue;
+				toggleToPickup.boolValue = EditorGUILayout.Toggle("Toggle To Pickup", toggleToPickup.boolValue);
+				if (toggleToPickup.boolValue != oldToggleToPickup) changed = true;
 
 				SerializedProperty useBreakDistance = interactableItem.FindProperty("useBreakDistance");
 				string breakDistanceTooltip = "If the distance between the controller and held position is greater than " +
@@ -282,6 +279,9 @@ namespace VRInteraction
 			soundsFoldout.boolValue = EditorGUILayout.Foldout(soundsFoldout.boolValue, "Sounds");
 			if (!soundsFoldout.boolValue) return;
 
+			SerializedProperty audioSource = interactableItem.FindProperty("audioSource");
+			GUIContent audioSourceContent = new GUIContent("Audio Source", "Optionally specify and audio source, if left null will use AudioSource.PlayClipAtPoint");
+			EditorGUILayout.PropertyField(audioSource, audioSourceContent);
 			SerializedProperty enterHover = interactableItem.FindProperty("enterHover");
 			EditorGUILayout.PropertyField(enterHover);
 			SerializedProperty exitHover = interactableItem.FindProperty("exitHover");
@@ -300,15 +300,27 @@ namespace VRInteraction
 			ikFoldout.boolValue = EditorGUILayout.Foldout(ikFoldout.boolValue, "IK");
 			if (!ikFoldout.boolValue) return;
 
-			SerializedProperty leftHandAnchor = interactableItem.FindProperty("leftHandIKAnchor");
 			string handAnchorTooltip = "If using an IK rig this is the transform the target will be" +
 				" moved to when picked up, this transform should be an empty" +
 				" object as a child of item and used for lining up the models held position";
+			string handPoseTooltip = "Use the HandPoseController and setup hand poses, then list the " +
+				"name of the pose object here. Check the FinalIK integration folder and prefabs for reference.";
+
+			SerializedProperty leftHandAnchor = interactableItem.FindProperty("leftHandIKAnchor");
 			GUIContent leftHandAnchorContent = new GUIContent("Left Hand IK Anchor", handAnchorTooltip);
 			EditorGUILayout.PropertyField(leftHandAnchor, leftHandAnchorContent);
+
+			SerializedProperty leftHandIKPoseName = interactableItem.FindProperty("leftHandIKPoseName");
+			GUIContent leftHandPoseContent = new GUIContent("Left Hand IK Pose Name", handAnchorTooltip);
+			EditorGUILayout.PropertyField(leftHandIKPoseName, leftHandPoseContent);
+
 			SerializedProperty rightHandAnchor = interactableItem.FindProperty("rightHandIKAnchor");
 			GUIContent rightHandAnchorContent = new GUIContent("Right Hand IK Anchor", handAnchorTooltip);
 			EditorGUILayout.PropertyField(rightHandAnchor, rightHandAnchorContent);
+
+			SerializedProperty rightHandIkPoseName = interactableItem.FindProperty("rightHandIkPoseName");
+			GUIContent rightHandPoseContent = new GUIContent("Right Hand IK Pose Name", handPoseTooltip);
+			EditorGUILayout.PropertyField(rightHandIkPoseName, rightHandPoseContent);
 		}
 	}
 }

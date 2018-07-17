@@ -394,7 +394,7 @@ namespace VRInteraction
 					{
 						var device = SteamVR_Controller.Input((int)controller.controllerIndex);
 						Vector2 axis = device.GetAxis(EVRButtonId.k_EButton_SteamVR_Touchpad);
-						if (axis.y > (hmdType == HMDType.VIVE ? 0.4f : 0.9f) &&
+						if (axis.y > (hmdType == HMDType.VIVE ? 0.4f : 0.8f) &&
 							axis.x < axis.y &&
 							axis.x > -axis.y)
 							return true;
@@ -406,7 +406,7 @@ namespace VRInteraction
 				if (!isSteamVR())
 				{
 					Vector2 axis = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick, controllerHand);
-					if (axis.y > 0.9f &&
+					if (axis.y > 0.8f &&
 						axis.x < axis.y &&
 						axis.x > -axis.y)
 						return true;
@@ -426,7 +426,7 @@ namespace VRInteraction
 					{
 						var device = SteamVR_Controller.Input((int)controller.controllerIndex);
 						Vector2 axis = device.GetAxis(EVRButtonId.k_EButton_SteamVR_Touchpad);
-						if (axis.x < (hmdType == HMDType.VIVE ? -0.4f : -0.9f) &&
+						if (axis.x < (hmdType == HMDType.VIVE ? -0.4f : -0.5f) &&
 							axis.y > axis.x &&
 							axis.y < -axis.x)
 							return true;
@@ -437,7 +437,7 @@ namespace VRInteraction
 				if (!isSteamVR())
 				{
 					Vector2 axis = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick, controllerHand);
-					if (axis.x < -0.8f &&
+					if (axis.x < -0.5f &&
 						axis.y > axis.x &&
 						axis.y < -axis.x)
 						return true;
@@ -457,7 +457,7 @@ namespace VRInteraction
 					{
 						var device = SteamVR_Controller.Input((int)controller.controllerIndex);
 						Vector2 axis = device.GetAxis(EVRButtonId.k_EButton_SteamVR_Touchpad);
-						if (axis.x > (hmdType == HMDType.VIVE ? 0.4f : 0.9f) &&
+						if (axis.x > (hmdType == HMDType.VIVE ? 0.4f : 0.5f) &&
 							axis.y < axis.x &&
 							axis.y > -axis.x)
 							return true;
@@ -468,7 +468,7 @@ namespace VRInteraction
 				if (!isSteamVR())
 				{
 					Vector2 axis = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick, controllerHand);
-					if (axis.x > 0.8f &&
+					if (axis.x > 0.5f &&
 						axis.y < axis.x &&
 						axis.y > -axis.x)
 						return true;
@@ -488,7 +488,7 @@ namespace VRInteraction
 					{
 						var device = SteamVR_Controller.Input((int)controller.controllerIndex);
 						Vector2 axis = device.GetAxis(EVRButtonId.k_EButton_SteamVR_Touchpad);
-						if ((axis.y < (hmdType == HMDType.VIVE ? -0.4f : -0.9f) &&
+						if ((axis.y < (hmdType == HMDType.VIVE ? -0.4f : -0.8f) &&
 							axis.x > axis.y &&
 							axis.x < -axis.y))
 							return true;
@@ -499,7 +499,7 @@ namespace VRInteraction
 				if (!isSteamVR())
 				{
 					Vector2 axis = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick, controllerHand);
-					if ((axis.y < -0.9f &&
+					if ((axis.y < -0.8f &&
 						axis.x > axis.y &&
 						axis.x < -axis.y))
 						return true;
