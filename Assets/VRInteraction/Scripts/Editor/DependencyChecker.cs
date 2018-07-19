@@ -10,136 +10,145 @@ using UnityEditor.SceneManagement;
 
 public class DependencyChecker : EditorWindow
 {
-	private const string SteamVRDefine = "Int_SteamVR";
-	private const string OculusDefine = "Int_Oculus";
-	private const string VRInteractionDefine = "VRInteraction";
+    private const string SteamVRDefine = "Int_SteamVR";
+    private const string OculusDefine = "Int_Oculus";
+    private const string VRInteractionDefine = "VRInteraction";
 
-	[DidReloadScripts]
-	private static void CheckVRPlatforms()
-	{
-		bool hasOculusSDK = DoesTypeExist("OVRInput");
-		bool hasSteamVR = DoesTypeExist("SteamVR");
+#if UNITY_ANDROID
+    private const BuildTargetGroup BuildTargetDefine = BuildTargetGroup.Android;
+#else // UNITY_STANDALONE
+    private const BuildTargetGroup BuildTargetDefine = BuildTargetGroup.Standalone;
+#endif
 
-		string scriptingDefine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone);
-		string[] scriptingDefines = scriptingDefine.Split(';');
-		bool hasOculusSDKDefine = scriptingDefines.Contains(OculusDefine);
-		bool hasSteamVRDefine = scriptingDefines.Contains(SteamVRDefine);
-		bool hasVRInteractionDefine = scriptingDefine.Contains(VRInteractionDefine);
+    [DidReloadScripts]
+    private static void CheckVRPlatforms()
+    {
+        bool hasOculusSDK = DoesTypeExist("OVRInput");
+        bool hasSteamVR = DoesTypeExist("SteamVR");
 
-		string action = "";
-		bool doingNothing = true;
+        string scriptingDefine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildTargetDefine);
+        string[] scriptingDefines = scriptingDefine.Split(';');
+        bool hasOculusSDKDefine = scriptingDefines.Contains(OculusDefine);
+        bool hasSteamVRDefine = scriptingDefines.Contains(SteamVRDefine);
+        bool hasVRInteractionDefine = scriptingDefine.Contains(VRInteractionDefine);
 
-		if (!hasVRInteractionDefine)
-		{
-			AddDefine(VRInteractionDefine);
-			doingNothing = false;
-			action += "Adding VRInteraction ";
-		}
+        string action = "";
+        bool doingNothing = true;
 
-		if (hasOculusSDK && !hasOculusSDKDefine)
-		{
-			AddDefine(OculusDefine);
-			doingNothing = false;
-			action += "Adding Oculus ";
-		} else if (!hasOculusSDK && hasOculusSDKDefine)
-		{
-			action += "Removing Oculus ";
-			doingNothing = false;
-			RemoveDefine(OculusDefine);
-		}
-			
-		if (hasSteamVR && !hasSteamVRDefine)
-		{
-			AddDefine(SteamVRDefine);
-			doingNothing = false;
-			action += " Adding Steamvr ";
-		} else if (!hasSteamVR && hasSteamVRDefine)
-		{
-			RemoveDefine(SteamVRDefine);
-			doingNothing = false;
-			action += " Removing Steamvr ";
-		}
-		if (doingNothing)
-		{
-			ClearProgressBar();
-		} else
-		{
-			string weaponFolderPath = "Assets/VRWeaponInteractor";
-			if (AssetDatabase.IsValidFolder(weaponFolderPath)) AssetDatabase.ImportAsset(weaponFolderPath, ImportAssetOptions.ImportRecursive);	
-			string teleportFolderPath = "Assets/VRArcTeleporter";
-			if (AssetDatabase.IsValidFolder(teleportFolderPath)) AssetDatabase.ImportAsset(teleportFolderPath, ImportAssetOptions.ImportRecursive);
-			string userInterfaceFolderPath = "Assets/VRUserInterfaces";
-			if (AssetDatabase.IsValidFolder(userInterfaceFolderPath)) AssetDatabase.ImportAsset(userInterfaceFolderPath, ImportAssetOptions.ImportRecursive);
-		}
-		if (action != "") Debug.Log(action);
-		if (!hasOculusSDK && !hasSteamVR)
-		{
-			EditorWindow.GetWindow(typeof(DependencyChecker), true, "VR Dependency", true);
-		}
-	}
+        if (!hasVRInteractionDefine)
+        {
+            AddDefine(VRInteractionDefine);
+            doingNothing = false;
+            action += "Adding VRInteraction ";
+        }
 
-	void OnGUI()
-	{
-		EditorGUILayout.HelpBox("This asset requires either SteamVR and or Oculus Integration to work. " +
-			"Please download and import one or both from the asset store to continue", MessageType.Info);
-		if (GUILayout.Button("SteamVR"))
-		{
-			Application.OpenURL("https://assetstore.unity.com/packages/templates/systems/steamvr-plugin-32647");
-		}
-		if (GUILayout.Button("Oculus Integration"))
-		{
-			Application.OpenURL("https://assetstore.unity.com/packages/tools/integration/oculus-integration-82022");
-		}
-	}
+        if (hasOculusSDK && !hasOculusSDKDefine)
+        {
+            AddDefine(OculusDefine);
+            doingNothing = false;
+            action += "Adding Oculus ";
+        }
+        else if (!hasOculusSDK && hasOculusSDKDefine)
+        {
+            action += "Removing Oculus ";
+            doingNothing = false;
+            RemoveDefine(OculusDefine);
+        }
 
-	static private bool DoesTypeExist(string className)
-	{
-		var foundType = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
-			from type in assembly.GetTypes()
-			where type.Name == className
-			select type).FirstOrDefault();
+        if (hasSteamVR && !hasSteamVRDefine)
+        {
+            AddDefine(SteamVRDefine);
+            doingNothing = false;
+            action += " Adding Steamvr ";
+        }
+        else if (!hasSteamVR && hasSteamVRDefine)
+        {
+            RemoveDefine(SteamVRDefine);
+            doingNothing = false;
+            action += " Removing Steamvr ";
+        }
+        if (doingNothing)
+        {
+            ClearProgressBar();
+        }
+        else
+        {
+            string weaponFolderPath = "Assets/VRWeaponInteractor";
+            if (AssetDatabase.IsValidFolder(weaponFolderPath)) AssetDatabase.ImportAsset(weaponFolderPath, ImportAssetOptions.ImportRecursive);
+            string teleportFolderPath = "Assets/VRArcTeleporter";
+            if (AssetDatabase.IsValidFolder(teleportFolderPath)) AssetDatabase.ImportAsset(teleportFolderPath, ImportAssetOptions.ImportRecursive);
+            string userInterfaceFolderPath = "Assets/VRUserInterfaces";
+            if (AssetDatabase.IsValidFolder(userInterfaceFolderPath)) AssetDatabase.ImportAsset(userInterfaceFolderPath, ImportAssetOptions.ImportRecursive);
+        }
+        if (action != "") Debug.Log(action);
+        if (!hasOculusSDK && !hasSteamVR)
+        {
+            EditorWindow.GetWindow(typeof(DependencyChecker), true, "VR Dependency", true);
+        }
+    }
 
-		return foundType != null;
-	}
+    void OnGUI()
+    {
+        EditorGUILayout.HelpBox("This asset requires either SteamVR and or Oculus Integration to work. " +
+            "Please download and import one or both from the asset store to continue", MessageType.Info);
+        if (GUILayout.Button("SteamVR"))
+        {
+            Application.OpenURL("https://assetstore.unity.com/packages/templates/systems/steamvr-plugin-32647");
+        }
+        if (GUILayout.Button("Oculus Integration"))
+        {
+            Application.OpenURL("https://assetstore.unity.com/packages/tools/integration/oculus-integration-82022");
+        }
+    }
 
-	static private void RemoveDefine(string define)
-	{
-		DisplayProgressBar("Removing support for " + define);
+    static private bool DoesTypeExist(string className)
+    {
+        var foundType = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
+                         from type in assembly.GetTypes()
+                         where type.Name == className
+                         select type).FirstOrDefault();
 
-		string scriptingDefine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone);
-		string[] scriptingDefines = scriptingDefine.Split(';');
-		List<string> listDefines = scriptingDefines.ToList();
-		listDefines.Remove(define);
+        return foundType != null;
+    }
 
-		string newDefines = string.Join(";", listDefines.ToArray());
-		PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone, newDefines);
-	}
+    static private void RemoveDefine(string define)
+    {
+        DisplayProgressBar("Removing support for " + define);
 
-	static private void AddDefine(string define)
-	{
-		DisplayProgressBar("Setting up support for " + define);
+        string scriptingDefine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildTargetDefine);
+        string[] scriptingDefines = scriptingDefine.Split(';');
+        List<string> listDefines = scriptingDefines.ToList();
+        listDefines.Remove(define);
 
-		string scriptingDefine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone);
-		string[] scriptingDefines = scriptingDefine.Split(';');
-		List<string> listDefines = scriptingDefines.ToList();
-		listDefines.Add(define);
+        string newDefines = string.Join(";", listDefines.ToArray());
+        PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetDefine, newDefines);
+    }
 
-		string newDefines = string.Join(";", listDefines.ToArray());
-		PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone, newDefines);
+    static private void AddDefine(string define)
+    {
+        DisplayProgressBar("Setting up support for " + define);
 
-		if (PlayerSettings.virtualRealitySupported == false)
-		{
-			PlayerSettings.virtualRealitySupported = true;
-		}
-	}
+        string scriptingDefine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildTargetDefine);
+        string[] scriptingDefines = scriptingDefine.Split(';');
+        List<string> listDefines = scriptingDefines.ToList();
+        listDefines.Add(define);
 
-	static private void DisplayProgressBar(string newMessage = "")
-	{
-		EditorUtility.DisplayProgressBar("VRInteraction", newMessage, UnityEngine.Random.value);
-	}
+        string newDefines = string.Join(";", listDefines.ToArray());
+        PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetDefine, newDefines);
 
-	static private void ClearProgressBar()
-	{
-		EditorUtility.ClearProgressBar();
-	}
+        if (PlayerSettings.virtualRealitySupported == false)
+        {
+            PlayerSettings.virtualRealitySupported = true;
+        }
+    }
+
+    static private void DisplayProgressBar(string newMessage = "")
+    {
+        EditorUtility.DisplayProgressBar("VRInteraction", newMessage, UnityEngine.Random.value);
+    }
+
+    static private void ClearProgressBar()
+    {
+        EditorUtility.ClearProgressBar();
+    }
 }
