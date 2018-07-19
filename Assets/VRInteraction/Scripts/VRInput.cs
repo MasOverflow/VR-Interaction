@@ -202,6 +202,14 @@ namespace VRInteraction
 
 		public OVRInput.Controller controllerHand;
 
+		#if UNITY_ANDROID
+		private const OVRInput.Controller LController = OVRInput.Controller.LTrackedRemote;
+		private const OVRInput.Controller RController = OVRInput.Controller.RTrackedRemote;
+		#else
+		private const OVRInput.Controller LController = OVRInput.Controller.LTouch;
+		private const OVRInput.Controller RController = OVRInput.Controller.RTouch;
+		#endif
+
 		#endif
 
 		virtual public bool isSteamVR()
@@ -262,18 +270,18 @@ namespace VRInteraction
 						if (avatar == null)
 						{
 							if (name.Contains("left"))
-								controllerHand = OVRInput.Controller.LTouch;
+								controllerHand = LController;
 							else
-								controllerHand = OVRInput.Controller.RTouch;
+								controllerHand = RController;
 						} else
 						{
 							if (avatar.ControllerLeft.transform == transform || avatar.HandLeft.transform == transform)
-								controllerHand = OVRInput.Controller.LTouch;
+								controllerHand = LController;
 							else if (avatar.ControllerRight.transform == transform || avatar.HandRight.transform == transform)
-								controllerHand = OVRInput.Controller.RTouch;
+								controllerHand = RController;
 						}
 					}
-					return controllerHand == OVRInput.Controller.LTouch;
+					return controllerHand == LController;
 				}
 				#endif
 				return false;
@@ -376,7 +384,11 @@ namespace VRInteraction
 			#if Int_Oculus
 			if (!isSteamVR())
 			{
+#if UNITY_ANDROID
+				return OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, controllerHand)?1:0;
+#elif UNITY_STANDALONE
 				return OVRInput.Get(OVRInput.Axis1D.PrimaryIndexTrigger, controllerHand);
+#endif
 			}
 			#endif
 			return 0f;
