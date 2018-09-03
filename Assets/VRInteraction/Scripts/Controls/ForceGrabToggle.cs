@@ -15,7 +15,8 @@ namespace VRInteraction
 		void Update()
 		{
 			if (vrInteractor != null && vrInteractor.forceGrabDistance == (forceGrabOn ? defaultForceDistance : 0f)) return;
-			vrInteractor = GetComponent<VRInteractor>();
+			if (vrInteractor == null) vrInteractor = GetComponent<VRInteractor>();
+			if (vrInteractor == null) return;
 			vrInteractor.forceGrabDistance = forceGrabOn ? defaultForceDistance : 0f;
 		}
 

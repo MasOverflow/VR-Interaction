@@ -74,6 +74,8 @@ namespace VRInteraction
 		public bool toggleToPickup;
 		public UnityEvent pickupEvent;
 		public UnityEvent dropEvent;
+		public UnityEvent enableHoverEvent;
+		public UnityEvent disableHoverEvent;
 
 		//Sounds
 		public AudioSource audioSource;
@@ -108,7 +110,11 @@ namespace VRInteraction
 
 		public Rigidbody selfBody
 		{
-			get { return _selfBody; }
+			get
+			{
+				if (_selfBody == null) _selfBody = item.GetComponent<Rigidbody>();
+				return _selfBody; 
+			}
 		}
 
 		public bool InteractionDisabled
@@ -190,7 +196,6 @@ namespace VRInteraction
 					}
 				}
 			}
-			_selfBody = item.GetComponent<Rigidbody>();
 			itemCollider = item.GetComponent<Collider>();
 			for(int i=0; i<hovers.Count; i++)
 			{
@@ -233,14 +238,13 @@ namespace VRInteraction
 
 			if (!canBeHeld) return;
 
-			if (_selfBody == null)
+			if (selfBody == null)
 			{
 				item.position = GetControllerPosition(heldBy);
 				item.rotation = GetControllerRotation(heldBy);
 				return;
 			}
-
-			_selfBody.maxAngularVelocity = float.MaxValue;
+			selfBody.maxAngularVelocity = float.MaxValue;
 
 			Quaternion rotationDelta = GetHeldRotationDelta();
 			Vector3 positionDelta = GetHeldPositionDelta();
@@ -257,14 +261,14 @@ namespace VRInteraction
 			if (angle != 0)
 			{
 				Vector3 angularTarget = (angle * axis)*(currentFollowForce*(Time.fixedDeltaTime*100f));
-				_selfBody.angularVelocity = angularTarget;
+				selfBody.angularVelocity = angularTarget;
 			}
 
 			Vector3 velocityTarget = (positionDelta / Time.fixedDeltaTime) * currentFollowForce;
 
 			if (float.IsInfinity(velocityTarget.x) || float.IsNaN(velocityTarget.x))
 				velocityTarget = Vector3.zero;
-			_selfBody.velocity = velocityTarget;
+			selfBody.velocity = velocityTarget;
 		}
 
 		virtual public bool CanInteract()
@@ -291,14 +295,11 @@ namespace VRInteraction
 		{
 			if (canBeHeld && item != null)
 			{
-				NetworkIdentity ident = item.GetComponent<NetworkIdentity>();
-				if (ident != null)
+				NetworkIdentity networkedIdent = item.GetComponent<NetworkIdentity>();
+				if (networkedIdent != null)
 				{
 					NetworkedCameraRig networkedRig = hand.GetVRRigRoot.GetComponent<NetworkedCameraRig>();
-					if (networkedRig != null && networkedRig.connection != null && networkedRig.connection.isLocalPlayer)
-					{
-						ident.AssignClientAuthority(networkedRig.connection.connectionToClient);
-					}
+					if (networkedRig != null) networkedRig.LocalAssignAuthority(networkedIdent.gameObject);
 				}
 
 				switch(holdType)
@@ -339,9 +340,8 @@ namespace VRInteraction
 				if (Vector3.Distance(hand.getControllerAnchorOffset.position, item.position) < interactionDistance)
 					PlaySound(pickupSound);
 				else PlaySound(forceGrabSound, hand.getControllerAnchorOffset.position);
-			}
+			} else CheckIK(true, hand);
 			if (pickupEvent != null) pickupEvent.Invoke();
-			CheckIK(true, hand);
 			heldBy = hand;
 			return true;
 		}
@@ -367,9 +367,10 @@ namespace VRInteraction
 				{
 					currentFollowForce = followForce;
 					_pickingUp = false;
-					yield break;
+					break;
 				}
 			}
+			CheckIK(true, heldBy);
 			_pickingUp = false;
 			currentFollowForce = followForce;
 		}
@@ -380,14 +381,11 @@ namespace VRInteraction
 			{
 				if (hand != null)
 				{
-					NetworkIdentity ident = item.GetComponent<NetworkIdentity>();
-					if (ident != null)
+					NetworkIdentity networkedIdent = item.GetComponent<NetworkIdentity>();
+					if (networkedIdent != null)
 					{
 						NetworkedCameraRig networkedRig = hand.GetVRRigRoot.GetComponent<NetworkedCameraRig>();
-						if (networkedRig != null && networkedRig.connection != null && networkedRig.connection.isLocalPlayer)
-						{
-							ident.RemoveClientAuthority(networkedRig.connection.connectionToClient);
-						}
+						if (networkedRig != null) networkedRig.LocalRemoveAuthority(networkedIdent.gameObject);
 					}
 				}
 
@@ -397,14 +395,14 @@ namespace VRInteraction
 				case HoldType.FIXED_POSITION:
 				case HoldType.PICKUP_POSITION:
 					VRInteractableItem.UnFreezeItem(item.gameObject);
-					if (_selfBody != null && addControllerVelocity)
+					if (selfBody != null)
 					{
-						if (hand != null)
+						if (hand != null && addControllerVelocity)
 						{
 							bool useBoost = hand.Velocity.magnitude > 1f;
-							_selfBody.velocity = hand.Velocity * (useBoost ? throwBoost : 1f);
-							_selfBody.angularVelocity = hand.AngularVelocity;
-							_selfBody.maxAngularVelocity = _selfBody.angularVelocity.magnitude;
+							selfBody.velocity = hand.Velocity * (useBoost ? throwBoost : 1f);
+							selfBody.angularVelocity = hand.AngularVelocity;
+							selfBody.maxAngularVelocity = selfBody.angularVelocity.magnitude;
 						}
 					}
 					break;
@@ -595,6 +593,7 @@ namespace VRInteraction
 			if (activeHover || interactionDisabled) return;
 			activeHover = true;
 			PlaySound(enterHover);
+			if (enableHoverEvent != null) enableHoverEvent.Invoke();
 			if (hovers.Count == 0) return;
 			for(int i=0; i<hovers.Count; i++)
 			{
@@ -618,6 +617,7 @@ namespace VRInteraction
 			if (!activeHover || interactionDisabled) return;
 			activeHover = false;
 			PlaySound(exitHover);
+			if (disableHoverEvent != null) disableHoverEvent.Invoke();
 			if (hovers.Count == 0) return;
 			for(int i=0; i<hovers.Count; i++)
 			{
@@ -649,14 +649,15 @@ namespace VRInteraction
 				if (ii != null && (ii.parents.Count != 0 || !ii.enabled || ii.interactionDisabled)) continue;
 				col.enabled = true;
 			}
-			Rigidbody itemBody = item.GetComponentInChildren<Rigidbody>();
-			if (itemBody != null)
+			RigidbodyMarker bodyMarker = item.GetComponent<RigidbodyMarker>();
+			if (bodyMarker != null) 
 			{
-				itemBody.velocity = Vector3.zero;
-				itemBody.useGravity = false;
-				itemBody.isKinematic = false;
-				itemBody.constraints = RigidbodyConstraints.None;
-				itemBody.interpolation = RigidbodyInterpolation.None;
+				Rigidbody body = bodyMarker.ReplaceMarkerWithRigidbody();
+				body.isKinematic = false;
+			} else
+			{
+				Rigidbody body = item.GetComponent<Rigidbody>();
+				if (body != null) body.isKinematic = false;
 			}
 		}
 
@@ -664,15 +665,8 @@ namespace VRInteraction
 		static public void FreezeItem(GameObject item, bool disableAllColliders = false, bool disableTriggerColliders = false, bool disableNonTriggerColliders = false)
 		{
 			VRInteractableItem.DisableObjectColliders(item, disableAllColliders, disableTriggerColliders, disableNonTriggerColliders);
-			Rigidbody itemBody = item.GetComponentInChildren<Rigidbody>();
-			if (itemBody != null)
-			{
-				itemBody.velocity = Vector3.zero;
-				itemBody.useGravity = false;
-				itemBody.isKinematic = true;
-				itemBody.constraints = RigidbodyConstraints.FreezeAll;
-				itemBody.interpolation = RigidbodyInterpolation.None;
-			}
+			Rigidbody itemBody = item.GetComponent<Rigidbody>();
+			if (itemBody != null) RigidbodyMarker.ReplaceRigidbodyWithMarker(itemBody);
 		}
 
 		//Enable unity physics
@@ -688,14 +682,24 @@ namespace VRInteraction
 				if (ii != null && (ii.parents.Count != 0 || !ii.enabled || ii.interactionDisabled)) continue;
 				col.enabled = true;
 			}
-			Rigidbody itemBody = item.GetComponentInChildren<Rigidbody>();
+			RigidbodyMarker bodyMarker = item.GetComponent<RigidbodyMarker>();
+			if (bodyMarker != null)
+			{
+				Rigidbody body = bodyMarker.ReplaceMarkerWithRigidbody();
+				body.isKinematic = false;
+			} else
+			{
+				Rigidbody body = item.GetComponent<Rigidbody>();
+				if (body != null) body.isKinematic = false;
+			}
+			/*Rigidbody itemBody = item.GetComponentInChildren<Rigidbody>();
 			if (itemBody != null)
 			{
 				itemBody.useGravity = true;
 				itemBody.isKinematic = false;
 				itemBody.constraints = RigidbodyConstraints.None;
 				itemBody.interpolation = RigidbodyInterpolation.Interpolate;
-			}
+			}*/
 		}
 
 		static public void DisableObjectColliders(GameObject item, bool disableAllColliders = false, bool disableTriggerColliders = false, bool disableNonTriggerColliders = false)

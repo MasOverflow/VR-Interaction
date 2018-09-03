@@ -32,7 +32,24 @@ public class NetworkedCameraRig : NetworkBehaviour
 		networkedRigs.Add(this);
 		Camera[] cameras = GetComponentsInChildren<Camera>(true);
 		foreach(Camera cam in cameras) cam.enabled = false;
-		StartCoroutine(ConvertToRemoteIfNewJoiningPlayer());
+
+		if (_connection == null) FindMyConnectionObject();
+		if (_connection == null) ConvertToRemoteRig();
+	}
+	
+	private void FindMyConnectionObject()
+	{
+		GameObject[] connectionObjects = GameObject.FindGameObjectsWithTag("ConnectionObject");
+		foreach(GameObject connectionObject in connectionObjects)
+		{
+			PlayerConnectionObject connection = connectionObject.GetComponent<PlayerConnectionObject>();
+			if (connection == null) continue;
+			if (connection.isLocalPlayer) 
+			{
+				_connection = connection;
+				break;
+			}
+		}
 	}
 
 	public override void OnStartAuthority ()
@@ -43,15 +60,7 @@ public class NetworkedCameraRig : NetworkBehaviour
 		Camera[] cameras = GetComponentsInChildren<Camera>(true);
 		foreach(Camera cam in cameras) cam.enabled = true;
 
-		PlayerConnectionObject[] connections = FindObjectsOfType<PlayerConnectionObject>();
-		foreach(PlayerConnectionObject connection in connections)
-		{
-			if (connection.isLocalPlayer) 
-			{
-				_connection = connection;
-				break;
-			}
-		}
+		if (_connection == null) FindMyConnectionObject();
 
 		#if Int_SteamVR
 
@@ -70,14 +79,14 @@ public class NetworkedCameraRig : NetworkBehaviour
 		}
 	}
 
-	IEnumerator ConvertToRemoteIfNewJoiningPlayer()
+	/*IEnumerator ConvertToRemoteIfNewJoiningPlayer()
 	{
 		yield return new WaitForSeconds(0.1f);
 		if (!hasAuthority)
 		{
 			ConvertToRemoteRig();
 		}
-	}
+	}*/
 
 	void ConvertOtherPlayerRigsToRemote()
 	{
@@ -95,13 +104,14 @@ public class NetworkedCameraRig : NetworkBehaviour
 	public void ConvertToRemoteRig()
 	{
 		if (remoteRig) return;
+
 		remoteRig = true;
 		Component[] components = GetComponentsInChildren<Component>(true);
 		foreach(Component comp in components)
 		{
 			if (comp == null || !CanDestroyType(comp) || !comp.gameObject.CanDestroy(comp.GetType())) continue;
 
-			if (comp.GetType().IsSubclassOf(typeof(VRInput)))
+			if (comp.GetType() == typeof(VRInput))
 			{
 				VRInputRemote inputRemote = comp.gameObject.AddComponent<VRInputRemote>();
 				// Initial Sync
@@ -135,7 +145,7 @@ public class NetworkedCameraRig : NetworkBehaviour
 				inputRemote.AXKeyOculus = originalInput.AXKeyOculus;
 			}
 
-			if (comp.GetType().IsSubclassOf(typeof(VRInteractor)))
+			if (comp.GetType() == typeof(VRInteractor))
 			{
 				VRInteractorRemote interactorRemote = comp.gameObject.AddComponent<VRInteractorRemote>();
 				//Initial Sync
@@ -270,6 +280,9 @@ public class NetworkedCameraRig : NetworkBehaviour
 			comp.GetType() == typeof(NetworkTransform) ||
 			comp.GetType() == typeof(NetworkTransformChild) ||
 			comp.GetType().IsSubclassOf(typeof(NetworkedCameraRig)) ||
+			comp.GetType() == typeof(NetworkedCameraRig) ||
+			comp.GetType() == typeof(VRInteractorRemote) ||
+			comp.GetType() == typeof(VRInputRemote) ||
 			comp.GetType() == typeof(ForceGrabToggle) ||
 			comp.GetType() == typeof(MeshFilter) ||
 			comp.GetType() == typeof(MeshRenderer) ||
@@ -277,5 +290,33 @@ public class NetworkedCameraRig : NetworkBehaviour
 			comp.GetType() == typeof(Animator))
 			return false;
 		return true;
+	}
+
+	public void LocalAssignAuthority(GameObject targetItem)
+	{
+		if (connection != null && connection.isLocalPlayer)
+		{
+			CmdAssignAuthority(targetItem.GetComponent<NetworkIdentity>(), connection.GetComponent<NetworkIdentity>());
+		}
+	}
+
+	public void LocalRemoveAuthority(GameObject targetItem)
+	{
+		if (connection != null && connection.isLocalPlayer)
+		{
+			CmdRemoveAuthority(targetItem.GetComponent<NetworkIdentity>(), connection.GetComponent<NetworkIdentity>());
+		}
+	}
+
+	[Command]
+	private void CmdAssignAuthority(NetworkIdentity targetItem, NetworkIdentity targetPlayer)
+	{
+		targetItem.AssignClientAuthority(targetPlayer.connectionToClient);
+	}
+
+	[Command]
+	private void CmdRemoveAuthority(NetworkIdentity targetItem, NetworkIdentity targetPlayer)
+	{
+		targetItem.RemoveClientAuthority(targetPlayer.connectionToClient);
 	}
 }

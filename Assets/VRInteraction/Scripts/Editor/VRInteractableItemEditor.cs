@@ -157,6 +157,10 @@ namespace VRInteraction
 					EditorGUILayout.PropertyField(pickupEvent, pickupContent);
 					if (pickupEvent != oldPickupEvent) changed = true;
 				}
+				SerializedProperty enableHoverEvent = interactableItem.FindProperty("enableHoverEvent");
+				EditorGUILayout.PropertyField(enableHoverEvent);
+				SerializedProperty disableHoverEvent = interactableItem.FindProperty("disableHoverEvent");
+				EditorGUILayout.PropertyField(disableHoverEvent);
 			}
 
 			if (updateAndApply) interactableItem.ApplyModifiedProperties();

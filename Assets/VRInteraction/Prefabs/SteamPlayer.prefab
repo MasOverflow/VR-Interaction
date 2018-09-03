@@ -556,7 +556,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95571498db70bb5459853ae0a2be91bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionName: ACTION_DROP
+  actionName: PICKUP_DROP
   defaultForceDistance: 5
 --- !u!114 &114325375390128164
 MonoBehaviour:
@@ -751,7 +751,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95571498db70bb5459853ae0a2be91bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionName: ACTION_DROP
+  actionName: PICKUP_DROP
   defaultForceDistance: 5
 --- !u!114 &114998633990921566
 MonoBehaviour:

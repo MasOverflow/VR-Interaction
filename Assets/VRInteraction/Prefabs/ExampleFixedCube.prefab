@@ -297,12 +297,23 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  enableHoverEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  disableHoverEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  audioSource: {fileID: 0}
   enterHover: {fileID: 0}
   exitHover: {fileID: 0}
   pickupSound: {fileID: 0}
   dropSound: {fileID: 0}
-  forceGrabSound: {fileID: 0}
-  hoverFoldout: 1
+  forceGrabSound: {fileID: 8300000, guid: 54b07a1d2d87f5348ab9eaa6c86a25ad, type: 3}
+  hoverFoldout: 0
   triggersFoldout: 1
-  soundsFoldout: 0
+  soundsFoldout: 1
   ikFoldout: 1
