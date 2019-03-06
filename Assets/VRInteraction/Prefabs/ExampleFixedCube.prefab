@@ -312,8 +312,8 @@ MonoBehaviour:
   exitHover: {fileID: 0}
   pickupSound: {fileID: 0}
   dropSound: {fileID: 0}
-  forceGrabSound: {fileID: 8300000, guid: 54b07a1d2d87f5348ab9eaa6c86a25ad, type: 3}
+  forceGrabSound: {fileID: 0}
   hoverFoldout: 0
   triggersFoldout: 1
-  soundsFoldout: 1
+  soundsFoldout: 0
   ikFoldout: 1

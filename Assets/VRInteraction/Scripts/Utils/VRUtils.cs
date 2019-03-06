@@ -153,6 +153,13 @@ namespace VRInteraction
 			return worldToLocalMatrix.MultiplyPoint3x4(worldPosition);
 		}
 
+		///Transforms direction from local space to world space, but you can put the rotation of the transform in directly.
+		///Useful if you don't want to make the actual gameobject and just want to convert
+		static public Vector3 TransformDirection(Quaternion rotation, Vector3 localDirection)
+		{
+			return rotation * localDirection;
+		}
+
 		static public LayerMask StringArrayToLayerMask(string[] layers, bool inverted)
 		{
 			if (layers == null || layers.Length == 0) return ~0;

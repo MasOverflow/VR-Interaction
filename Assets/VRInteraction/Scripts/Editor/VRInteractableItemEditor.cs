@@ -133,6 +133,10 @@ namespace VRInteraction
 					if (acceptedActions != oldAcceptedAction) changed = true;
 				}
 
+				SerializedProperty itemId = interactableItem.FindProperty("itemId");
+				GUIContent itemIdContent = new GUIContent("Item ID", "Used with inventory");// and for bullets and attachments if 'use string id' is toggled on");
+				EditorGUILayout.PropertyField(itemId, itemIdContent);
+
 				VRInteractableItemEditor.DisplayHoverSegment(interactableItem);
 
 				VRInteractableItemEditor.DisplayTriggerColliderSegment(interactableItem);

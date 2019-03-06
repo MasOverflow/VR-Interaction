@@ -83,10 +83,14 @@ namespace VRInteraction
 		{
 			get
 			{
-				#if Int_SteamVR
+				#if Int_SteamVR && !Int_SteamVR2
 				if (vrInput.isSteamVR())
 				{
-					if (_vrRigRoot == null) _vrRigRoot = GetComponentInParent<SteamVR_PlayArea>().transform;
+					if (_vrRigRoot == null)
+					{
+						SteamVR_PlayArea playArea = GetComponentInParent<SteamVR_PlayArea>();
+						if (playArea != null) _vrRigRoot = playArea.transform;
+					}
 					return _vrRigRoot;
 				}
 				#endif
@@ -105,7 +109,7 @@ namespace VRInteraction
 		{
 			get
 			{
-				#if Int_SteamVR
+				#if Int_SteamVR && !Int_SteamVR2
 				if (vrInput.isSteamVR())
 				{
 					var device = SteamVR_Controller.Input((int)vrInput.controller.controllerIndex);
@@ -128,7 +132,7 @@ namespace VRInteraction
 		{
 			get
 			{
-				#if Int_SteamVR
+				#if Int_SteamVR && !Int_SteamVR2
 				if (vrInput.isSteamVR())
 				{
 					var device = SteamVR_Controller.Input((int)vrInput.controller.controllerIndex);
@@ -147,7 +151,7 @@ namespace VRInteraction
 		}
 		virtual public void TriggerHapticPulse(int frames)
 		{
-			#if Int_SteamVR
+			#if Int_SteamVR && !Int_SteamVR2
 			if (vrInput.isSteamVR())
 			{
 				var device = SteamVR_Controller.Input((int)vrInput.controller.controllerIndex);
@@ -375,6 +379,11 @@ namespace VRInteraction
 
 			foreach(Collider col in item.triggerColliders)
 			{
+				if (col == null)
+				{
+					Debug.LogError("Item has an empty collider in trigger colliders list: " + item.name, item.gameObject);
+					continue;
+				}
 				//Is the controller anchor offset within the bounds of this collider
 				if (col.bounds.Contains(getControllerAnchorOffset.position))
 					return true;

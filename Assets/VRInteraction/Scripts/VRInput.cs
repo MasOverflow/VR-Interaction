@@ -182,8 +182,13 @@ namespace VRInteraction
 			}
 		}
 
-		#if Int_SteamVR
+		#if Int_SteamVR && !Int_SteamVR2
 
+		//	If you are getting the error "The Type or namespace name 'SteamVR_TrackedController' could not be found."
+		//	but you have SteamVR imported it is likely you imported the newest version of SteamVR which is not currently
+		//	supported. The latest version that is supported is version 1.2.3 which you can download here:
+		//	https://github.com/ValveSoftware/steamvr_unity_plugin/tree/fad02abee8ed45791993e92e420b340f63940aca
+		//	Please delete the SteamVR folder and replace with the one from this repo.
 		protected SteamVR_TrackedController _controller;
 
 		public SteamVR_TrackedController controller
@@ -206,11 +211,15 @@ namespace VRInteraction
 
 		virtual public bool isSteamVR()
 		{
-			#if Int_SteamVR
+			#if Int_SteamVR && !Int_SteamVR2
 			if (GetComponent<SteamVR_TrackedController>() != null || GetComponent<SteamVR_TrackedObject>() != null || GetComponentInParent<SteamVR_ControllerManager>() != null)
 				return true;
 			else
 				return false;
+			#elif Int_SteamVR2
+			throw new System.Exception("SteamVR 2 is not currently supported. You can download SteamVR 1.2.3 from here:\n" +
+				"https://github.com/ValveSoftware/steamvr_unity_plugin/tree/fad02abee8ed45791993e92e420b340f63940aca\n" +
+				"Please delete the SteamVR folder and replace with the one from this repo.");
 			#elif Int_Oculus
 			return false;
 			#else
@@ -223,7 +232,7 @@ namespace VRInteraction
 		{
 			get
 			{
-			#if Int_SteamVR
+			#if Int_SteamVR && !Int_SteamVR2
 			if ((GetComponent<SteamVR_TrackedObject>() == null && GetComponentInParent<SteamVR_ControllerManager>() == null) || SteamVR.enabled && SteamVR.instance != null && SteamVR.instance.hmd_TrackingSystemName == "oculus")
 				return HMDType.OCULUS; 
 			else
@@ -239,7 +248,7 @@ namespace VRInteraction
 		{
 			get 
 			{
-				#if Int_SteamVR
+				#if Int_SteamVR && !Int_SteamVR2
 				if (isSteamVR())
 				{
 					SteamVR_ControllerManager controllerManager = null;
@@ -346,7 +355,7 @@ namespace VRInteraction
 		{
 			get
 			{
-				#if Int_SteamVR
+				#if Int_SteamVR && !Int_SteamVR2
 				if (isSteamVR())
 				{
 					return controller.triggerPressed;
@@ -365,7 +374,7 @@ namespace VRInteraction
 		{
 			get
 			{
-			#if Int_SteamVR
+			#if Int_SteamVR && !Int_SteamVR2
 			if (isSteamVR())
 			{
 				var device = SteamVR_Controller.Input((int)controller.controllerIndex);
@@ -387,7 +396,7 @@ namespace VRInteraction
 		{
 			get
 			{
-				#if Int_SteamVR
+				#if Int_SteamVR && !Int_SteamVR2
 				if (isSteamVR())
 				{
 					if (controller.padPressed || (hmdType == HMDType.OCULUS && PadTouched))
@@ -419,7 +428,7 @@ namespace VRInteraction
 		{
 			get
 			{
-				#if Int_SteamVR
+				#if Int_SteamVR && !Int_SteamVR2
 				if (isSteamVR())
 				{
 					if (controller.padPressed || (hmdType == HMDType.OCULUS && PadTouched))
@@ -450,7 +459,7 @@ namespace VRInteraction
 		{
 			get
 			{
-				#if Int_SteamVR
+				#if Int_SteamVR && !Int_SteamVR2
 				if (isSteamVR())
 				{
 					if (controller.padPressed || (hmdType == HMDType.OCULUS && PadTouched))
@@ -481,7 +490,7 @@ namespace VRInteraction
 		{
 			get
 			{
-				#if Int_SteamVR
+				#if Int_SteamVR && !Int_SteamVR2
 				if (isSteamVR())
 				{
 					if (controller.padPressed || (hmdType == HMDType.OCULUS && PadTouched))
@@ -512,7 +521,7 @@ namespace VRInteraction
 		{
 			get
 			{
-				#if Int_SteamVR
+				#if Int_SteamVR && !Int_SteamVR2
 				if (isSteamVR())
 				{
 					if (controller.padPressed)
@@ -543,7 +552,7 @@ namespace VRInteraction
 		{
 			get
 			{
-				#if Int_SteamVR
+				#if Int_SteamVR && !Int_SteamVR2
 				if (isSteamVR())
 				{
 					return controller.padTouched;
@@ -562,7 +571,7 @@ namespace VRInteraction
 		{
 			get 
 			{
-				#if Int_SteamVR
+				#if Int_SteamVR && !Int_SteamVR2
 				if (isSteamVR())
 				{
 					return controller.padPressed;
@@ -581,7 +590,7 @@ namespace VRInteraction
 		{
 			get
 			{
-				#if Int_SteamVR
+				#if Int_SteamVR && !Int_SteamVR2
 				if (isSteamVR())
 				{
 					var device = SteamVR_Controller.Input((int)controller.controllerIndex);
@@ -601,7 +610,7 @@ namespace VRInteraction
 		{
 			get
 			{
-				#if Int_SteamVR
+				#if Int_SteamVR && !Int_SteamVR2
 				if (isSteamVR())
 				{
 					return controller.gripped;
@@ -620,7 +629,7 @@ namespace VRInteraction
 		{
 			get
 			{
-				#if Int_SteamVR
+				#if Int_SteamVR && !Int_SteamVR2
 				if (isSteamVR())
 				{
 					return controller.menuPressed;
@@ -639,7 +648,7 @@ namespace VRInteraction
 		{
 			get
 			{
-				#if Int_SteamVR
+				#if Int_SteamVR && !Int_SteamVR2
 				if (isSteamVR())
 				{
 					var system = OpenVR.System;

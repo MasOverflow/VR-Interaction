@@ -12,7 +12,6 @@ using UnityEngine.Networking;
 
 namespace VRInteraction
 {
-
 	public class VRInteractableItem : MonoBehaviour {
 
 		public enum HoverMode
@@ -50,6 +49,7 @@ namespace VRInteraction
 		public List<VRInteractableItem> parents = new List<VRInteractableItem>();
 
 		//Variables
+		public string itemId;
 		public bool canBeHeld = true;
 		public bool interactionDisabled = false;
 		public HoldType holdType = HoldType.FIXED_POSITION;
@@ -99,6 +99,7 @@ namespace VRInteraction
 		protected float currentFollowForce = -1f;
 		protected bool _pickingUp;
 		protected object[] selfParam;
+		protected static int itemIdIndex;
 
 		protected VRInteractor _heldBy;
 		protected List<VRInteractor> _heldBys = new List<VRInteractor>();
@@ -169,6 +170,8 @@ namespace VRInteraction
 
 			//Initialize self param (This is so it's not being made when the object is being destroyed)
 			selfParam = getSelfParam;
+
+			if (string.IsNullOrEmpty(itemId)) itemId = (1000+(itemIdIndex++)).ToString();
 
 			if (item.GetComponent<Rigidbody>() != null)
 			{
@@ -295,13 +298,6 @@ namespace VRInteraction
 		{
 			if (canBeHeld && item != null)
 			{
-				NetworkIdentity networkedIdent = item.GetComponent<NetworkIdentity>();
-				if (networkedIdent != null)
-				{
-					NetworkedCameraRig networkedRig = hand.GetVRRigRoot.GetComponent<NetworkedCameraRig>();
-					if (networkedRig != null) networkedRig.LocalAssignAuthority(networkedIdent.gameObject);
-				}
-
 				switch(holdType)
 				{
 				case HoldType.FIXED_POSITION:
@@ -379,16 +375,6 @@ namespace VRInteraction
 		{
 			if (canBeHeld && item != null)
 			{
-				if (hand != null)
-				{
-					NetworkIdentity networkedIdent = item.GetComponent<NetworkIdentity>();
-					if (networkedIdent != null)
-					{
-						NetworkedCameraRig networkedRig = hand.GetVRRigRoot.GetComponent<NetworkedCameraRig>();
-						if (networkedRig != null) networkedRig.LocalRemoveAuthority(networkedIdent.gameObject);
-					}
-				}
-
 				item.parent = null;
 				switch(holdType)
 				{
@@ -716,24 +702,16 @@ namespace VRInteraction
 
 		static private Collider[] GetCollidersOf(GameObject item, bool all, bool triggers, bool nonTriggers)
 		{
-			Collider[] itemColliders = null;
-			if (all)
-				itemColliders = item.GetComponentsInChildren<Collider>();
-			else
+			Collider[] itemColliders = item.GetComponentsInChildren<Collider>();
+			if (!all)
 			{
 				itemColliders = item.GetComponentsInChildren<Collider>();
-				if (triggers)
+				for(int i=itemColliders.Length-1; i>=0; i--)
 				{
-					for(int i=itemColliders.Length-1; i>=0; i--)
+					if (itemColliders[i].isTrigger && !triggers ||
+						!itemColliders[i].isTrigger && !nonTriggers)
 					{
-						if (!itemColliders[i].isTrigger) itemColliders[i] = null;
-					}
-				}
-				if (nonTriggers)
-				{
-					for(int i=itemColliders.Length-1; i>=0; i--)
-					{
-						if (itemColliders[i].isTrigger) itemColliders[i] = null;
+						itemColliders[i] = null;
 					}
 				}
 			}

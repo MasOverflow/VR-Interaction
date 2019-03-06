@@ -38,8 +38,8 @@ GameObject:
   - component: {fileID: 114401930562661544}
   - component: {fileID: 114998633990921566}
   - component: {fileID: 114283554517044428}
-  - component: {fileID: 114048102693469672}
   - component: {fileID: 114518566146656072}
+  - component: {fileID: 114048102693469672}
   m_Layer: 0
   m_Name: Controller (right)
   m_TagString: Untagged
@@ -556,7 +556,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95571498db70bb5459853ae0a2be91bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionName: PICKUP_DROP
+  actionName: ACTION_DROP
   defaultForceDistance: 5
 --- !u!114 &114325375390128164
 MonoBehaviour:
@@ -751,7 +751,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95571498db70bb5459853ae0a2be91bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionName: PICKUP_DROP
+  actionName: ACTION_DROP
   defaultForceDistance: 5
 --- !u!114 &114998633990921566
 MonoBehaviour:

@@ -11,6 +11,7 @@ using UnityEditor.SceneManagement;
 public class DependencyChecker : EditorWindow
 {
 	private const string SteamVRDefine = "Int_SteamVR";
+	private const string SteamVR2Define = "Int_SteamVR2";
 	private const string OculusDefine = "Int_Oculus";
 	private const string VRInteractionDefine = "VRInteraction";
 
@@ -19,11 +20,13 @@ public class DependencyChecker : EditorWindow
 	{
 		bool hasOculusSDK = DoesTypeExist("OVRInput");
 		bool hasSteamVR = DoesTypeExist("SteamVR");
+		bool hasSteamVR2 = hasSteamVR ? !DoesTypeExist("SteamVR_TrackedController") : false;
 
 		string scriptingDefine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone);
 		string[] scriptingDefines = scriptingDefine.Split(';');
 		bool hasOculusSDKDefine = scriptingDefines.Contains(OculusDefine);
 		bool hasSteamVRDefine = scriptingDefines.Contains(SteamVRDefine);
+		bool hasSteamVR2Define = scriptingDefines.Contains(SteamVR2Define);
 		bool hasVRInteractionDefine = scriptingDefine.Contains(VRInteractionDefine);
 
 		string action = "";
@@ -47,17 +50,35 @@ public class DependencyChecker : EditorWindow
 			doingNothing = false;
 			RemoveDefine(OculusDefine);
 		}
-			
-		if (hasSteamVR && !hasSteamVRDefine)
+		if (hasSteamVR)
 		{
-			AddDefine(SteamVRDefine);
-			doingNothing = false;
-			action += " Adding Steamvr ";
+			if (!hasSteamVRDefine)
+			{
+				AddDefine(SteamVRDefine);
+				doingNothing = false;
+				action += " Adding Steamvr ";
+			}
+			if (hasSteamVR2 && !hasSteamVR2Define)
+			{
+				AddDefine(SteamVR2Define);
+				doingNothing = false;
+				action += " Adding Steamvr 2";
+				Debug.LogError("SteamVR 2 is not currently supported. You can download SteamVR 1.2.3 from here:\n" +
+					"https://github.com/ValveSoftware/steamvr_unity_plugin/tree/fad02abee8ed45791993e92e420b340f63940aca\n" +
+					"Please delete the SteamVR folder and replace with the one from this repo.");
+			}
 		} else if (!hasSteamVR && hasSteamVRDefine)
 		{
 			RemoveDefine(SteamVRDefine);
+			if (hasSteamVR2Define) RemoveDefine(SteamVR2Define);
 			doingNothing = false;
 			action += " Removing Steamvr ";
+		}
+		if (!hasSteamVR2 && hasSteamVR2Define)
+		{
+			RemoveDefine(SteamVR2Define);
+			doingNothing = false;
+			action += " Removing Steamvr2 ";
 		}
 		if (doingNothing)
 		{
