@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE></TITLE>
+	<STYLE TYPE="text/css">
+	</STYLE>
+</HEAD>
+<BODY align="center" style="width:800px;margin:0 auto;">
+	<font face="verdana">
+	<h1>
+		<B>Setup Guide</B>
+	</h1>
+
+	<h3>
+	Setting The Scene:
+	</h3>
+	<P>
+		In the scene you must have either the SteamVR camera rig or Oculus Avatar rig with a VRInteractor and VRInput script attached to either or both
+		controller objects. It should add all the scripts it needs.
+	</P>
+
+	<h3>VRInteractor / VRInput</h3>
+	<IMG SRC="Images/InteractorInspector.png" NAME="graphics26" ALIGN=CENTER WIDTH=446 HEIGHT=653 BORDER=0><BR CLEAR=LEFT><BR>
+	<P>
+		The VRInteractor and VRInput scripts need to be attached to either or both controllers in order to pick up anything.
+		You are able to configure exactly what you want each controller button to do from here.
+	</p>
+	<p>Action Settings:</p>
+	<p>
+		The name of the Actions (ACTION, PICKUP_DROP) corrospond to the method name in the VRInteractableItem or any script that inherits from a VRInteractbleItem.
+		The method name will be called on either the held or hover item when the key is pressed and the method name plus Released will be called when that key is released.<br><br>
+		public void PICKUP_DROP(VRInteractor hand)<br>
+		public void PICKUP_DROPReleased(VRInteractor hand)
+	</p>
+	<p>Object Reference:</p>
+	<p>
+		The object reference can be used to attached an item to a controller at startup. You can use this in conjunction
+		with setting PICKUP_DROP buttons to none which will lock the item to your hand permanently.
+	</P>
+
+	<h3>Oculus Native</h3>
+	<P>
+		Switching to Oculus Native requires changing the Virtual Reality SDK in the PlayerSettings panel (Edit->Project Settings->Player) and switching the order from
+		OpenVR to Oculus. The second step is changing the camera rig from the SteamVr one to the Oculus one, an example of the Oculus setup can be found in the ExampleScene scene.
+	</P>
+	<P>
+		When developing a game you intend to release both natively and through SteamVR you will want two build the only change required will be the VRSDK and the camera rig, everything else should
+		work the same.
+	</P>
+
+	<h3>Misc</h3>
+
+	<P>Saving Weapon Prefab:</P>
+	<P>
+		Make sure to only apply prefab changes to the weapon as a whole when there
+		isn't a magazine, bullet or origin destination spheres. As they shouldn't
+		be included in the prefab and will cause problems. Simply closing the editor
+		will clean up the mentioned objects and allow you to apply changes to the weapon
+		prefab.
+	</P>
+
+	<P>(Something go wrong and it's not mentioned here? Email me at sam@massgames.co.uk and I'll see if I can fix it.)</p>
+	</font>
+</BODY>
+</HTML>
