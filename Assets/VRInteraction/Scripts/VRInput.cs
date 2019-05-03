@@ -292,7 +292,7 @@ namespace VRInteraction
 					#else
 					if (handType == SteamVR_Input_Sources.Any)
 					{
-						if (name.Contains("left"))
+						if (name.ToUpper().Contains("LEFT"))
 							handType = SteamVR_Input_Sources.LeftHand;
 						else handType = SteamVR_Input_Sources.RightHand;
 					}
@@ -309,7 +309,7 @@ namespace VRInteraction
 						OvrAvatar avatar = GetComponentInParent<OvrAvatar>();
 						if (avatar == null)
 						{
-							if (name.Contains("left"))
+							if (name.ToUpper().Contains("LEFT"))
 								controllerHand = OVRInput.Controller.LTouch;
 							else
 								controllerHand = OVRInput.Controller.RTouch;
