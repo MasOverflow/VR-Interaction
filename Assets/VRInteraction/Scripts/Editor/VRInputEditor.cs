@@ -9,6 +9,9 @@ using UnityEditor;
 using System.Collections;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
+#if Int_SteamVR
+using Valve.VR;
+#endif
 
 namespace VRInteraction
 {
@@ -43,7 +46,17 @@ namespace VRInteraction
 				ResetToInteractbaleDefault();
 			}
 
+			#if Int_Oculus || (Int_SteamVR && !Int_SteamVR2)
+
+			GUIStyle titleStyle = new GUIStyle();
+			titleStyle.fontSize = 24;
+			titleStyle.normal.textColor = Color.white;
+			GUIContent title1Content = new GUIContent("Oculus and SteamVR Legacy");
+			float height = titleStyle.CalcHeight(title1Content, 10f);
+			EditorGUILayout.LabelField(title1Content, titleStyle, GUILayout.Height(height));
+
 			editActionsFoldout = EditorGUILayout.Foldout(editActionsFoldout, "Edit Actions");
+
 			if (editActionsFoldout)
 			{
 				if (input.VRActions != null)
@@ -278,13 +291,45 @@ namespace VRInteraction
 				}
 			}
 
-			serializedObject.ApplyModifiedProperties();
-
 			EditorGUILayout.HelpBox("The VRInput script allows you to specify a list of custom actions. " +
-				"Do this by expanding the 'Edit Actions' foldout and adding or removing from the list, " +
-				"You can then assign the actions to controller keys.\n" +
+			"Do this by expanding the 'Edit Actions' foldout and adding or removing from the list, " +
+			"You can then assign the actions to controller keys.\n" +
+			"The method 'InputReceived' is called on this object using a SendMessage call. You can implement this " +
+			"method in any script on this object.", MessageType.Info);
+
+			#endif
+			#if Int_SteamVR2
+
+			GUIContent title2Content = new GUIContent("SteamVR 2.0");
+			float height2 = titleStyle.CalcHeight(title2Content, 10f);
+			EditorGUILayout.LabelField(title2Content, titleStyle, GUILayout.Height(height2));
+
+			SerializedProperty handType = serializedObject.FindProperty("handType");
+			EditorGUILayout.PropertyField(handType);
+
+			SerializedProperty triggerPressure = serializedObject.FindProperty("triggerPressure");
+			EditorGUILayout.PropertyField(triggerPressure);
+
+			SerializedProperty touchPosition = serializedObject.FindProperty("touchPosition");
+			EditorGUILayout.PropertyField(touchPosition);
+
+			SerializedProperty padTouched = serializedObject.FindProperty("padTouched");
+			EditorGUILayout.PropertyField(padTouched);
+
+			SerializedProperty padPressed = serializedObject.FindProperty("padPressed");
+			EditorGUILayout.PropertyField(padPressed);
+
+			SerializedProperty booleanActions = serializedObject.FindProperty("booleanActions");
+			EditorGUILayout.PropertyField(booleanActions, true);
+
+			EditorGUILayout.HelpBox("Create your actions in the SteamVR Input Editor. Then specify " +
+				"the actions in the lists above. The name of the action is the method called.\n" +
 				"The method 'InputReceived' is called on this object using a SendMessage call. You can implement this " +
 				"method in any script on this object.", MessageType.Info);
+
+			#endif
+
+			serializedObject.ApplyModifiedProperties();
 		}
 
 		public void ResetToInteractbaleDefault()
@@ -311,6 +356,28 @@ namespace VRInteraction
 			input.menuKeyOculus = 0;
 			input.AXKey = 0;
 			input.AXKeyOculus = 0;
+
+			#if Int_SteamVR2
+			SteamVR_Action_Boolean actionAction = SteamVR_Input.GetAction<SteamVR_Action_Boolean>("ACTION");
+			SteamVR_Action_Boolean pickupDropAction = SteamVR_Input.GetAction<SteamVR_Action_Boolean>("PICKUP_DROP");
+			input.booleanActions.Clear();
+			input.booleanActions.Add(actionAction);
+			input.booleanActions.Add(pickupDropAction);
+
+			input.triggerPressure = SteamVR_Input.GetAction<SteamVR_Action_Single>("TriggerPressure");
+			input.touchPosition = SteamVR_Input.GetAction<SteamVR_Action_Vector2>("TouchPosition");
+			input.padTouched = SteamVR_Input.GetAction<SteamVR_Action_Boolean>("PadTouched");
+			input.padPressed = SteamVR_Input.GetAction<SteamVR_Action_Boolean>("PadPressed");
+
+			input.handType = input.LeftHand ? SteamVR_Input_Sources.LeftHand : SteamVR_Input_Sources.RightHand;
+			SteamVR_Behaviour_Pose poseComp = input.GetComponent<SteamVR_Behaviour_Pose>();
+			if (poseComp == null)
+			{
+				poseComp = input.gameObject.AddComponent<SteamVR_Behaviour_Pose>();
+				poseComp.inputSource = input.handType;
+			}
+
+			#endif
 
 			EditorUtility.SetDirty(input);
 			EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());

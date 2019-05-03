@@ -9,6 +9,9 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+#if Int_SteamVR
+using Valve.VR;
+#endif
 
 namespace VRInteraction
 {
@@ -26,10 +29,10 @@ namespace VRInteraction
 		public float forceGrabDistance = 0f;
 		public bool useHoverLine;
 		public Material hoverLineMat;
+		public Transform _vrRigRoot;
 
 		protected VRInteractableItem _hoverItem;
 		protected VRInteractableItem _heldItem;
-		protected Transform _vrRigRoot;
 		protected bool beingDestroyed;
 		protected VRInput _vrInput;
 		protected bool _highlighting;
@@ -83,40 +86,53 @@ namespace VRInteraction
 		{
 			get
 			{
-				#if Int_SteamVR && !Int_SteamVR2
+				#if Int_SteamVR
 				if (vrInput.isSteamVR())
 				{
 					if (_vrRigRoot == null)
 					{
 						SteamVR_PlayArea playArea = GetComponentInParent<SteamVR_PlayArea>();
 						if (playArea != null) _vrRigRoot = playArea.transform;
+						else _vrRigRoot = transform.root;
 					}
-					return _vrRigRoot;
 				}
 				#endif
 				#if Int_Oculus 
 				if (!vrInput.isSteamVR())
 				{
-					if (_vrRigRoot == null) _vrRigRoot = GetComponentInParent<OvrAvatar>().transform;
-					if (_vrRigRoot.parent != null) _vrRigRoot = _vrRigRoot.parent;
-					return _vrRigRoot;
+					if (_vrRigRoot == null)
+					{
+						OvrAvatar ovrAvatar = GetComponentInParent<OvrAvatar>();
+						if (ovrAvatar != null)
+						{
+							if (ovrAvatar.transform.parent != null) _vrRigRoot = ovrAvatar.transform.parent;
+							else _vrRigRoot = ovrAvatar.transform;
+						} else _vrRigRoot = transform.root;
+					}
 				}
 				#endif
-				return null;
+				return _vrRigRoot;
 			}
 		}
 		virtual public Vector3 Velocity
 		{
 			get
 			{
-				#if Int_SteamVR && !Int_SteamVR2
+				#if Int_SteamVR
 				if (vrInput.isSteamVR())
 				{
+					Vector3 deviceVel = Vector3.zero;
+					#if !Int_SteamVR2
 					var device = SteamVR_Controller.Input((int)vrInput.controller.controllerIndex);
+					deviceVel = device.velocity;
+					#else
+					SteamVR_Behaviour_Pose poseComp = GetComponent<SteamVR_Behaviour_Pose>();
+					if (poseComp != null) deviceVel = poseComp.GetVelocity();
+					#endif
 					Rigidbody body = transform.parent.GetComponent<Rigidbody>();
 					Vector3 bodyVel = Vector3.zero;
 					if (body != null) bodyVel = body.velocity;
-					return bodyVel + (transform.parent.rotation * device.velocity);
+					return bodyVel + (transform.parent.rotation * deviceVel);
 				}
 				#endif
 				#if Int_Oculus 
@@ -132,11 +148,18 @@ namespace VRInteraction
 		{
 			get
 			{
-				#if Int_SteamVR && !Int_SteamVR2
+				#if Int_SteamVR
 				if (vrInput.isSteamVR())
 				{
+					Vector3 deviceAngularVel = Vector3.zero;
+					#if !Int_SteamVR2
 					var device = SteamVR_Controller.Input((int)vrInput.controller.controllerIndex);
-					return transform.parent.TransformVector(device.angularVelocity);
+					deviceAngularVel = device.angularVelocity;
+					#else
+					SteamVR_Behaviour_Pose poseComp = GetComponent<SteamVR_Behaviour_Pose>();
+					if (poseComp != null) deviceAngularVel = poseComp.GetAngularVelocity();
+					#endif
+					return transform.parent.TransformVector(deviceAngularVel);
 				}
 				#endif
 				#if Int_Oculus 

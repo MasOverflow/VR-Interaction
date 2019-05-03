@@ -14,6 +14,7 @@ public class DependencyChecker : EditorWindow
 	private const string SteamVR2Define = "Int_SteamVR2";
 	private const string OculusDefine = "Int_Oculus";
 	private const string VRInteractionDefine = "VRInteraction";
+	private const string FinalIKDefine = "Int_FinalIK";
 
 	[DidReloadScripts]
 	private static void CheckVRPlatforms()
@@ -21,6 +22,7 @@ public class DependencyChecker : EditorWindow
 		bool hasOculusSDK = DoesTypeExist("OVRInput");
 		bool hasSteamVR = DoesTypeExist("SteamVR");
 		bool hasSteamVR2 = hasSteamVR ? !DoesTypeExist("SteamVR_TrackedController") : false;
+		bool hasFinalIK = DoesTypeExist("VRIK");
 
 		string scriptingDefine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone);
 		string[] scriptingDefines = scriptingDefine.Split(';');
@@ -28,6 +30,7 @@ public class DependencyChecker : EditorWindow
 		bool hasSteamVRDefine = scriptingDefines.Contains(SteamVRDefine);
 		bool hasSteamVR2Define = scriptingDefines.Contains(SteamVR2Define);
 		bool hasVRInteractionDefine = scriptingDefine.Contains(VRInteractionDefine);
+		bool hasFinalIKDefine = scriptingDefine.Contains(FinalIKDefine);
 
 		string action = "";
 		bool doingNothing = true;
@@ -63,9 +66,9 @@ public class DependencyChecker : EditorWindow
 				AddDefine(SteamVR2Define);
 				doingNothing = false;
 				action += " Adding Steamvr 2";
-				Debug.LogError("SteamVR 2 is not currently supported. You can download SteamVR 1.2.3 from here:\n" +
-					"https://github.com/ValveSoftware/steamvr_unity_plugin/tree/fad02abee8ed45791993e92e420b340f63940aca\n" +
-					"Please delete the SteamVR folder and replace with the one from this repo.");
+				//Debug.LogError("SteamVR 2 is not currently supported. You can download SteamVR 1.2.3 from here:\n" +
+				//	"https://github.com/ValveSoftware/steamvr_unity_plugin/tree/fad02abee8ed45791993e92e420b340f63940aca\n" +
+				//	"Please delete the SteamVR folder and replace with the one from this repo.");
 			}
 		} else if (!hasSteamVR && hasSteamVRDefine)
 		{
@@ -79,6 +82,17 @@ public class DependencyChecker : EditorWindow
 			RemoveDefine(SteamVR2Define);
 			doingNothing = false;
 			action += " Removing Steamvr2 ";
+		}
+		if (hasFinalIK && !hasFinalIKDefine)
+		{
+			AddDefine(FinalIKDefine);
+			doingNothing = false;
+			action += "Adding FinalIK ";
+		} else if (!hasFinalIK && hasFinalIKDefine)
+		{
+			action += "Removing FinalIK ";
+			doingNothing = false;
+			RemoveDefine(FinalIKDefine);
 		}
 		if (doingNothing)
 		{

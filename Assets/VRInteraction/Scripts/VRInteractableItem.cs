@@ -337,8 +337,8 @@ namespace VRInteraction
 					PlaySound(pickupSound);
 				else PlaySound(forceGrabSound, hand.getControllerAnchorOffset.position);
 			} else CheckIK(true, hand);
-			if (pickupEvent != null) pickupEvent.Invoke();
 			heldBy = hand;
+			if (pickupEvent != null) pickupEvent.Invoke();
 			return true;
 		}
 

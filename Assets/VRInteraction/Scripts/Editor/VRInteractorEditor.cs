@@ -110,6 +110,10 @@ namespace VRInteraction
 			SerializedProperty forceGrabDistance = serializedObject.FindProperty("forceGrabDistance");
 			EditorGUILayout.PropertyField(forceGrabDistance);
 
+			SerializedProperty _vrRigRoot = serializedObject.FindProperty("_vrRigRoot");
+			GUIContent vrRigRootContent = new GUIContent("VR Rig Root", "Can usually leave null and it will be found automatically, if it is wrong you can set it here");
+			EditorGUILayout.PropertyField(_vrRigRoot, vrRigRootContent);
+
 			serializedObject.ApplyModifiedProperties();
 
 			EditorGUILayout.HelpBox(
