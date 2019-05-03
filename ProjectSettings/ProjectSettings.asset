@@ -626,7 +626,7 @@ PlayerSettings:
   webGLUseWasm: 0
   webGLCompressionFormat: 1
   scriptingDefineSymbols:
-    1: VRInteraction;Int_SteamVR;Int_Oculus
+    1: VRInteraction;Int_Oculus;Int_SteamVR;Int_SteamVR2;Int_FinalIK
   platformArchitecture: {}
   scriptingBackend:
     Standalone: 0

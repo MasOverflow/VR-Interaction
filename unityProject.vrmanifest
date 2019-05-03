@@ -1,0 +1,16 @@
+{
+  "source": "Unity",
+  "applications": [
+    {
+      "app_key": "application.generated.unity.vrinteraction.exe",
+      "launch_type": "url",
+      "url": "steam://launch/",
+      "action_manifest_path": "E:\\VR-Interaction\\actions.json",
+      "strings": {
+        "en_us": {
+          "name": "VRInteraction [Testing]"
+        }
+      }
+    }
+  ]
+}

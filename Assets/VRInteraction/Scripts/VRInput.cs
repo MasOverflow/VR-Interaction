@@ -91,6 +91,25 @@ namespace VRInteraction
 			
 		virtual protected void Update()
 		{
+			#if Int_SteamVR2
+
+			if (isSteamVR())
+			{
+				foreach(SteamVR_Action_Boolean boolAction in booleanActions)
+				{
+					if (boolAction.GetStateDown(handType))
+					{
+						SendMessageToInteractor(boolAction.GetShortName());
+					}
+					if (boolAction.GetStateUp(handType))
+					{
+						SendMessageToInteractor(boolAction.GetShortName()+"Released");
+					}
+				}
+			}
+			else
+			{
+			#endif
 			bool trigger = TriggerPressed;
 			if (trigger && !_triggerPressedFlag)
 			{
@@ -101,6 +120,42 @@ namespace VRInteraction
 				_triggerPressedFlag = false;
 				TriggerReleased();
 			}
+
+			bool grip = GripPressed;
+			if (grip && !_grippedFlag)
+			{
+				_grippedFlag = true;
+				Gripped();
+			} else if (!grip && _grippedFlag)
+			{
+				_grippedFlag = false;
+				UnGripped();
+			}
+
+			bool menu = MenuPressed;
+			if (menu && !_menuPressedFlag)
+			{
+				_menuPressedFlag = true;
+				MenuClicked();
+			} else if (!menu && _menuPressedFlag)
+			{
+				_menuPressedFlag = false;
+				MenuReleased();
+			}
+
+			bool AX = AXPressed;
+			if (AX && !_AX_PressedFlag)
+			{
+				_AX_PressedFlag = true;
+				AXClicked();
+			} else if (!AX && _AX_PressedFlag)
+			{
+				_AX_PressedFlag = false;
+				AXReleased();
+			}
+			#if Int_SteamVR2
+			}
+			#endif
 
 			bool thumbstick = PadPressed;
 			if (thumbstick && !_padPressedFlag)
@@ -158,55 +213,6 @@ namespace VRInteraction
 				} else if (!PadTopPressed && _stickTopDown)
 					_stickTopDown = false;
 			}
-
-			bool grip = GripPressed;
-			if (grip && !_grippedFlag)
-			{
-				_grippedFlag = true;
-				Gripped();
-			} else if (!grip && _grippedFlag)
-			{
-				_grippedFlag = false;
-				UnGripped();
-			}
-
-			bool menu = MenuPressed;
-			if (menu && !_menuPressedFlag)
-			{
-				_menuPressedFlag = true;
-				MenuClicked();
-			} else if (!menu && _menuPressedFlag)
-			{
-				_menuPressedFlag = false;
-				MenuReleased();
-			}
-
-			bool AX = AXPressed;
-			if (AX && !_AX_PressedFlag)
-			{
-				_AX_PressedFlag = true;
-				AXClicked();
-			} else if (!AX && _AX_PressedFlag)
-			{
-				_AX_PressedFlag = false;
-				AXReleased();
-			}
-
-			#if Int_SteamVR2
-
-			foreach(SteamVR_Action_Boolean boolAction in booleanActions)
-			{
-				if (boolAction.GetStateDown(handType))
-				{
-					SendMessageToInteractor(boolAction.GetShortName());
-				}
-				if (boolAction.GetStateUp(handType))
-				{
-					SendMessageToInteractor(boolAction.GetShortName()+"Released");
-				}
-			}
-
-			#endif
 		}
 
 		#if Int_SteamVR && !Int_SteamVR2
@@ -398,7 +404,7 @@ namespace VRInteraction
 		{
 			get
 			{
-				return TriggerPressure > 0.5f;
+				return TriggerPressure > 0.9f;
 			}
 		}
 		virtual public float TriggerPressure
