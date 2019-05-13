@@ -1,9 +1,10 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Oculus.Platform;
 
-public class RemotePlayer {
+public class RemotePlayer
+{
     public ulong remoteUserID;
     public bool stillInRoom;
 
@@ -13,18 +14,19 @@ public class RemotePlayer {
     public PeerConnectionState voipConnectionState;
 
     public OvrAvatar RemoteAvatar;
-    // The in-scene objects representing the user
-    public GameObject remotePlayerBody;
 
-    // the last received position updates
-    public Vector3 receivedBodyPosition;
+    // the last received root transform position updates, equivalent to local tracking space transform
+    public Vector3 receivedRootPosition;
 
     // the previous received positions to interpolate from
-    public Vector3 receivedBodyPositionPrior;
+    public Vector3 receivedRootPositionPrior;
 
-    // the last received rotation updates
-    public Quaternion receivedBodyRotation;
+    // the last received root transform rotation updates, equivalent to local tracking space transform
+    public Quaternion receivedRootRotation;
 
     // the previous received rotations to interpolate from
-    public Quaternion receivedBodyRotationPrior;
+    public Quaternion receivedRootRotationPrior;
+
+    // the voip tracker for the player
+    public VoipAudioSourceHiLevel voipSource;
 }

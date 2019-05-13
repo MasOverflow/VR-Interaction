@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class VoiceModDemo_Logic : MonoBehaviour 
@@ -6,7 +6,7 @@ public class VoiceModDemo_Logic : MonoBehaviour
 	public OVRVoiceModContext[] contexts;
 	public Material material;
 	public Transform[] xfrms;
-	public EnableSwitch SwitchTarget;
+	public VoiceModEnableSwitch SwitchTarget;
 
 	private int targetSet = 0;
 

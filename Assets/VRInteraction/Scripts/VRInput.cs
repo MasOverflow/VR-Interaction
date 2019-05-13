@@ -91,25 +91,6 @@ namespace VRInteraction
 			
 		virtual protected void Update()
 		{
-			#if Int_SteamVR2
-
-			if (isSteamVR())
-			{
-				foreach(SteamVR_Action_Boolean boolAction in booleanActions)
-				{
-					if (boolAction.GetStateDown(handType))
-					{
-						SendMessageToInteractor(boolAction.GetShortName());
-					}
-					if (boolAction.GetStateUp(handType))
-					{
-						SendMessageToInteractor(boolAction.GetShortName()+"Released");
-					}
-				}
-			}
-			else
-			{
-			#endif
 			bool trigger = TriggerPressed;
 			if (trigger && !_triggerPressedFlag)
 			{
@@ -120,42 +101,6 @@ namespace VRInteraction
 				_triggerPressedFlag = false;
 				TriggerReleased();
 			}
-
-			bool grip = GripPressed;
-			if (grip && !_grippedFlag)
-			{
-				_grippedFlag = true;
-				Gripped();
-			} else if (!grip && _grippedFlag)
-			{
-				_grippedFlag = false;
-				UnGripped();
-			}
-
-			bool menu = MenuPressed;
-			if (menu && !_menuPressedFlag)
-			{
-				_menuPressedFlag = true;
-				MenuClicked();
-			} else if (!menu && _menuPressedFlag)
-			{
-				_menuPressedFlag = false;
-				MenuReleased();
-			}
-
-			bool AX = AXPressed;
-			if (AX && !_AX_PressedFlag)
-			{
-				_AX_PressedFlag = true;
-				AXClicked();
-			} else if (!AX && _AX_PressedFlag)
-			{
-				_AX_PressedFlag = false;
-				AXReleased();
-			}
-			#if Int_SteamVR2
-			}
-			#endif
 
 			bool thumbstick = PadPressed;
 			if (thumbstick && !_padPressedFlag)
@@ -213,6 +158,55 @@ namespace VRInteraction
 				} else if (!PadTopPressed && _stickTopDown)
 					_stickTopDown = false;
 			}
+
+			bool grip = GripPressed;
+			if (grip && !_grippedFlag)
+			{
+				_grippedFlag = true;
+				Gripped();
+			} else if (!grip && _grippedFlag)
+			{
+				_grippedFlag = false;
+				UnGripped();
+			}
+
+			bool menu = MenuPressed;
+			if (menu && !_menuPressedFlag)
+			{
+				_menuPressedFlag = true;
+				MenuClicked();
+			} else if (!menu && _menuPressedFlag)
+			{
+				_menuPressedFlag = false;
+				MenuReleased();
+			}
+
+			bool AX = AXPressed;
+			if (AX && !_AX_PressedFlag)
+			{
+				_AX_PressedFlag = true;
+				AXClicked();
+			} else if (!AX && _AX_PressedFlag)
+			{
+				_AX_PressedFlag = false;
+				AXReleased();
+			}
+
+			#if Int_SteamVR2
+
+			foreach(SteamVR_Action_Boolean boolAction in booleanActions)
+			{
+				if (boolAction.GetStateDown(handType))
+				{
+					SendMessageToInteractor(boolAction.GetShortName());
+				}
+				if (boolAction.GetStateUp(handType))
+				{
+					SendMessageToInteractor(boolAction.GetShortName()+"Released");
+				}
+			}
+
+			#endif
 		}
 
 		#if Int_SteamVR && !Int_SteamVR2
@@ -262,7 +256,7 @@ namespace VRInteraction
 			get
 			{
 			#if Int_SteamVR
-			if ((GetComponent<SteamVR_TrackedObject>() != null || GetComponentInParent<SteamVR_PlayArea>() != null) || !SteamVR.enabled || SteamVR.instance == null || SteamVR.instance.hmd_TrackingSystemName != "oculus")
+			if ((GetComponent<SteamVR_TrackedObject>() != null || GetComponentInParent<SteamVR_PlayArea>() != null) || (SteamVR.active && SteamVR.instance != null && SteamVR.instance.hmd_TrackingSystemName != "oculus"))
 				return HMDType.VIVE; 
 			else
 				return HMDType.OCULUS;
@@ -290,12 +284,9 @@ namespace VRInteraction
 						Debug.LogError("Can't find SteamVR_ControllerManager in scene");
 					}
 					#else
-					if (handType == SteamVR_Input_Sources.Any)
-					{
-						if (name.ToUpper().Contains("LEFT"))
-							handType = SteamVR_Input_Sources.LeftHand;
-						else handType = SteamVR_Input_Sources.RightHand;
-					}
+					if (name.ToUpper().Contains("LEFT"))
+						handType = SteamVR_Input_Sources.LeftHand;
+					else handType = SteamVR_Input_Sources.RightHand;
 					return handType == SteamVR_Input_Sources.LeftHand;
 					#endif
 				}
@@ -304,22 +295,19 @@ namespace VRInteraction
 				#if Int_Oculus
 				if (!isSteamVR())
 				{
-					if (controllerHand == OVRInput.Controller.None)
+					OvrAvatar avatar = GetComponentInParent<OvrAvatar>();
+					if (avatar == null)
 					{
-						OvrAvatar avatar = GetComponentInParent<OvrAvatar>();
-						if (avatar == null)
-						{
-							if (name.ToUpper().Contains("LEFT"))
-								controllerHand = OVRInput.Controller.LTouch;
-							else
-								controllerHand = OVRInput.Controller.RTouch;
-						} else
-						{
-							if (avatar.ControllerLeft.transform == transform || avatar.HandLeft.transform == transform)
-								controllerHand = OVRInput.Controller.LTouch;
-							else if (avatar.ControllerRight.transform == transform || avatar.HandRight.transform == transform)
-								controllerHand = OVRInput.Controller.RTouch;
-						}
+						if (name.ToUpper().Contains("LEFT"))
+							controllerHand = OVRInput.Controller.LTouch;
+						else
+							controllerHand = OVRInput.Controller.RTouch;
+					} else
+					{
+						if (avatar.ControllerLeft.transform == transform || avatar.HandLeft.transform == transform)
+							controllerHand = OVRInput.Controller.LTouch;
+						else if (avatar.ControllerRight.transform == transform || avatar.HandRight.transform == transform)
+							controllerHand = OVRInput.Controller.RTouch;
 					}
 					return controllerHand == OVRInput.Controller.LTouch;
 				}
@@ -330,15 +318,17 @@ namespace VRInteraction
 
 		public bool ActionPressed(string action)
 		{
-			#if !Int_SteamVR2
-			for(int i=0; i<VRActions.Length; i++)
+			if (VRActions != null)
 			{
-				if (action == VRActions[i])
+				for(int i=0; i<VRActions.Length; i++)
 				{
-					return ActionPressed(i);
+					if (action == VRActions[i])
+					{
+						return ActionPressed(i);
+					}
 				}
 			}
-			#else
+			#if Int_SteamVR2
 			foreach (SteamVR_Action_Boolean booleanActions in booleanActions)
 			{
 				if (booleanActions.GetShortName() == action)
@@ -404,7 +394,7 @@ namespace VRInteraction
 		{
 			get
 			{
-				return TriggerPressure > 0.9f;
+				return TriggerPressure > 0.5f;
 			}
 		}
 		virtual public float TriggerPressure

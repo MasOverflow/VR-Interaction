@@ -10,7 +10,7 @@ namespace Oculus.Platform
 
   public abstract class Message<T> : Message
   {
-    public delegate void Callback(Message<T> message);
+    public new delegate void Callback(Message<T> message);
     public Message(IntPtr c_message) : base(c_message) {
       if (!IsError)
       {
@@ -78,8 +78,18 @@ namespace Oculus.Platform
       Application_GetVersion                              = 0x68670A0E,
       Application_LaunchOtherApp                          = 0x54E2D1F8,
       AssetFile_Delete                                    = 0x6D5D7886,
+      AssetFile_DeleteById                                = 0x5AE8CD52,
+      AssetFile_DeleteByName                              = 0x420AC1CF,
       AssetFile_Download                                  = 0x11449FC5,
+      AssetFile_DownloadById                              = 0x2D008992,
+      AssetFile_DownloadByName                            = 0x6336CEFA,
       AssetFile_DownloadCancel                            = 0x080AD3C7,
+      AssetFile_DownloadCancelById                        = 0x51659514,
+      AssetFile_DownloadCancelByName                      = 0x446AECFA,
+      AssetFile_GetList                                   = 0x4AFC6F74,
+      AssetFile_Status                                    = 0x02D32F60,
+      AssetFile_StatusById                                = 0x5D955D38,
+      AssetFile_StatusByName                              = 0x41CFDA50,
       CloudStorage_Delete                                 = 0x28DA456D,
       CloudStorage_GetNextCloudStorageMetadataArrayPage   = 0x5C07A2EF,
       CloudStorage_Load                                   = 0x40846B41,
@@ -97,6 +107,8 @@ namespace Oculus.Platform
       IAP_GetProductsBySKU                                = 0x7E9ACAF5,
       IAP_GetViewerPurchases                              = 0x3A0F8419,
       IAP_LaunchCheckoutFlow                              = 0x3F9B0D0D,
+      LanguagePack_GetCurrent                             = 0x1F90F0D5,
+      LanguagePack_SetCurrent                             = 0x5B4FBBE0,
       Leaderboard_GetEntries                              = 0x5DB3474C,
       Leaderboard_GetEntriesAfterRank                     = 0x18378BEF,
       Leaderboard_GetNextEntries                          = 0x4E207CD9,
@@ -158,6 +170,7 @@ namespace Oculus.Platform
       User_GetOrgScopedID                                 = 0x18F0B01B,
       User_GetSdkAccounts                                 = 0x67526A83,
       User_GetUserProof                                   = 0x22810483,
+      User_LaunchFriendRequestFlow                        = 0x0904B598,
       User_LaunchProfile                                  = 0x0A397297,
       Voip_SetSystemVoipSuppressed                        = 0x453FC9AA,
 
@@ -168,6 +181,12 @@ namespace Oculus.Platform
 
       /// Sent to indicate download progress for asset files.
       Notification_AssetFile_DownloadUpdate = 0x2FDD0CCD,
+
+      /// Result of a leader picking an application for CAL launch.
+      Notification_Cal_FinalizeApplication = 0x750C5099,
+
+      /// Application that the group leader has proposed for a CAL launch.
+      Notification_Cal_ProposeApplication = 0x2E7451F5,
 
       /// Sent to indicate that more data has been read or an error occured.
       Notification_HTTP_Transfer = 0x7DD46E2F,
@@ -195,6 +214,9 @@ namespace Oculus.Platform
       /// Generated in response to Net.Ping(). Either contains ping time in
       /// microseconds or indicates that there was a timeout.
       Notification_Networking_PingResult = 0x51153012,
+
+      /// Indicates that party has been updated
+      Notification_Party_PartyUpdate = 0x1D118AB2,
 
       /// Indicates that the user has accepted an invitation, for example in Oculus
       /// Home. Use Message.GetString() to extract the ID of the room that the user
@@ -233,6 +255,7 @@ namespace Oculus.Platform
       Notification_Voip_SystemVoipState = 0x58D254A5,
 
 
+      Platform_InitializeWithAccessToken = 0x35692F2B,
       Platform_InitializeStandaloneOculus = 0x51F8CE0C,
       Platform_InitializeAndroidAsynchronous = 0x1AD307B4,
       Platform_InitializeWindowsAsynchronous = 0x6DA7BA8F,
@@ -253,22 +276,33 @@ namespace Oculus.Platform
 
     public virtual PlatformInitialize GetPlatformInitialize() { return null; }
 
+    public virtual AbuseReportRecording GetAbuseReportRecording() { return null; }
     public virtual AchievementDefinitionList GetAchievementDefinitions() { return null; }
     public virtual AchievementProgressList GetAchievementProgressList() { return null; }
     public virtual AchievementUpdate GetAchievementUpdate() { return null; }
     public virtual ApplicationVersion GetApplicationVersion() { return null; }
+    public virtual AssetDetails GetAssetDetails() { return null; }
+    public virtual AssetDetailsList GetAssetDetailsList() { return null; }
     public virtual AssetFileDeleteResult GetAssetFileDeleteResult() { return null; }
     public virtual AssetFileDownloadCancelResult GetAssetFileDownloadCancelResult() { return null; }
     public virtual AssetFileDownloadResult GetAssetFileDownloadResult() { return null; }
     public virtual AssetFileDownloadUpdate GetAssetFileDownloadUpdate() { return null; }
+    public virtual CalApplicationFinalized GetCalApplicationFinalized() { return null; }
+    public virtual CalApplicationProposed GetCalApplicationProposed() { return null; }
+    public virtual CalApplicationSuggestionList GetCalApplicationSuggestionList() { return null; }
     public virtual CloudStorageConflictMetadata GetCloudStorageConflictMetadata() { return null; }
     public virtual CloudStorageData GetCloudStorageData() { return null; }
     public virtual CloudStorageMetadata GetCloudStorageMetadata() { return null; }
     public virtual CloudStorageMetadataList GetCloudStorageMetadataList() { return null; }
     public virtual CloudStorageUpdateResponse GetCloudStorageUpdateResponse() { return null; }
     public virtual InstalledApplicationList GetInstalledApplicationList() { return null; }
+    public virtual LaunchBlockFlowResult GetLaunchBlockFlowResult() { return null; }
+    public virtual LaunchFriendRequestFlowResult GetLaunchFriendRequestFlowResult() { return null; }
+    public virtual LaunchReportFlowResult GetLaunchReportFlowResult() { return null; }
+    public virtual LaunchUnblockFlowResult GetLaunchUnblockFlowResult() { return null; }
     public virtual bool GetLeaderboardDidUpdate() { return false; }
     public virtual LeaderboardEntryList GetLeaderboardEntryList() { return null; }
+    public virtual LinkedAccountList GetLinkedAccountList() { return null; }
     public virtual LivestreamingApplicationStatus GetLivestreamingApplicationStatus() { return null; }
     public virtual LivestreamingStartResult GetLivestreamingStartResult() { return null; }
     public virtual LivestreamingStatus GetLivestreamingStatus() { return null; }
@@ -281,6 +315,7 @@ namespace Oculus.Platform
     public virtual OrgScopedID GetOrgScopedID() { return null; }
     public virtual Party GetParty() { return null; }
     public virtual PartyID GetPartyID() { return null; }
+    public virtual PartyUpdateNotification GetPartyUpdateNotification() { return null; }
     public virtual PidList GetPidList() { return null; }
     public virtual ProductList GetProductList() { return null; }
     public virtual Purchase GetPurchase() { return null; }
@@ -334,20 +369,46 @@ namespace Oculus.Platform
           message = new MessageWithApplicationVersion(messageHandle);
           break;
 
+        case Message.MessageType.AssetFile_Status:
+        case Message.MessageType.AssetFile_StatusById:
+        case Message.MessageType.AssetFile_StatusByName:
+        case Message.MessageType.LanguagePack_GetCurrent:
+          message = new MessageWithAssetDetails(messageHandle);
+          break;
+
+        case Message.MessageType.AssetFile_GetList:
+          message = new MessageWithAssetDetailsList(messageHandle);
+          break;
+
         case Message.MessageType.AssetFile_Delete:
+        case Message.MessageType.AssetFile_DeleteById:
+        case Message.MessageType.AssetFile_DeleteByName:
           message = new MessageWithAssetFileDeleteResult(messageHandle);
           break;
 
         case Message.MessageType.AssetFile_DownloadCancel:
+        case Message.MessageType.AssetFile_DownloadCancelById:
+        case Message.MessageType.AssetFile_DownloadCancelByName:
           message = new MessageWithAssetFileDownloadCancelResult(messageHandle);
           break;
 
         case Message.MessageType.AssetFile_Download:
+        case Message.MessageType.AssetFile_DownloadById:
+        case Message.MessageType.AssetFile_DownloadByName:
+        case Message.MessageType.LanguagePack_SetCurrent:
           message = new MessageWithAssetFileDownloadResult(messageHandle);
           break;
 
         case Message.MessageType.Notification_AssetFile_DownloadUpdate:
           message = new MessageWithAssetFileDownloadUpdate(messageHandle);
+          break;
+
+        case Message.MessageType.Notification_Cal_FinalizeApplication:
+          message = new MessageWithCalApplicationFinalized(messageHandle);
+          break;
+
+        case Message.MessageType.Notification_Cal_ProposeApplication:
+          message = new MessageWithCalApplicationProposed(messageHandle);
           break;
 
         case Message.MessageType.CloudStorage_LoadConflictMetadata:
@@ -387,6 +448,10 @@ namespace Oculus.Platform
         case Message.MessageType.Room_UpdateOwner:
         case Message.MessageType.User_LaunchProfile:
           message = new Message(messageHandle);
+          break;
+
+        case Message.MessageType.User_LaunchFriendRequestFlow:
+          message = new MessageWithLaunchFriendRequestFlowResult(messageHandle);
           break;
 
         case Message.MessageType.Leaderboard_GetEntries:
@@ -438,6 +503,10 @@ namespace Oculus.Platform
 
         case Message.MessageType.Party_GetCurrent:
           message = new MessageWithPartyUnderCurrentParty(messageHandle);
+          break;
+
+        case Message.MessageType.Notification_Party_PartyUpdate:
+          message = new MessageWithPartyUpdateNotification(messageHandle);
           break;
 
         case Message.MessageType.ApplicationLifecycle_GetRegisteredPIDs:
@@ -567,6 +636,7 @@ namespace Oculus.Platform
           message = new MessageWithHttpTransferUpdate(messageHandle);
           break;
 
+        case Message.MessageType.Platform_InitializeWithAccessToken:
         case Message.MessageType.Platform_InitializeStandaloneOculus:
         case Message.MessageType.Platform_InitializeAndroidAsynchronous:
         case Message.MessageType.Platform_InitializeWindowsAsynchronous:
@@ -605,6 +675,18 @@ namespace Oculus.Platform
     internal static ExtraMessageTypesHandler HandleExtraMessageTypes { set; private get; }
   }
 
+  public class MessageWithAbuseReportRecording : Message<AbuseReportRecording>
+  {
+    public MessageWithAbuseReportRecording(IntPtr c_message) : base(c_message) { }
+    public override AbuseReportRecording GetAbuseReportRecording() { return Data; }
+    protected override AbuseReportRecording GetDataFromMessage(IntPtr c_message)
+    {
+      var msg = CAPI.ovr_Message_GetNativeMessage(c_message);
+      var obj = CAPI.ovr_Message_GetAbuseReportRecording(msg);
+      return new AbuseReportRecording(obj);
+    }
+
+  }
   public class MessageWithAchievementDefinitions : Message<AchievementDefinitionList>
   {
     public MessageWithAchievementDefinitions(IntPtr c_message) : base(c_message) { }
@@ -653,6 +735,30 @@ namespace Oculus.Platform
     }
 
   }
+  public class MessageWithAssetDetails : Message<AssetDetails>
+  {
+    public MessageWithAssetDetails(IntPtr c_message) : base(c_message) { }
+    public override AssetDetails GetAssetDetails() { return Data; }
+    protected override AssetDetails GetDataFromMessage(IntPtr c_message)
+    {
+      var msg = CAPI.ovr_Message_GetNativeMessage(c_message);
+      var obj = CAPI.ovr_Message_GetAssetDetails(msg);
+      return new AssetDetails(obj);
+    }
+
+  }
+  public class MessageWithAssetDetailsList : Message<AssetDetailsList>
+  {
+    public MessageWithAssetDetailsList(IntPtr c_message) : base(c_message) { }
+    public override AssetDetailsList GetAssetDetailsList() { return Data; }
+    protected override AssetDetailsList GetDataFromMessage(IntPtr c_message)
+    {
+      var msg = CAPI.ovr_Message_GetNativeMessage(c_message);
+      var obj = CAPI.ovr_Message_GetAssetDetailsArray(msg);
+      return new AssetDetailsList(obj);
+    }
+
+  }
   public class MessageWithAssetFileDeleteResult : Message<AssetFileDeleteResult>
   {
     public MessageWithAssetFileDeleteResult(IntPtr c_message) : base(c_message) { }
@@ -698,6 +804,42 @@ namespace Oculus.Platform
       var msg = CAPI.ovr_Message_GetNativeMessage(c_message);
       var obj = CAPI.ovr_Message_GetAssetFileDownloadUpdate(msg);
       return new AssetFileDownloadUpdate(obj);
+    }
+
+  }
+  public class MessageWithCalApplicationFinalized : Message<CalApplicationFinalized>
+  {
+    public MessageWithCalApplicationFinalized(IntPtr c_message) : base(c_message) { }
+    public override CalApplicationFinalized GetCalApplicationFinalized() { return Data; }
+    protected override CalApplicationFinalized GetDataFromMessage(IntPtr c_message)
+    {
+      var msg = CAPI.ovr_Message_GetNativeMessage(c_message);
+      var obj = CAPI.ovr_Message_GetCalApplicationFinalized(msg);
+      return new CalApplicationFinalized(obj);
+    }
+
+  }
+  public class MessageWithCalApplicationProposed : Message<CalApplicationProposed>
+  {
+    public MessageWithCalApplicationProposed(IntPtr c_message) : base(c_message) { }
+    public override CalApplicationProposed GetCalApplicationProposed() { return Data; }
+    protected override CalApplicationProposed GetDataFromMessage(IntPtr c_message)
+    {
+      var msg = CAPI.ovr_Message_GetNativeMessage(c_message);
+      var obj = CAPI.ovr_Message_GetCalApplicationProposed(msg);
+      return new CalApplicationProposed(obj);
+    }
+
+  }
+  public class MessageWithCalApplicationSuggestionList : Message<CalApplicationSuggestionList>
+  {
+    public MessageWithCalApplicationSuggestionList(IntPtr c_message) : base(c_message) { }
+    public override CalApplicationSuggestionList GetCalApplicationSuggestionList() { return Data; }
+    protected override CalApplicationSuggestionList GetDataFromMessage(IntPtr c_message)
+    {
+      var msg = CAPI.ovr_Message_GetNativeMessage(c_message);
+      var obj = CAPI.ovr_Message_GetCalApplicationSuggestionArray(msg);
+      return new CalApplicationSuggestionList(obj);
     }
 
   }
@@ -773,6 +915,54 @@ namespace Oculus.Platform
     }
 
   }
+  public class MessageWithLaunchBlockFlowResult : Message<LaunchBlockFlowResult>
+  {
+    public MessageWithLaunchBlockFlowResult(IntPtr c_message) : base(c_message) { }
+    public override LaunchBlockFlowResult GetLaunchBlockFlowResult() { return Data; }
+    protected override LaunchBlockFlowResult GetDataFromMessage(IntPtr c_message)
+    {
+      var msg = CAPI.ovr_Message_GetNativeMessage(c_message);
+      var obj = CAPI.ovr_Message_GetLaunchBlockFlowResult(msg);
+      return new LaunchBlockFlowResult(obj);
+    }
+
+  }
+  public class MessageWithLaunchFriendRequestFlowResult : Message<LaunchFriendRequestFlowResult>
+  {
+    public MessageWithLaunchFriendRequestFlowResult(IntPtr c_message) : base(c_message) { }
+    public override LaunchFriendRequestFlowResult GetLaunchFriendRequestFlowResult() { return Data; }
+    protected override LaunchFriendRequestFlowResult GetDataFromMessage(IntPtr c_message)
+    {
+      var msg = CAPI.ovr_Message_GetNativeMessage(c_message);
+      var obj = CAPI.ovr_Message_GetLaunchFriendRequestFlowResult(msg);
+      return new LaunchFriendRequestFlowResult(obj);
+    }
+
+  }
+  public class MessageWithLaunchReportFlowResult : Message<LaunchReportFlowResult>
+  {
+    public MessageWithLaunchReportFlowResult(IntPtr c_message) : base(c_message) { }
+    public override LaunchReportFlowResult GetLaunchReportFlowResult() { return Data; }
+    protected override LaunchReportFlowResult GetDataFromMessage(IntPtr c_message)
+    {
+      var msg = CAPI.ovr_Message_GetNativeMessage(c_message);
+      var obj = CAPI.ovr_Message_GetLaunchReportFlowResult(msg);
+      return new LaunchReportFlowResult(obj);
+    }
+
+  }
+  public class MessageWithLaunchUnblockFlowResult : Message<LaunchUnblockFlowResult>
+  {
+    public MessageWithLaunchUnblockFlowResult(IntPtr c_message) : base(c_message) { }
+    public override LaunchUnblockFlowResult GetLaunchUnblockFlowResult() { return Data; }
+    protected override LaunchUnblockFlowResult GetDataFromMessage(IntPtr c_message)
+    {
+      var msg = CAPI.ovr_Message_GetNativeMessage(c_message);
+      var obj = CAPI.ovr_Message_GetLaunchUnblockFlowResult(msg);
+      return new LaunchUnblockFlowResult(obj);
+    }
+
+  }
   public class MessageWithLeaderboardEntryList : Message<LeaderboardEntryList>
   {
     public MessageWithLeaderboardEntryList(IntPtr c_message) : base(c_message) { }
@@ -782,6 +972,18 @@ namespace Oculus.Platform
       var msg = CAPI.ovr_Message_GetNativeMessage(c_message);
       var obj = CAPI.ovr_Message_GetLeaderboardEntryArray(msg);
       return new LeaderboardEntryList(obj);
+    }
+
+  }
+  public class MessageWithLinkedAccountList : Message<LinkedAccountList>
+  {
+    public MessageWithLinkedAccountList(IntPtr c_message) : base(c_message) { }
+    public override LinkedAccountList GetLinkedAccountList() { return Data; }
+    protected override LinkedAccountList GetDataFromMessage(IntPtr c_message)
+    {
+      var msg = CAPI.ovr_Message_GetNativeMessage(c_message);
+      var obj = CAPI.ovr_Message_GetLinkedAccountArray(msg);
+      return new LinkedAccountList(obj);
     }
 
   }
@@ -926,6 +1128,18 @@ namespace Oculus.Platform
       var msg = CAPI.ovr_Message_GetNativeMessage(c_message);
       var obj = CAPI.ovr_Message_GetPartyID(msg);
       return new PartyID(obj);
+    }
+
+  }
+  public class MessageWithPartyUpdateNotification : Message<PartyUpdateNotification>
+  {
+    public MessageWithPartyUpdateNotification(IntPtr c_message) : base(c_message) { }
+    public override PartyUpdateNotification GetPartyUpdateNotification() { return Data; }
+    protected override PartyUpdateNotification GetDataFromMessage(IntPtr c_message)
+    {
+      var msg = CAPI.ovr_Message_GetNativeMessage(c_message);
+      var obj = CAPI.ovr_Message_GetPartyUpdateNotification(msg);
+      return new PartyUpdateNotification(obj);
     }
 
   }

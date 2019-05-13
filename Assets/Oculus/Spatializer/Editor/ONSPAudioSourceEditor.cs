@@ -1,22 +1,18 @@
-﻿/************************************************************************************
-
-Filename    :   OculusSpatializerUserParamsEditor.cs
+/************************************************************************************
+Filename    :   ONSPAudioSourceEditor.cs
 Content     :   This script adds editor functionality to OculusSpatializerUserParams script.
-Created     :   December 14, 2015
-Authors     :   Peter Giokaris
+Copyright   :   Copyright (c) Facebook Technologies, LLC and its affiliates. All rights reserved.
 
-Copyright   :   Copyright 2015 Oculus VR, Inc. All Rights reserved.
-
-Licensed under the Oculus VR Rift SDK License Version 3.1 (the "License"); 
-you may not use the Oculus VR Rift SDK except in compliance with the License, 
+Licensed under the Oculus SDK Version 3.5 (the "License"); 
+you may not use the Oculus SDK except in compliance with the License, 
 which is provided at the time of installation or download, or which 
 otherwise accompanies this software in either electronic or hard copy form.
 
 You may obtain a copy of the License at
 
-http://www.oculusvr.com/licenses/LICENSE-3.1 
+https://developer.oculus.com/licenses/sdk-3.5/
 
-Unless required by applicable law or agreed to in writing, the Oculus VR SDK 
+Unless required by applicable law or agreed to in writing, the Oculus SDK 
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
@@ -34,19 +30,11 @@ public class OculusSpatializerUserParamsEditor : Editor
 {
 	// target component
 	private ONSPAudioSource m_Component;
-	
-	// highlight color
-	// Color HColor = Color.green;
 
 	// OnEnable
 	void OnEnable()
 	{
 		m_Component = (ONSPAudioSource)target;
-	}
-	
-	// OnDestroy
-	void OnDestroy()
-	{
 	}
 	
 	// OnInspectorGUI
@@ -75,18 +63,12 @@ public class OculusSpatializerUserParamsEditor : Editor
             m_Component.VolumetricRadius = EditorGUILayout.FloatField("Radius", m_Component.VolumetricRadius);
 
 			Separator();
-/*
-			// Reference GUI Layout fields
-			m_Component.VerticalFOV         = EditorGUILayout.FloatField("Vertical FOV", m_Component.VerticalFOV);
-			m_Component.NeckPosition 		= EditorGUILayout.Vector3Field("Neck Position", m_Component.NeckPosition);
-			m_Component.UsePlayerEyeHeight  = EditorGUILayout.Toggle ("Use Player Eye Height", m_Component.UsePlayerEeHeight);
-			m_Component.FollowOrientation   = EditorGUILayout.ObjectField("Follow Orientation", 
-																		m_Component.FollowOrientation,
-																		typeof(Transform), true) as Transform;
-			m_Component.BackgroundColor 	= EditorGUILayout.ColorField("Background Color", m_Component.BackgroundColor);
-			OVREditorGUIUtility.Separator();
-*/
-			
+
+			Label("REVERB SEND LEVEL (-60.0 - 20.0 decibels)");
+			m_Component.ReverbSend  = EditorGUILayout.FloatField(" ", m_Component.ReverbSend);
+
+			Separator();
+
 			#else			 
 			DrawDefaultInspector ();
 			#endif

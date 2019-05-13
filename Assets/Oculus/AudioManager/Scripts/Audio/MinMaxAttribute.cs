@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+using UnityEngine;
+
+namespace OVR
+{
 
 /*
 -----------------------
@@ -19,3 +22,5 @@ public class MinMaxAttribute : PropertyAttribute {
 		this.max = max;
 	}
 }
+
+} // namespace OVR

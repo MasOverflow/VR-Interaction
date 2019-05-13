@@ -17,6 +17,10 @@ namespace Oculus.Platform
       Application_ExecuteCoordinatedLaunch          = 0x267DB4F4,
       Application_GetInstalledApplications          = 0x520F744C,
       Avatar_UpdateMetaData                         = 0x7BCFD98E,
+      Cal_FinalizeApplication                       = 0x1DA9CBD5,
+      Cal_GetSuggestedApplications                  = 0x56707015,
+      Cal_ProposeApplication                        = 0x4E83F2DD,
+      CloudStorage2_GetUserDirectoryPath            = 0x76A42EEE,
       GraphAPI_Get                                  = 0x30FF006E,
       GraphAPI_Post                                 = 0x76A5A7C4,
       HTTP_Get                                      = 0x6FB63223,
@@ -42,11 +46,19 @@ namespace Oculus.Platform
       Room_GetSocialRooms                           = 0x61881D76,
       SystemPermissions_GetStatus                   = 0x1D6A2C09,
       SystemPermissions_LaunchDeeplink              = 0x1A5A8431,
+      User_CancelRecordingForReportFlow             = 0x03E0D149,
+      User_GetLinkedAccounts                        = 0x5793F456,
       User_LaunchBlockFlow                          = 0x6FD62528,
       User_LaunchReportFlow                         = 0x5662A011,
+      User_LaunchReportFlow2                        = 0x7F835863,
+      User_LaunchUnblockFlow                        = 0x14A22A97,
       User_NewEntitledTestUser                      = 0x11741F03,
       User_NewTestUser                              = 0x36E84F8C,
-      User_NewTestUserFriends                       = 0x1ED726C7
+      User_NewTestUserFriends                       = 0x1ED726C7,
+      User_StartRecordingForReportFlow              = 0x6C6E33E3,
+      User_StopRecordingAndLaunchReportFlow         = 0x60788C8B,
+      User_StopRecordingAndLaunchReportFlow2        = 0x19C2B32B,
+      User_TestUserCreateDeviceManifest             = 0x6570B2BD
     };
 
     public static void CrashApplication() {
@@ -58,16 +70,46 @@ namespace Oculus.Platform
       Message message = null;
       switch ((PlatformInternal.MessageTypeInternal)messageType)
       {
+        case MessageTypeInternal.User_StartRecordingForReportFlow:
+          message = new MessageWithAbuseReportRecording(messageHandle);
+          break;
+
+        case MessageTypeInternal.Cal_FinalizeApplication:
+          message = new MessageWithCalApplicationFinalized(messageHandle);
+          break;
+
+        case MessageTypeInternal.Cal_GetSuggestedApplications:
+          message = new MessageWithCalApplicationSuggestionList(messageHandle);
+          break;
+
         case MessageTypeInternal.Application_ExecuteCoordinatedLaunch:
+        case MessageTypeInternal.Cal_ProposeApplication:
         case MessageTypeInternal.Livestreaming_StopPartyStream:
         case MessageTypeInternal.Livestreaming_UpdateMicStatus:
         case MessageTypeInternal.Party_Leave:
-        case MessageTypeInternal.User_LaunchBlockFlow:
+        case MessageTypeInternal.User_CancelRecordingForReportFlow:
+        case MessageTypeInternal.User_TestUserCreateDeviceManifest:
           message = new Message(messageHandle);
           break;
 
         case MessageTypeInternal.Application_GetInstalledApplications:
           message = new MessageWithInstalledApplicationList(messageHandle);
+          break;
+
+        case MessageTypeInternal.User_LaunchBlockFlow:
+          message = new MessageWithLaunchBlockFlowResult(messageHandle);
+          break;
+
+        case MessageTypeInternal.User_LaunchReportFlow2:
+          message = new MessageWithLaunchReportFlowResult(messageHandle);
+          break;
+
+        case MessageTypeInternal.User_LaunchUnblockFlow:
+          message = new MessageWithLaunchUnblockFlowResult(messageHandle);
+          break;
+
+        case MessageTypeInternal.User_GetLinkedAccounts:
+          message = new MessageWithLinkedAccountList(messageHandle);
           break;
 
         case MessageTypeInternal.Livestreaming_IsAllowedForApplication:
@@ -112,6 +154,7 @@ namespace Oculus.Platform
           break;
 
         case MessageTypeInternal.Avatar_UpdateMetaData:
+        case MessageTypeInternal.CloudStorage2_GetUserDirectoryPath:
         case MessageTypeInternal.GraphAPI_Get:
         case MessageTypeInternal.GraphAPI_Post:
         case MessageTypeInternal.HTTP_Get:
@@ -130,6 +173,8 @@ namespace Oculus.Platform
           break;
 
         case MessageTypeInternal.User_LaunchReportFlow:
+        case MessageTypeInternal.User_StopRecordingAndLaunchReportFlow:
+        case MessageTypeInternal.User_StopRecordingAndLaunchReportFlow2:
           message = new MessageWithUserReportID(messageHandle);
           break;
 

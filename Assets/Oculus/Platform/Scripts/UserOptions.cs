@@ -18,6 +18,14 @@ namespace Oculus.Platform
       CAPI.ovr_UserOptions_SetMaxUsers(Handle, value);
     }
 
+    public void AddServiceProvider(ServiceProvider value) {
+      CAPI.ovr_UserOptions_AddServiceProvider(Handle, value);
+    }
+
+    public void ClearServiceProviders() {
+      CAPI.ovr_UserOptions_ClearServiceProviders(Handle);
+    }
+
     public void SetTimeWindow(TimeWindow value) {
       CAPI.ovr_UserOptions_SetTimeWindow(Handle, value);
     }

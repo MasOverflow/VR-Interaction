@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Oculus.Avatar;
 using UnityEngine;
 
@@ -13,6 +13,17 @@ public class OvrAvatarAssetTexture : OvrAvatarAsset {
         TextureFormat format;
         IntPtr textureData = textureAssetData.textureData;
         int textureDataSize = (int)textureAssetData.textureDataSize;
+
+        AvatarLogger.Log(
+            "OvrAvatarAssetTexture - " 
+            + _assetId 
+            + ": " 
+            + textureAssetData.format.ToString()
+            + " "  
+            + textureAssetData.sizeX
+            + "x"
+            + textureAssetData.sizeY);
+
         switch (textureAssetData.format)
         {
             case ovrAvatarTextureFormat.RGB24:
@@ -39,7 +50,8 @@ public class OvrAvatarAssetTexture : OvrAvatarAsset {
         }
         texture = new Texture2D(
             (int)textureAssetData.sizeX, (int)textureAssetData.sizeY,
-            format, textureAssetData.mipCount > 1, false);
+            format, textureAssetData.mipCount > 1,
+            QualitySettings.activeColorSpace == ColorSpace.Gamma ? false : true);
         texture.LoadRawTextureData(textureData, textureDataSize);
         texture.Apply(true, false);
     }

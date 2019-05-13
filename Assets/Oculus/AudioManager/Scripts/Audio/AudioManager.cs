@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.Audio;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,6 +7,9 @@ using UnityEditor;
 using System;
 using System.Reflection;
 #endif
+
+namespace OVR
+{
 
 public enum PreloadSounds {
 	Default,		// default unity behavior
@@ -423,3 +426,4 @@ public partial class AudioManager : MonoBehaviour {
 #endif
 }
 
+} // namespace OVR

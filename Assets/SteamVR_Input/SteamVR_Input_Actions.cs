@@ -39,6 +39,18 @@ namespace Valve.VR
         
         private static SteamVR_Action_Boolean p_vRInteraction_PadPressed;
         
+        private static SteamVR_Action_Boolean p_vRInteraction_BUTTON_1;
+        
+        private static SteamVR_Action_Boolean p_vRInteraction_BUTTON_2;
+        
+        private static SteamVR_Action_Boolean p_vRInteraction_BUTTON_3;
+        
+        private static SteamVR_Action_Boolean p_vRInteraction_BUTTON_4;
+        
+        private static SteamVR_Action_Boolean p_vRInteraction_TELEPORT;
+        
+        private static SteamVR_Action_Boolean p_vRInteraction_SWITCH;
+        
         private static SteamVR_Action_Vibration p_vRInteraction_Haptic;
         
         public static SteamVR_Action_Boolean vRInteraction_ACTION
@@ -129,6 +141,54 @@ namespace Valve.VR
             }
         }
         
+        public static SteamVR_Action_Boolean vRInteraction_BUTTON_1
+        {
+            get
+            {
+                return SteamVR_Actions.p_vRInteraction_BUTTON_1.GetCopy <SteamVR_Action_Boolean>();
+            }
+        }
+        
+        public static SteamVR_Action_Boolean vRInteraction_BUTTON_2
+        {
+            get
+            {
+                return SteamVR_Actions.p_vRInteraction_BUTTON_2.GetCopy <SteamVR_Action_Boolean>();
+            }
+        }
+        
+        public static SteamVR_Action_Boolean vRInteraction_BUTTON_3
+        {
+            get
+            {
+                return SteamVR_Actions.p_vRInteraction_BUTTON_3.GetCopy <SteamVR_Action_Boolean>();
+            }
+        }
+        
+        public static SteamVR_Action_Boolean vRInteraction_BUTTON_4
+        {
+            get
+            {
+                return SteamVR_Actions.p_vRInteraction_BUTTON_4.GetCopy <SteamVR_Action_Boolean>();
+            }
+        }
+        
+        public static SteamVR_Action_Boolean vRInteraction_TELEPORT
+        {
+            get
+            {
+                return SteamVR_Actions.p_vRInteraction_TELEPORT.GetCopy <SteamVR_Action_Boolean>();
+            }
+        }
+        
+        public static SteamVR_Action_Boolean vRInteraction_SWITCH
+        {
+            get
+            {
+                return SteamVR_Actions.p_vRInteraction_SWITCH.GetCopy <SteamVR_Action_Boolean>();
+            }
+        }
+        
         public static SteamVR_Action_Vibration vRInteraction_Haptic
         {
             get
@@ -152,6 +212,12 @@ namespace Valve.VR
                     SteamVR_Actions.vRInteraction_TouchPosition,
                     SteamVR_Actions.vRInteraction_PadTouched,
                     SteamVR_Actions.vRInteraction_PadPressed,
+                    SteamVR_Actions.vRInteraction_BUTTON_1,
+                    SteamVR_Actions.vRInteraction_BUTTON_2,
+                    SteamVR_Actions.vRInteraction_BUTTON_3,
+                    SteamVR_Actions.vRInteraction_BUTTON_4,
+                    SteamVR_Actions.vRInteraction_TELEPORT,
+                    SteamVR_Actions.vRInteraction_SWITCH,
                     SteamVR_Actions.vRInteraction_Haptic};
             Valve.VR.SteamVR_Input.actionsIn = new Valve.VR.ISteamVR_Action_In[]
             {
@@ -165,7 +231,13 @@ namespace Valve.VR
                     SteamVR_Actions.vRInteraction_TriggerPressure,
                     SteamVR_Actions.vRInteraction_TouchPosition,
                     SteamVR_Actions.vRInteraction_PadTouched,
-                    SteamVR_Actions.vRInteraction_PadPressed};
+                    SteamVR_Actions.vRInteraction_PadPressed,
+                    SteamVR_Actions.vRInteraction_BUTTON_1,
+                    SteamVR_Actions.vRInteraction_BUTTON_2,
+                    SteamVR_Actions.vRInteraction_BUTTON_3,
+                    SteamVR_Actions.vRInteraction_BUTTON_4,
+                    SteamVR_Actions.vRInteraction_TELEPORT,
+                    SteamVR_Actions.vRInteraction_SWITCH};
             Valve.VR.SteamVR_Input.actionsOut = new Valve.VR.ISteamVR_Action_Out[]
             {
                     SteamVR_Actions.vRInteraction_Haptic};
@@ -182,7 +254,13 @@ namespace Valve.VR
                     SteamVR_Actions.vRInteraction_PICKUP,
                     SteamVR_Actions.vRInteraction_DROP,
                     SteamVR_Actions.vRInteraction_PadTouched,
-                    SteamVR_Actions.vRInteraction_PadPressed};
+                    SteamVR_Actions.vRInteraction_PadPressed,
+                    SteamVR_Actions.vRInteraction_BUTTON_1,
+                    SteamVR_Actions.vRInteraction_BUTTON_2,
+                    SteamVR_Actions.vRInteraction_BUTTON_3,
+                    SteamVR_Actions.vRInteraction_BUTTON_4,
+                    SteamVR_Actions.vRInteraction_TELEPORT,
+                    SteamVR_Actions.vRInteraction_SWITCH};
             Valve.VR.SteamVR_Input.actionsSingle = new Valve.VR.SteamVR_Action_Single[]
             {
                     SteamVR_Actions.vRInteraction_TriggerPressure};
@@ -203,7 +281,13 @@ namespace Valve.VR
                     SteamVR_Actions.vRInteraction_TriggerPressure,
                     SteamVR_Actions.vRInteraction_TouchPosition,
                     SteamVR_Actions.vRInteraction_PadTouched,
-                    SteamVR_Actions.vRInteraction_PadPressed};
+                    SteamVR_Actions.vRInteraction_PadPressed,
+                    SteamVR_Actions.vRInteraction_BUTTON_1,
+                    SteamVR_Actions.vRInteraction_BUTTON_2,
+                    SteamVR_Actions.vRInteraction_BUTTON_3,
+                    SteamVR_Actions.vRInteraction_BUTTON_4,
+                    SteamVR_Actions.vRInteraction_TELEPORT,
+                    SteamVR_Actions.vRInteraction_SWITCH};
         }
         
         private static void PreInitActions()
@@ -219,6 +303,12 @@ namespace Valve.VR
             SteamVR_Actions.p_vRInteraction_TouchPosition = ((SteamVR_Action_Vector2)(SteamVR_Action.Create <SteamVR_Action_Vector2>("/actions/VRInteraction/in/TouchPosition")));
             SteamVR_Actions.p_vRInteraction_PadTouched = ((SteamVR_Action_Boolean)(SteamVR_Action.Create <SteamVR_Action_Boolean>("/actions/VRInteraction/in/PadTouched")));
             SteamVR_Actions.p_vRInteraction_PadPressed = ((SteamVR_Action_Boolean)(SteamVR_Action.Create <SteamVR_Action_Boolean>("/actions/VRInteraction/in/PadPressed")));
+            SteamVR_Actions.p_vRInteraction_BUTTON_1 = ((SteamVR_Action_Boolean)(SteamVR_Action.Create <SteamVR_Action_Boolean>("/actions/VRInteraction/in/BUTTON_1")));
+            SteamVR_Actions.p_vRInteraction_BUTTON_2 = ((SteamVR_Action_Boolean)(SteamVR_Action.Create <SteamVR_Action_Boolean>("/actions/VRInteraction/in/BUTTON_2")));
+            SteamVR_Actions.p_vRInteraction_BUTTON_3 = ((SteamVR_Action_Boolean)(SteamVR_Action.Create <SteamVR_Action_Boolean>("/actions/VRInteraction/in/BUTTON_3")));
+            SteamVR_Actions.p_vRInteraction_BUTTON_4 = ((SteamVR_Action_Boolean)(SteamVR_Action.Create <SteamVR_Action_Boolean>("/actions/VRInteraction/in/BUTTON_4")));
+            SteamVR_Actions.p_vRInteraction_TELEPORT = ((SteamVR_Action_Boolean)(SteamVR_Action.Create <SteamVR_Action_Boolean>("/actions/VRInteraction/in/TELEPORT")));
+            SteamVR_Actions.p_vRInteraction_SWITCH = ((SteamVR_Action_Boolean)(SteamVR_Action.Create <SteamVR_Action_Boolean>("/actions/VRInteraction/in/SWITCH")));
             SteamVR_Actions.p_vRInteraction_Haptic = ((SteamVR_Action_Vibration)(SteamVR_Action.Create <SteamVR_Action_Vibration>("/actions/VRInteraction/out/Haptic")));
         }
     }

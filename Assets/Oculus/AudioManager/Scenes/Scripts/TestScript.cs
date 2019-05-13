@@ -1,5 +1,8 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
+
+namespace OVR
+{
 
 public class TestScript : MonoBehaviour {
 
@@ -29,3 +32,5 @@ public class TestScript : MonoBehaviour {
 		}
 	}
 }
+
+} // namespace OVR

@@ -1,5 +1,8 @@
-﻿using UnityEditor;
+using UnityEditor;
 using UnityEngine;
+
+namespace OVR
+{
 
 /*
 -----------------------
@@ -43,3 +46,5 @@ public class MixerSnapshotPropertyDrawer : PropertyDrawer {
 		EditorGUI.EndProperty();
 	}
 }
+
+} // namespace OVR

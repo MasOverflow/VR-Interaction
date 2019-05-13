@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using Oculus.Avatar;
 using System.Collections.Generic;
@@ -77,7 +77,7 @@ public class OvrAvatarMeshInstance : MonoBehaviour
         OvrAvatarAsset asset = OvrAvatarSDKManager.Instance.GetAsset(assetID);
         if (asset == null)
         {
-            OvrAvatarSDKManager.Instance.BeginLoadingAsset(assetID, this.AssetLoadedCallback);
+            OvrAvatarSDKManager.Instance.BeginLoadingAsset(assetID, ovrAvatarAssetLevelOfDetail.Medium, this.AssetLoadedCallback);
             AssetsToLoad.Add(assetID);
         }
         else

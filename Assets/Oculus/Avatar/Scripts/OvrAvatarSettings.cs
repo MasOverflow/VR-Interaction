@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 #if UNITY_EDITOR
@@ -11,7 +11,7 @@ public sealed class OvrAvatarSettings : ScriptableObject {
         set { Instance.ovrAppID = value; }
     }
 
-    public static string GearAppID
+    public static string MobileAppID
     {
         get { return Instance.ovrGearAppID; }
         set { Instance.ovrGearAppID = value; }

@@ -240,7 +240,7 @@ namespace VRInteraction
 			if (prefabType == PrefabType.Prefab) return possiblePrefab;
 			else if (prefabType == PrefabType.PrefabInstance)
 			{
-				GameObject prefab = (GameObject)PrefabUtility.GetPrefabParent(possiblePrefab);
+				GameObject prefab = (GameObject)PrefabUtility.GetCorrespondingObjectFromSource(possiblePrefab);
 				return prefab;
 			}
 			return null;
