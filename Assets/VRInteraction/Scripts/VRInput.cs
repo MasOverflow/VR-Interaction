@@ -91,6 +91,10 @@ namespace VRInteraction
 			
 		virtual protected void Update()
 		{
+			#if !(Int_SteamVR && !Int_SteamVR2)
+			if (!isSteamVR())
+			{
+			#endif
 			bool trigger = TriggerPressed;
 			if (trigger && !_triggerPressedFlag)
 			{
@@ -191,7 +195,10 @@ namespace VRInteraction
 				_AX_PressedFlag = false;
 				AXReleased();
 			}
-
+			
+			#if !(Int_SteamVR && !Int_SteamVR2)
+			}
+			#endif
 			#if Int_SteamVR2
 
 			foreach(SteamVR_Action_Boolean boolAction in booleanActions)
@@ -318,7 +325,11 @@ namespace VRInteraction
 
 		public bool ActionPressed(string action)
 		{
+		#if Int_SteamVR && !Int_SteamVR2
 			if (VRActions != null)
+		#else
+			if (VRActions != null && !isSteamVR())
+		#endif
 			{
 				for(int i=0; i<VRActions.Length; i++)
 				{

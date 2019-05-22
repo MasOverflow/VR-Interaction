@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using RootMotion.FinalIK;
 
-public class HandPoseController : MonoBehaviour {
-
+public class HandPoseController : MonoBehaviour 
+{
 	public Transform defaultLeftPose;
 	public Transform defaultRightPose;
 	public List<Transform> poses = new List<Transform>();

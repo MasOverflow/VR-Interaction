@@ -109,6 +109,10 @@ namespace VRInteraction
 			{
 				MoveToItem();
 			}
+			if (GUILayout.Button("Reset Hand"))
+			{
+				ResetHands(_vrIK);
+			}
 			EditorGUI.BeginDisabledGroup((_hand == Hand.LEFT ? _vrIK.references.leftHand : _vrIK.references.rightHand) == null ||
 				string.IsNullOrEmpty(_hand == Hand.LEFT ? _leftPoseName : _rightPoseName));
 			if (GUILayout.Button("Select Hand Object"))
@@ -198,7 +202,12 @@ namespace VRInteraction
 
 			//save item if prefab
 			GameObject itemPrefab = ConvertToPrefabSource(_item.item.gameObject);
-			if (itemPrefab != null) PrefabUtility.ReplacePrefab(_item.item.gameObject, itemPrefab, ReplacePrefabOptions.ConnectToPrefab | ReplacePrefabOptions.ReplaceNameBased);
+			if (itemPrefab != null)
+			{
+				GameObject rootInstance = _item.item.gameObject;
+				if (_item.parents.Count != 0) rootInstance = _item.parents[0].item.gameObject;
+				PrefabUtility.ReplacePrefab(rootInstance, itemPrefab, ReplacePrefabOptions.ConnectToPrefab | ReplacePrefabOptions.ReplaceNameBased);
+			}
 
 			//Check hand pose controller list for pose name
 			Transform foundPose = null;
@@ -234,13 +243,13 @@ namespace VRInteraction
 			return prefabType == PrefabType.ModelPrefab || prefabType == PrefabType.Prefab;
 		}
 
-		private GameObject ConvertToPrefabSource(GameObject possiblePrefab)
+		private GameObject ConvertToPrefabSource(GameObject rootObject)
 		{
-			PrefabType prefabType = PrefabUtility.GetPrefabType(possiblePrefab);
-			if (prefabType == PrefabType.Prefab) return possiblePrefab;
+			PrefabType prefabType = PrefabUtility.GetPrefabType(rootObject);
+			if (prefabType == PrefabType.Prefab) return rootObject;
 			else if (prefabType == PrefabType.PrefabInstance)
 			{
-				GameObject prefab = (GameObject)PrefabUtility.GetCorrespondingObjectFromSource(possiblePrefab);
+				GameObject prefab = (GameObject)PrefabUtility.GetCorrespondingObjectFromSource(rootObject);
 				return prefab;
 			}
 			return null;
