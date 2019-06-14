@@ -725,9 +725,10 @@ namespace VRInteraction
 		public bool isBY_Pressed { get { return _menuPressedFlag; } }
 		public bool isAX_Pressed { get { return _AX_PressedFlag; } }
 
-		virtual protected void SendMessageToInteractor(string message)
-		{
-			SendMessage("InputReceived", message, SendMessageOptions.DontRequireReceiver);
+        //Made public so that it could be called by VRTKv4 events
+        virtual public void SendMessageToInteractor(string message)
+        {
+            SendMessage("InputReceived", message, SendMessageOptions.DontRequireReceiver);
 		}
 
 		protected void TriggerClicked()

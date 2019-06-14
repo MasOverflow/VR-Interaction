@@ -30,6 +30,7 @@ namespace VRInteraction
 		public bool useHoverLine;
 		public Material hoverLineMat;
 		public Transform _vrRigRoot;
+        public bool triggerHapticPulse = true;
 
 		protected VRInteractableItem _hoverItem;
 		protected VRInteractableItem _heldItem;
@@ -75,7 +76,7 @@ namespace VRInteraction
 			{
 				if (_highlighting == value) return;
 				_highlighting = value;
-				if (_highlighting)
+				if (_highlighting && triggerHapticPulse)
 				{
 					TriggerHapticPulse(500);
 				}
@@ -174,6 +175,8 @@ namespace VRInteraction
 		}
 		virtual public void TriggerHapticPulse(int frames)
 		{
+            if (!triggerHapticPulse) return;
+
 			#if Int_SteamVR && !Int_SteamVR2
 			if (vrInput.isSteamVR())
 			{

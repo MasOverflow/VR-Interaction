@@ -103,7 +103,12 @@ namespace VRInteraction
 			GUIContent hideControllerContent = new GUIContent("Held Hide Controller", "Hide Controllers While Holding Item");
 			hideControllersWhileHolding.boolValue = EditorGUILayout.Toggle(hideControllerContent, hideControllersWhileHolding.boolValue);
 
-			SerializedProperty forceGrabDirection = serializedObject.FindProperty("forceGrabDirection");
+            SerializedProperty triggerHapticPulse = serializedObject.FindProperty("triggerHapticPulse");
+            GUIContent triggerHapticPulseContent = new GUIContent("Trigger Haptic Pulse", "Determines whether or not haptic pulses can be triggered from this VRInteractor. " +
+                "This is desirable for using VRInteractor with VRTK Simulators.");
+            triggerHapticPulse.boolValue = EditorGUILayout.Toggle(triggerHapticPulseContent, triggerHapticPulse.boolValue);
+
+            SerializedProperty forceGrabDirection = serializedObject.FindProperty("forceGrabDirection");
 			GUIContent forceGrabDirectionContent = new GUIContent("Force Grab Direction", "Local Controller Direction, use (1,0,0) for palm or (0,0,1) for forward");
 			EditorGUILayout.PropertyField(forceGrabDirection, forceGrabDirectionContent);
 
