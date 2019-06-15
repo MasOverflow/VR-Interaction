@@ -203,6 +203,11 @@ namespace VRInteraction
 
 			foreach(SteamVR_Action_Boolean boolAction in booleanActions)
 			{
+				if (boolAction == null)
+				{
+					Debug.LogError("SteamVR Inputs have not been setup. Refer to the SteamVR 2.0 section of the Setup Guide. Found in Assets/VRInteraction/Docs.");
+					continue;
+				}
 				if (boolAction.GetStateDown(handType))
 				{
 					SendMessageToInteractor(boolAction.GetShortName());
@@ -249,7 +254,12 @@ namespace VRInteraction
 			if (GetComponent<SteamVR_TrackedObject>() != null || GetComponentInParent<SteamVR_PlayArea>() != null)
 				return true;
 			else
+			{
+				#if Int_SteamVR2
+				if (GetComponent<SteamVR_Behaviour_Pose>() != null) return true;
+				#endif
 				return false;
+			}
 			#elif Int_Oculus
 			return false;
 			#else
@@ -340,11 +350,16 @@ namespace VRInteraction
 				}
 			}
 			#if Int_SteamVR2
-			foreach (SteamVR_Action_Boolean booleanActions in booleanActions)
+			foreach (SteamVR_Action_Boolean booleanAction in booleanActions)
 			{
-				if (booleanActions.GetShortName() == action)
+				if (booleanAction == null)
 				{
-					return booleanActions.GetState(handType);
+					Debug.LogError("SteamVR Inputs have not been setup. Refer to the SteamVR 2.0 section of the Setup Guide. Found in Assets/VRInteraction/Docs.");
+					continue;
+				}
+				if (booleanAction.GetShortName() == action)
+				{
+					return booleanAction.GetState(handType);
 				}
 			}
 			#endif
@@ -420,7 +435,8 @@ namespace VRInteraction
 				var device = SteamVR_Controller.Input((int)controller.controllerIndex);
 				return device.GetAxis(EVRButtonId.k_EButton_SteamVR_Trigger).x;
 			#else
-				return triggerPressure.GetAxis(handType);
+				if (triggerPressure != null) return triggerPressure.GetAxis(handType);
+				else Debug.LogError("SteamVR Inputs have not been setup. Refer to the SteamVR 2.0 section of the Setup Guide. Found in Assets/VRInteraction/Docs.");
 			#endif
 			}
 			#endif
@@ -595,7 +611,8 @@ namespace VRInteraction
 					#if !Int_SteamVR2
 					return controller.padTouched;
 					#else
-					padTouched.GetState(handType);
+					if (padTouched != null) return padTouched.GetState(handType);
+					else Debug.LogError("SteamVR Inputs have not been setup. Refer to the SteamVR 2.0 section of the Setup Guide. Found in Assets/VRInteraction/Docs.");
 					#endif
 				}
 				#endif
@@ -618,7 +635,8 @@ namespace VRInteraction
 					#if !Int_SteamVR2
 					return controller.padPressed;
 					#else
-					padPressed.GetState(handType);
+					if (padPressed != null) return padPressed.GetState(handType);
+					else Debug.LogError("SteamVR Inputs have not been setup. Refer to the SteamVR 2.0 section of the Setup Guide. Found in Assets/VRInteraction/Docs.");
 					#endif
 				}
 				#endif
@@ -642,7 +660,8 @@ namespace VRInteraction
 					var device = SteamVR_Controller.Input((int)controller.controllerIndex);
 					return device.GetAxis(EVRButtonId.k_EButton_SteamVR_Touchpad);
 					#else
-					return touchPosition.GetAxis(handType);
+					if (touchPosition != null) return touchPosition.GetAxis(handType);
+					else Debug.LogError("SteamVR Inputs have not been setup. Refer to the SteamVR 2.0 section of the Setup Guide. Found in Assets/VRInteraction/Docs.");
 					#endif
 				}
 				#endif

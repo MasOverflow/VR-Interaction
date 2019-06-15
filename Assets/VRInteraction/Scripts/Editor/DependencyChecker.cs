@@ -24,7 +24,7 @@ public class DependencyChecker : EditorWindow
 		bool hasSteamVR2 = hasSteamVR ? !DoesTypeExist("SteamVR_TrackedController") : false;
 		bool hasFinalIK = DoesTypeExist("VRIK");
 
-		string scriptingDefine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone);
+		string scriptingDefine = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
 		string[] scriptingDefines = scriptingDefine.Split(';');
 		bool hasOculusSDKDefine = scriptingDefines.Contains(OculusDefine);
 		bool hasSteamVRDefine = scriptingDefines.Contains(SteamVRDefine);
@@ -99,6 +99,8 @@ public class DependencyChecker : EditorWindow
 			ClearProgressBar();
 		} else
 		{
+			string vrInteractionFolderPath = "Assets/VRInteraction";
+			if (AssetDatabase.IsValidFolder(vrInteractionFolderPath)) AssetDatabase.ImportAsset(vrInteractionFolderPath, ImportAssetOptions.ImportRecursive);
 			string weaponFolderPath = "Assets/VRWeaponInteractor";
 			if (AssetDatabase.IsValidFolder(weaponFolderPath)) AssetDatabase.ImportAsset(weaponFolderPath, ImportAssetOptions.ImportRecursive);	
 			string teleportFolderPath = "Assets/VRArcTeleporter";
@@ -141,26 +143,26 @@ public class DependencyChecker : EditorWindow
 	{
 		DisplayProgressBar("Removing support for " + define);
 
-		string scriptingDefine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone);
+		string scriptingDefine = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
 		string[] scriptingDefines = scriptingDefine.Split(';');
 		List<string> listDefines = scriptingDefines.ToList();
 		listDefines.Remove(define);
 
 		string newDefines = string.Join(";", listDefines.ToArray());
-		PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone, newDefines);
+		PlayerSettings.SetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup, newDefines);
 	}
 
 	static private void AddDefine(string define)
 	{
 		DisplayProgressBar("Setting up support for " + define);
 
-		string scriptingDefine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone);
+		string scriptingDefine = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
 		string[] scriptingDefines = scriptingDefine.Split(';');
 		List<string> listDefines = scriptingDefines.ToList();
 		listDefines.Add(define);
 
 		string newDefines = string.Join(";", listDefines.ToArray());
-		PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildTargetGroup.Standalone, newDefines);
+		PlayerSettings.SetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup, newDefines);
 
 		if (PlayerSettings.virtualRealitySupported == false)
 		{
