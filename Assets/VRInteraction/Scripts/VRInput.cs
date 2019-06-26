@@ -11,7 +11,6 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.Networking;
 #if Int_SteamVR
 using Valve.VR;
 #endif
@@ -744,7 +743,6 @@ namespace VRInteraction
 		public bool isBY_Pressed { get { return _menuPressedFlag; } }
 		public bool isAX_Pressed { get { return _AX_PressedFlag; } }
 
-        //Made public so that it could be called by VRTKv4 events
         virtual public void SendMessageToInteractor(string message)
         {
             SendMessage("InputReceived", message, SendMessageOptions.DontRequireReceiver);

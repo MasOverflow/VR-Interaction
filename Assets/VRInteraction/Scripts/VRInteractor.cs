@@ -76,10 +76,7 @@ namespace VRInteraction
 			{
 				if (_highlighting == value) return;
 				_highlighting = value;
-				if (_highlighting && triggerHapticPulse)
-				{
-					TriggerHapticPulse(500);
-				}
+				if (_highlighting) TriggerHapticPulse(500);
 			}
 		}
 
