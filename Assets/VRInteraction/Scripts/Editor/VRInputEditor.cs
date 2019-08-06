@@ -365,8 +365,8 @@ namespace VRInteraction
 
 		public void ResetToInteractbaleDefault()
 		{
-			#if Int_Oculus || (Int_SteamVR && !Int_SteamVR2)
 			input.VRActions = new string[] { "NONE", "ACTION", "PICKUP_DROP" };
+			#if Int_Oculus || (Int_SteamVR && !Int_SteamVR2)
 
 			input.triggerKey = 1;
 			input.triggerKeyOculus = 1;
