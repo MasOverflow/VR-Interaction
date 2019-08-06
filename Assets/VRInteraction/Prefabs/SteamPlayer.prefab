@@ -91,7 +91,7 @@ GameObject:
   - component: {fileID: 81796297889338454}
   m_Layer: 0
   m_Name: Camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -366,6 +366,7 @@ MonoBehaviour:
   useHoverLine: 0
   hoverLineMat: {fileID: 0}
   _vrRigRoot: {fileID: 0}
+  triggerHapticPulse: 1
 --- !u!114 &114162340911069178
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -448,6 +449,7 @@ MonoBehaviour:
   useHoverLine: 0
   hoverLineMat: {fileID: 0}
   _vrRigRoot: {fileID: 0}
+  triggerHapticPulse: 1
 --- !u!114 &114518566146656072
 MonoBehaviour:
   m_ObjectHideFlags: 1

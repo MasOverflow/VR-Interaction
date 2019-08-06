@@ -1,226 +1,202 @@
 {
-  
-  "bindings": {
-    "/actions/legacy": {
-      "chords": [],
-      "poses": [],
-      "haptics": [],
-      "sources": [],
-      "skeleton": []
-    },
-    "/actions/vrinteraction": {
-      "chords": [],
-      "poses": [
-        {
-          "output": "/actions/vrinteraction/in/pose",
-          "path": "/user/hand/left/pose/gdc2015"
-        },
-        {
-          "output": "/actions/vrinteraction/in/pose",
-          "path": "/user/hand/right/pose/gdc2015"
-        }
-      ],
-      "haptics": [],
-      "sources": [
-        {
-          "path": "/user/hand/left/input/grip",
-          "mode": "button",
-          "parameters": {},
-          "inputs": {
-            "click": {
-              "output": "/actions/vrinteraction/in/pickup_drop"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/right/input/grip",
-          "mode": "button",
-          "parameters": {},
-          "inputs": {
-            "click": {
-              "output": "/actions/vrinteraction/in/pickup_drop"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/left/input/trigger",
-          "mode": "button",
-          "parameters": {},
-          "inputs": {
-            "click": {
-              "output": "/actions/vrinteraction/in/action"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/left/input/trigger",
-          "mode": "trigger",
-          "parameters": {},
-          "inputs": {
-            "pull": {
-              "output": "/actions/vrinteraction/in/triggerpressure"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/left/input/trackpad",
-          "mode": "dpad",
-          "parameters": {
-            "sub_mode": "click"
-          },
-          "inputs": {
-            "east": {
-              "output": "/actions/vrinteraction/in/button_3"
+   "action_manifest_version" : 0,
+   "alias_info" : {},
+   "app_key" : "application.generated.unity.vrinteraction.exe",
+   "bindings" : {
+      "/actions/legacy" : {
+         "chords" : [],
+         "haptics" : [],
+         "poses" : [],
+         "skeleton" : [],
+         "sources" : []
+      },
+      "/actions/vrinteraction" : {
+         "chords" : [],
+         "haptics" : [
+            {
+               "output" : "/actions/vrinteraction/out/haptic",
+               "path" : "/user/hand/left/output/haptic"
             },
-            "north": {
-              "output": "/actions/vrinteraction/in/button_2"
+            {
+               "output" : "/actions/vrinteraction/out/haptic",
+               "path" : "/user/hand/right/output/haptic"
+            }
+         ],
+         "poses" : [
+            {
+               "output" : "/actions/vrinteraction/in/pose",
+               "path" : "/user/hand/left/pose/gdc2015"
             },
-            "south": {
-              "output": "/actions/vrinteraction/in/button_4"
+            {
+               "output" : "/actions/vrinteraction/in/pose",
+               "path" : "/user/hand/right/pose/gdc2015"
+            }
+         ],
+         "skeleton" : [
+            {
+               "output" : "/actions/vrinteraction/in/skeletonrighthand",
+               "path" : "/user/hand/left/input/skeleton/right"
             },
-            "west": {
-              "output": "/actions/vrinteraction/in/button_1"
+            {
+               "output" : "/actions/vrinteraction/in/skeletonrighthand",
+               "path" : "/user/hand/right/input/skeleton/right"
             }
-          }
-        },
-        {
-          "path": "/user/hand/left/input/trackpad",
-          "mode": "trackpad",
-          "parameters": {},
-          "inputs": {
-            "click": {
-              "output": "/actions/vrinteraction/in/padpressed"
+         ],
+         "sources" : [
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/vrinteraction/in/pickup_drop"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/left/input/grip"
             },
-            "position": {
-              "output": "/actions/vrinteraction/in/touchposition"
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/vrinteraction/in/pickup_drop"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/right/input/grip"
             },
-            "touch": {
-              "output": "/actions/vrinteraction/in/padtouched"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/right/input/trigger",
-          "mode": "trigger",
-          "parameters": {},
-          "inputs": {
-            "pull": {
-              "output": "/actions/vrinteraction/in/triggerpressure"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/right/input/trigger",
-          "mode": "button",
-          "parameters": {},
-          "inputs": {
-            "click": {
-              "output": "/actions/vrinteraction/in/action"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/right/input/trackpad",
-          "mode": "dpad",
-          "parameters": {
-            "sub_mode": "click"
-          },
-          "inputs": {
-            "east": {
-              "output": "/actions/vrinteraction/in/button_3"
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/vrinteraction/in/action"
+                  },
+                  "pull" : {
+                     "output" : "/actions/vrinteraction/in/triggerpressure"
+                  }
+               },
+               "mode" : "trigger",
+               "path" : "/user/hand/left/input/trigger"
             },
-            "north": {
-              "output": "/actions/vrinteraction/in/button_2"
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/vrinteraction/in/padpressed"
+                  },
+                  "position" : {
+                     "output" : "/actions/vrinteraction/in/touchposition"
+                  },
+                  "touch" : {
+                     "output" : "/actions/vrinteraction/in/padtouched"
+                  }
+               },
+               "mode" : "trackpad",
+               "path" : "/user/hand/left/input/trackpad"
             },
-            "south": {
-              "output": "/actions/vrinteraction/in/button_4"
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/vrinteraction/in/action"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/right/input/trigger"
             },
-            "west": {
-              "output": "/actions/vrinteraction/in/button_1"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/right/input/trackpad",
-          "mode": "trackpad",
-          "parameters": {},
-          "inputs": {
-            "click": {
-              "output": "/actions/vrinteraction/in/padpressed"
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/vrinteraction/in/padpressed"
+                  },
+                  "position" : {
+                     "output" : "/actions/vrinteraction/in/touchposition"
+                  },
+                  "touch" : {
+                     "output" : "/actions/vrinteraction/in/padtouched"
+                  }
+               },
+               "mode" : "trackpad",
+               "path" : "/user/hand/right/input/trackpad"
             },
-            "position": {
-              "output": "/actions/vrinteraction/in/touchposition"
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/vrinteraction/in/teleport"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/left/input/trigger"
             },
-            "touch": {
-              "output": "/actions/vrinteraction/in/padtouched"
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/vrinteraction/in/switch"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/left/input/application_menu"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/vrinteraction/in/switch"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/right/input/application_menu"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/vrinteraction/in/teleport"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/right/input/trigger"
+            },
+            {
+               "inputs" : {
+                  "east" : {
+                     "output" : "/actions/vrinteraction/in/lighttoggle"
+                  },
+                  "north" : {
+                     "output" : "/actions/vrinteraction/in/sliderelease"
+                  },
+                  "south" : {
+                     "output" : "/actions/vrinteraction/in/eject"
+                  },
+                  "west" : {
+                     "output" : "/actions/vrinteraction/in/scopetoggle"
+                  }
+               },
+               "mode" : "dpad",
+               "parameters" : {
+                  "sub_mode" : "click"
+               },
+               "path" : "/user/hand/left/input/trackpad"
+            },
+            {
+               "inputs" : {
+                  "east" : {
+                     "output" : "/actions/vrinteraction/in/lighttoggle"
+                  },
+                  "north" : {
+                     "output" : "/actions/vrinteraction/in/sliderelease"
+                  },
+                  "south" : {
+                     "output" : "/actions/vrinteraction/in/eject"
+                  },
+                  "west" : {
+                     "output" : "/actions/vrinteraction/in/scopetoggle"
+                  }
+               },
+               "mode" : "dpad",
+               "parameters" : {
+                  "sub_mode" : "click"
+               },
+               "path" : "/user/hand/right/input/trackpad"
             }
-          }
-        },
-        {
-          "path": "/user/hand/left/input/trigger",
-          "mode": "button",
-          "parameters": {},
-          "inputs": {
-            "click": {
-              "output": "/actions/vrinteraction/in/teleport"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/left/input/grip",
-          "mode": "button",
-          "parameters": {},
-          "inputs": {
-            "click": {
-              "output": "/actions/vrinteraction/in/teleport"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/left/input/application_menu",
-          "mode": "button",
-          "parameters": {},
-          "inputs": {
-            "click": {
-              "output": "/actions/vrinteraction/in/switch"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/right/input/grip",
-          "mode": "button",
-          "parameters": {},
-          "inputs": {
-            "click": {
-              "output": "/actions/vrinteraction/in/teleport"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/right/input/application_menu",
-          "mode": "button",
-          "parameters": {},
-          "inputs": {
-            "click": {
-              "output": "/actions/vrinteraction/in/switch"
-            }
-          }
-        },
-        {
-          "path": "/user/hand/right/input/trigger",
-          "mode": "button",
-          "parameters": {},
-          "inputs": {
-            "click": {
-              "output": "/actions/vrinteraction/in/teleport"
-            }
-          }
-        }
-      ],
-      "skeleton": []
-    }
-  },
-  "controller_type": "vive_controller",
-  "description": "",
-  "name": "Default bindings for Vive Controllers"
+         ]
+      }
+   },
+   "category" : "steamvr_input",
+   "controller_type" : "vive_controller",
+   "description" : "",
+   "name" : "Binding_VRInteraction_Vive_Controller",
+   "options" : {},
+   "simulated_actions" : []
 }
