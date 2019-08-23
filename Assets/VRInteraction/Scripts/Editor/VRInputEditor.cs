@@ -98,85 +98,261 @@ namespace VRInteraction
 									input.triggerKey -= 1;
 								else if (input.triggerKey == i)
 									input.triggerKey = 0;
+                                for(int j=0; j<input.triggerKeys.Count;j++)
+                                {
+                                    if (input.triggerKeys[j] > i)
+                                        input.triggerKeys[j] -= 1;
+                                    else if (input.triggerKeys[j] == i)
+                                        input.triggerKeys[j] = 0;
+                                }
 								if (input.padTop > i)
 									input.padTop -= 1;
 								else if (input.padTop == i)
 									input.padTop = 0;
-								if (input.padLeft > i)
+
+                                for (int j = 0; j < input.padTops.Count; j++)
+                                {
+                                    if (input.padTops[j] > i)
+                                        input.padTops[j] -= 1;
+                                    else if (input.padTops[j] == i)
+                                        input.padTops[j] = 0;
+                                }
+
+                                if (input.padLeft > i)
 									input.padLeft -= 1;
 								else if (input.padLeft == i)
 									input.padLeft = 0;
-								if (input.padRight > i)
+
+                                for (int j = 0; j < input.padLefts.Count; j++)
+                                {
+                                    if (input.padLefts[j] > i)
+                                        input.padLefts[j] -= 1;
+                                    else if (input.padLefts[j] == i)
+                                        input.padLefts[j] = 0;
+                                }
+
+                                if (input.padRight > i)
 									input.padRight -= 1;
 								else if (input.padRight == i)
 									input.padRight = 0;
-								if (input.padBottom > i)
+
+                                for (int j = 0; j < input.padRights.Count; j++)
+                                {
+                                    if (input.padRights[j] > i)
+                                        input.padRights[j] -= 1;
+                                    else if (input.padRights[j] == i)
+                                        input.padRights[j] = 0;
+                                }
+
+                                if (input.padBottom > i)
 									input.padBottom -= 1;
 								else if (input.padBottom == i)
 									input.padBottom = 0;
-								if (input.padCentre > i)
+
+                                for (int j = 0; j < input.padBottoms.Count; j++)
+                                {
+                                    if (input.padBottoms[j] > i)
+                                        input.padBottoms[j] -= 1;
+                                    else if (input.padBottoms[j] == i)
+                                        input.padBottoms[j] = 0;
+                                }
+
+                                if (input.padCentre > i)
 									input.padCentre -= 1;
 								else if (input.padCentre == i)								
 									input.padTouch = 0;
-								if (input.padTouch > i)
+
+                                for (int j = 0; j < input.padCentres.Count; j++)
+                                {
+                                    if (input.padCentres[j] > i)
+                                        input.padCentres[j] -= 1;
+                                    else if (input.padCentres[j] == i)
+                                        input.padCentres[j] = 0;
+                                }
+
+                                if (input.padTouch > i)
 									input.padTouch -= 1;
 								else if (input.padTouch == i)
 									input.padTouch = 0;
-								if (input.gripKey > i)
+
+                                for (int j = 0; j < input.padTouchs.Count; j++)
+                                {
+                                    if (input.padTouchs[j] > i)
+                                        input.padTouchs[j] -= 1;
+                                    else if (input.padTouchs[j] == i)
+                                        input.padTouchs[j] = 0;
+                                }
+
+                                if (input.gripKey > i)
 									input.gripKey -= 1;
 								else if (input.gripKey == i)
 									input.gripKey = 0;
-								if (input.menuKey > i)
+
+                                for (int j = 0; j < input.gripKeys.Count; j++)
+                                {
+                                    if (input.gripKeys[j] > i)
+                                        input.gripKeys[j] -= 1;
+                                    else if (input.gripKeys[j] == i)
+                                        input.gripKeys[j] = 0;
+                                }
+
+                                if (input.menuKey > i)
 									input.menuKey -= 1;
 								else if (input.menuKey == i)
 									input.menuKey = 0;
-								if (input.AXKey > i)
+
+                                for (int j = 0; j < input.menuKeys.Count; j++)
+                                {
+                                    if (input.menuKeys[j] > i)
+                                        input.menuKeys[j] -= 1;
+                                    else if (input.menuKeys[j] == i)
+                                        input.menuKeys[j] = 0;
+                                }
+
+                                if (input.AXKey > i)
 									input.AXKey -= 1;
 								else if (input.AXKey == i)
 									input.AXKey = 0;
 
-								if (input.triggerKeyOculus > i)
+                                for (int j = 0; j < input.AXKeys.Count; j++)
+                                {
+                                    if (input.AXKeys[j] > i)
+                                        input.AXKeys[j] -= 1;
+                                    else if (input.AXKeys[j] == i)
+                                        input.AXKeys[j] = 0;
+                                }
+
+                                if (input.triggerKeyOculus > i)
 									input.triggerKeyOculus -= 1;
 								else if (input.triggerKeyOculus == i)
 									input.triggerKeyOculus = 0;
-								if (input.padTopOculus > i)
+
+                                for (int j = 0; j < input.triggerKeysOculus.Count; j++)
+                                {
+                                    if (input.triggerKeysOculus[j] > i)
+                                        input.triggerKeysOculus[j] -= 1;
+                                    else if (input.triggerKeysOculus[j] == i)
+                                        input.triggerKeysOculus[j] = 0;
+                                }
+
+                                if (input.padTopOculus > i)
 									input.padTopOculus -= 1;
 								else if (input.padTopOculus == i)
 									input.padTopOculus = 0;
-								if (input.padLeftOculus > i)
+
+                                for (int j = 0; j < input.padTopsOculus.Count; j++)
+                                {
+                                    if (input.padTopsOculus[j] > i)
+                                        input.padTopsOculus[j] -= 1;
+                                    else if (input.padTopsOculus[j] == i)
+                                        input.padTopsOculus[j] = 0;
+                                }
+
+                                if (input.padLeftOculus > i)
 									input.padLeftOculus -= 1;
 								else if (input.padLeftOculus == i)
 									input.padLeftOculus = 0;
-								if (input.padRightOculus > i)
+
+                                for (int j = 0; j < input.padLeftsOculus.Count; j++)
+                                {
+                                    if (input.padLeftsOculus[j] > i)
+                                        input.padLeftsOculus[j] -= 1;
+                                    else if (input.padLeftsOculus[j] == i)
+                                        input.padLeftsOculus[j] = 0;
+                                }
+
+                                if (input.padRightOculus > i)
 									input.padRightOculus -= 1;
 								else if (input.padRightOculus == i)
 									input.padRightOculus = 0;
-								if (input.padBottomOculus > i)
+
+                                for (int j = 0; j < input.padRightsOculus.Count; j++)
+                                {
+                                    if (input.padRightsOculus[j] > i)
+                                        input.padRightsOculus[j] -= 1;
+                                    else if (input.padRightsOculus[j] == i)
+                                        input.padRightsOculus[j] = 0;
+                                }
+
+                                if (input.padBottomOculus > i)
 									input.padBottomOculus -= 1;
 								else if (input.padBottomOculus == i)
 									input.padBottomOculus = 0;
-								if (input.padCentreOculus > i)
+
+                                for (int j = 0; j < input.padBottomsOculus.Count; j++)
+                                {
+                                    if (input.padBottomsOculus[j] > i)
+                                        input.padBottomsOculus[j] -= 1;
+                                    else if (input.padBottomsOculus[j] == i)
+                                        input.padBottomsOculus[j] = 0;
+                                }
+
+                                if (input.padCentreOculus > i)
 									input.padCentreOculus -= 1;
 								else if (input.padCentreOculus == i)
 									input.padCentreOculus = 0;
-								if (input.padTouchOculus > i)
+
+                                for (int j = 0; j < input.padCentresOculus.Count; j++)
+                                {
+                                    if (input.padCentresOculus[j] > i)
+                                        input.padCentresOculus[j] -= 1;
+                                    else if (input.padCentresOculus[j] == i)
+                                        input.padCentresOculus[j] = 0;
+                                }
+
+                                if (input.padTouchOculus > i)
 									input.padTouchOculus -= 1;
 								else if (input.padTouchOculus == i)
 									input.padTouchOculus = 0;
-								if (input.gripKeyOculus > i)
+
+                                for (int j = 0; j < input.padTouchsOculus.Count; j++)
+                                {
+                                    if (input.padTouchsOculus[j] > i)
+                                        input.padTouchsOculus[j] -= 1;
+                                    else if (input.padTouchsOculus[j] == i)
+                                        input.padTouchsOculus[j] = 0;
+                                }
+
+                                if (input.gripKeyOculus > i)
 									input.gripKeyOculus -= 1;
 								else if (input.gripKeyOculus == i)
 									input.gripKeyOculus = 0;
-								if (input.menuKeyOculus > i)
+
+                                for (int j = 0; j < input.gripKeysOculus.Count; j++)
+                                {
+                                    if (input.gripKeysOculus[j] > i)
+                                        input.gripKeysOculus[j] -= 1;
+                                    else if (input.gripKeysOculus[j] == i)
+                                        input.gripKeysOculus[j] = 0;
+                                }
+
+                                if (input.menuKeyOculus > i)
 									input.menuKeyOculus -= 1;
 								else if (input.menuKeyOculus == i)
 									input.menuKeyOculus = 0;
-								if (input.AXKeyOculus > i)
+
+                                for (int j = 0; j < input.menuKeysOculus.Count; j++)
+                                {
+                                    if (input.menuKeysOculus[j] > i)
+                                        input.menuKeysOculus[j] -= 1;
+                                    else if (input.menuKeysOculus[j] == i)
+                                        input.menuKeysOculus[j] = 0;
+                                }
+
+                                if (input.AXKeyOculus > i)
 									input.AXKeyOculus -= 1;
 								else if (input.AXKeyOculus == i)
 									input.AXKeyOculus = 0;
 
-								EditorUtility.SetDirty(input);
+                                for (int j = 0; j < input.AXKeysOculus.Count; j++)
+                                {
+                                    if (input.AXKeysOculus[j] > i)
+                                        input.AXKeysOculus[j] -= 1;
+                                    else if (input.AXKeysOculus[j] == i)
+                                        input.AXKeysOculus[j] = 0;
+                                }
+
+                                EditorUtility.SetDirty(input);
 								EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
 								break;
 							}
@@ -236,7 +412,28 @@ namespace VRInteraction
 				SerializedProperty menuKeyOculus = serializedObject.FindProperty("menuKeyOculus");
 				SerializedProperty AXKeyOculus = serializedObject.FindProperty("AXKeyOculus");
 
-				SerializedProperty displayViveButtons = serializedObject.FindProperty("displayViveButtons");
+                SerializedProperty triggerKeys = serializedObject.FindProperty("triggerKeys");
+                SerializedProperty padTops = serializedObject.FindProperty("padTops");
+                SerializedProperty padLefts = serializedObject.FindProperty("padLefts");
+                SerializedProperty padRights = serializedObject.FindProperty("padRights");
+                SerializedProperty padBottoms = serializedObject.FindProperty("padBottoms");
+                SerializedProperty padCentres = serializedObject.FindProperty("padCentres");
+                SerializedProperty padTouchs = serializedObject.FindProperty("padTouchs");
+                SerializedProperty gripKeys = serializedObject.FindProperty("gripKeys");
+                SerializedProperty menuKeys = serializedObject.FindProperty("menuKeys");
+                SerializedProperty AXKeys = serializedObject.FindProperty("AXKeys");
+                SerializedProperty triggerKeysOculus = serializedObject.FindProperty("triggerKeysOculus");
+                SerializedProperty padTopsOculus = serializedObject.FindProperty("padTopsOculus");
+                SerializedProperty padLeftsOculus = serializedObject.FindProperty("padLeftsOculus");
+                SerializedProperty padRightsOculus = serializedObject.FindProperty("padRightsOculus");
+                SerializedProperty padBottomsOculus = serializedObject.FindProperty("padBottomsOculus");
+                SerializedProperty padCentresOculus = serializedObject.FindProperty("padCentresOculus");
+                SerializedProperty padTouchsOculus = serializedObject.FindProperty("padTouchsOculus");
+                SerializedProperty gripKeysOculus = serializedObject.FindProperty("gripKeysOculus");
+                SerializedProperty menuKeysOculus = serializedObject.FindProperty("menuKeysOculus");
+                SerializedProperty AXKeysOculus = serializedObject.FindProperty("AXKeysOculus");
+
+                SerializedProperty displayViveButtons = serializedObject.FindProperty("displayViveButtons");
 				SerializedProperty mirrorControls = serializedObject.FindProperty("mirrorControls");
 				if (!lockToOculus)
 				{
@@ -256,57 +453,117 @@ namespace VRInteraction
 					int newTriggerKey = EditorGUILayout.Popup("Trigger Key", displayViveButtons.boolValue ? triggerKey.intValue : triggerKeyOculus.intValue, input.VRActions);
 					if (displayViveButtons.boolValue) triggerKey.intValue = newTriggerKey;
 					else triggerKeyOculus.intValue = newTriggerKey;
-					int newPadTop = EditorGUILayout.Popup((displayViveButtons.boolValue ? "Pad Up Key" : "Thumbstick Up"), displayViveButtons.boolValue ? padTop.intValue : padTopOculus.intValue, input.VRActions);
+
+                    AdditionalButtonArrayUnMirrored(triggerKeys, triggerKeysOculus, "Trigger Key", "Trigger Key", displayViveButtons.boolValue);
+
+                    int newPadTop = EditorGUILayout.Popup((displayViveButtons.boolValue ? "Pad Up Key" : "Thumbstick Up"), displayViveButtons.boolValue ? padTop.intValue : padTopOculus.intValue, input.VRActions);
 					if (displayViveButtons.boolValue) padTop.intValue = newPadTop;
 					else padTopOculus.intValue = newPadTop;
-					int newPadLeft = EditorGUILayout.Popup((displayViveButtons.boolValue ? "Pad Left Key" : "Thumbstick Left"), displayViveButtons.boolValue ? padLeft.intValue : padLeftOculus.intValue, input.VRActions);
+
+                    AdditionalButtonArrayUnMirrored(padTops, padTopsOculus, "Pad Up Key", "Thumbstick Up", displayViveButtons.boolValue);
+
+                    int newPadLeft = EditorGUILayout.Popup((displayViveButtons.boolValue ? "Pad Left Key" : "Thumbstick Left"), displayViveButtons.boolValue ? padLeft.intValue : padLeftOculus.intValue, input.VRActions);
 					if (displayViveButtons.boolValue) padLeft.intValue = newPadLeft;
 					else padLeftOculus.intValue = newPadLeft;
-					int newPadRight = EditorGUILayout.Popup((displayViveButtons.boolValue ? "Pad Right Key" : "Thumbstick Right"), displayViveButtons.boolValue ? padRight.intValue : padRightOculus.intValue, input.VRActions);
+
+                    AdditionalButtonArrayUnMirrored(padLefts, padLeftsOculus, "Pad Left Key", "Thumbstick Left", displayViveButtons.boolValue);
+
+                    int newPadRight = EditorGUILayout.Popup((displayViveButtons.boolValue ? "Pad Right Key" : "Thumbstick Right"), displayViveButtons.boolValue ? padRight.intValue : padRightOculus.intValue, input.VRActions);
 					if (displayViveButtons.boolValue) padRight.intValue = newPadRight;
 					else padRightOculus.intValue = newPadRight;
-					int newPadBottom = EditorGUILayout.Popup((displayViveButtons.boolValue ? "Pad Down Key" : "Thumbstick Down"), displayViveButtons.boolValue ? padBottom.intValue : padBottomOculus.intValue, input.VRActions);
+
+                    AdditionalButtonArrayUnMirrored(padRights, padRightsOculus, "Pad Right Key", "Thumbstick Right", displayViveButtons.boolValue);
+
+                    int newPadBottom = EditorGUILayout.Popup((displayViveButtons.boolValue ? "Pad Down Key" : "Thumbstick Down"), displayViveButtons.boolValue ? padBottom.intValue : padBottomOculus.intValue, input.VRActions);
 					if (displayViveButtons.boolValue) padBottom.intValue = newPadBottom;
 					else padBottomOculus.intValue = newPadBottom;
-					int newPadCentre = EditorGUILayout.Popup((displayViveButtons.boolValue ? "Pad Centre Key" : "Thumbstick Button"), displayViveButtons.boolValue ? padCentre.intValue : padCentreOculus.intValue, input.VRActions);
+
+                    AdditionalButtonArrayUnMirrored(padBottoms, padBottomsOculus, "Pad Down Key", "Thumbstick Down", displayViveButtons.boolValue);
+
+                    int newPadCentre = EditorGUILayout.Popup((displayViveButtons.boolValue ? "Pad Centre Key" : "Thumbstick Button"), displayViveButtons.boolValue ? padCentre.intValue : padCentreOculus.intValue, input.VRActions);
 					if (displayViveButtons.boolValue) padCentre.intValue = newPadCentre;
 					else padCentreOculus.intValue = newPadCentre;
-					int newPadTouch = EditorGUILayout.Popup((displayViveButtons.boolValue ? "Pad Touch Key" : "Thumbstick Touch"), displayViveButtons.boolValue ? padTouch.intValue : padTouchOculus.intValue, input.VRActions);
+
+                    AdditionalButtonArrayUnMirrored(padCentres, padCentresOculus, "Pad Centre Key", "Thumbstick Button", displayViveButtons.boolValue);
+
+                    int newPadTouch = EditorGUILayout.Popup((displayViveButtons.boolValue ? "Pad Touch Key" : "Thumbstick Touch"), displayViveButtons.boolValue ? padTouch.intValue : padTouchOculus.intValue, input.VRActions);
 					if (displayViveButtons.boolValue) padTouch.intValue = newPadTouch;
 					else padTouchOculus.intValue = newPadTouch;
-					int newGripKey = EditorGUILayout.Popup("Grip Key", displayViveButtons.boolValue ? gripKey.intValue : gripKeyOculus.intValue, input.VRActions);
+
+                    AdditionalButtonArrayUnMirrored(padTouchs, padTouchsOculus, "Pad Touch Key", "Thumbstick Touch", displayViveButtons.boolValue);
+
+                    int newGripKey = EditorGUILayout.Popup("Grip Key", displayViveButtons.boolValue ? gripKey.intValue : gripKeyOculus.intValue, input.VRActions);
 					if (displayViveButtons.boolValue) gripKey.intValue = newGripKey;
 					else gripKeyOculus.intValue = newGripKey;
-					int newMenuKey = EditorGUILayout.Popup((displayViveButtons.boolValue ? "Menu Key" : "B/Y"), displayViveButtons.boolValue ? menuKey.intValue : menuKeyOculus.intValue, input.VRActions);
+
+                    AdditionalButtonArrayUnMirrored(gripKeys, gripKeysOculus, "Grip Key", "Grip Key", displayViveButtons.boolValue);
+
+                    int newMenuKey = EditorGUILayout.Popup((displayViveButtons.boolValue ? "Menu Key" : "B/Y"), displayViveButtons.boolValue ? menuKey.intValue : menuKeyOculus.intValue, input.VRActions);
 					if (displayViveButtons.boolValue) menuKey.intValue = newMenuKey;
 					else menuKeyOculus.intValue = newMenuKey;
-					if (!displayViveButtons.boolValue) AXKeyOculus.intValue = EditorGUILayout.Popup("A/X", AXKeyOculus.intValue, input.VRActions);
+
+                    AdditionalButtonArrayUnMirrored(menuKeys, menuKeysOculus, "Menu Key", "B/Y", displayViveButtons.boolValue);
+
+                    if (!displayViveButtons.boolValue)
+                    {
+                        AXKeyOculus.intValue = EditorGUILayout.Popup("A/X", AXKeyOculus.intValue, input.VRActions);
+
+                        AdditionalButtonArrayUnMirrored(AXKeys, AXKeysOculus, "A/X", "A/X", displayViveButtons.boolValue);
+                    }
 
 				} else
 				{
 					triggerKey.intValue = EditorGUILayout.Popup("Trigger Key", triggerKey.intValue, input.VRActions);
 					triggerKeyOculus.intValue = triggerKey.intValue;
-					padTop.intValue = EditorGUILayout.Popup((displayViveButtons.boolValue ? "Pad Up Key" : "Thumbstick Up"), padTop.intValue, input.VRActions);
+                    AdditionalButtonArray(triggerKeys, triggerKeysOculus, "Trigger Key");
+                    padTop.intValue = EditorGUILayout.Popup(displayViveButtons.boolValue ? "Pad Up Key" : "Thumbstick Up", padTop.intValue, input.VRActions);
 					padTopOculus.intValue = padTop.intValue;
-					padLeft.intValue = EditorGUILayout.Popup((displayViveButtons.boolValue ? "Pad Left Key" : "Thumbstick Left"), padLeft.intValue, input.VRActions);
+
+                    AdditionalButtonArray(padTops, padTopsOculus, displayViveButtons.boolValue ? "Pad Up Key" : "Thumbstick Up");
+
+                    padLeft.intValue = EditorGUILayout.Popup(displayViveButtons.boolValue ? "Pad Left Key" : "Thumbstick Left", padLeft.intValue, input.VRActions);
 					padLeftOculus.intValue = padLeft.intValue;
-					padRight.intValue = EditorGUILayout.Popup((displayViveButtons.boolValue ? "Pad Right Key" : "Thumbstick Right"), padRight.intValue, input.VRActions);
+
+                    AdditionalButtonArray(padLefts, padLeftsOculus, displayViveButtons.boolValue ? "Pad Left Key" : "Thumbstick Left");
+
+                    padRight.intValue = EditorGUILayout.Popup(displayViveButtons.boolValue ? "Pad Right Key" : "Thumbstick Right", padRight.intValue, input.VRActions);
 					padRightOculus.intValue = padRight.intValue;
-					padBottom.intValue = EditorGUILayout.Popup((displayViveButtons.boolValue ? "Pad Down Key" : "Thumbstick Down"), padBottom.intValue, input.VRActions);
+
+                    AdditionalButtonArray(padRights, padRightsOculus, displayViveButtons.boolValue ? "Pad Right Key" : "Thumbstick Right");
+
+                    padBottom.intValue = EditorGUILayout.Popup(displayViveButtons.boolValue ? "Pad Down Key" : "Thumbstick Down", padBottom.intValue, input.VRActions);
 					padBottomOculus.intValue = padBottom.intValue;
-					padCentre.intValue = EditorGUILayout.Popup((displayViveButtons.boolValue ? "Pad Centre Key" : "Thumbstick Button"), padCentre.intValue, input.VRActions);
+
+                    AdditionalButtonArray(padBottoms, padBottomsOculus, displayViveButtons.boolValue ? "Pad Down Key" : "Thumbstick Down");
+
+                    padCentre.intValue = EditorGUILayout.Popup(displayViveButtons.boolValue ? "Pad Centre Key" : "Thumbstick Button", padCentre.intValue, input.VRActions);
 					padCentreOculus.intValue = padCentre.intValue;
-					padTouch.intValue = EditorGUILayout.Popup((displayViveButtons.boolValue ? "Pad Touch Key" : "Thumbstick Touch"), padTouch.intValue, input.VRActions);
+
+                    AdditionalButtonArray(padCentres, padCentresOculus, displayViveButtons.boolValue ? "Pad Centre Key" : "Thumbstick Button");
+
+                    padTouch.intValue = EditorGUILayout.Popup(displayViveButtons.boolValue ? "Pad Touch Key" : "Thumbstick Touch", padTouch.intValue, input.VRActions);
 					padTouchOculus.intValue = padTouch.intValue;
-					gripKey.intValue = EditorGUILayout.Popup("Grip Key", gripKey.intValue, input.VRActions);
+
+                    AdditionalButtonArray(padTouchs, padTouchsOculus, displayViveButtons.boolValue ? "Pad Touch Key" : "Thumbstick Touch");
+
+                    gripKey.intValue = EditorGUILayout.Popup("Grip Key", gripKey.intValue, input.VRActions);
 					gripKeyOculus.intValue = gripKey.intValue;
-					menuKey.intValue = EditorGUILayout.Popup((displayViveButtons.boolValue ? "Menu Key" : "B/Y"), menuKey.intValue, input.VRActions);
+
+                    AdditionalButtonArray(gripKeys, gripKeysOculus, "Grip Key");
+
+                    menuKey.intValue = EditorGUILayout.Popup(displayViveButtons.boolValue ? "Menu Key" : "B/Y", menuKey.intValue, input.VRActions);
 					menuKeyOculus.intValue = menuKey.intValue;
-					if (!displayViveButtons.boolValue)
+
+                    AdditionalButtonArray(menuKeys, menuKeysOculus, displayViveButtons.boolValue ? "Menu Key" : "B/Y");
+
+                    if (!displayViveButtons.boolValue)
 					{
 						AXKey.intValue = EditorGUILayout.Popup("A/X", AXKey.intValue, input.VRActions);
 						AXKeyOculus.intValue = AXKey.intValue;
-					}
+
+                        AdditionalButtonArray(AXKeys, AXKeysOculus, "A/X");
+
+                    }
 				}
 
 				#if Int_Oculus
@@ -363,7 +620,88 @@ namespace VRInteraction
 			serializedObject.ApplyModifiedProperties();
 		}
 
-		public void ResetToInteractbaleDefault()
+        private void AdditionalButtonArray(SerializedProperty actionKeys, SerializedProperty actionsKeysOculus, string displayName)
+        {
+            bool changed = false;
+            for (int x = 0; x < actionKeys.arraySize; x++)
+            {
+                SerializedProperty property = actionKeys.GetArrayElementAtIndex(x);
+                int oldProperty = property.intValue;
+                GUILayout.BeginHorizontal();
+                property.intValue = EditorGUILayout.Popup(displayName, property.intValue, input.VRActions);
+                if (oldProperty != property.intValue) changed = true;
+
+                if (GUILayout.Button("-"))
+                {
+                    actionKeys.DeleteArrayElementAtIndex(x);
+                    changed = true;
+                    break;
+                }
+
+                GUILayout.EndHorizontal();
+            }
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("+"))
+            {
+                actionKeys.arraySize++;
+                changed = true;
+            }
+            GUILayout.EndHorizontal();
+            if (changed)
+            {
+                actionsKeysOculus.arraySize = actionKeys.arraySize;
+                for (int x = 0; x < actionKeys.arraySize; x++)
+                {
+                    SerializedProperty property = actionKeys.GetArrayElementAtIndex(x);
+                    SerializedProperty property2 = actionsKeysOculus.GetArrayElementAtIndex(x);
+                    property2.intValue = property.intValue;
+                }
+            }
+        }
+
+        private void AdditionalButtonArrayUnMirrored(SerializedProperty actionKeys, SerializedProperty actionsKeysOculus, string displayName, string displayNameOculus, bool displayVive)
+        {
+            if (displayVive)
+            {
+                for (int x = 0; x < actionKeys.arraySize; x++)
+                {
+                    SerializedProperty property = actionKeys.GetArrayElementAtIndex(x);
+                    GUILayout.BeginHorizontal();
+                    property.intValue = EditorGUILayout.Popup(displayName, property.intValue, input.VRActions);
+                    if (GUILayout.Button("-"))
+                    {
+                        actionKeys.DeleteArrayElementAtIndex(x);
+                        break;
+                    }
+                    GUILayout.EndHorizontal();
+                }
+                if (GUILayout.Button("+"))
+                {
+                    actionKeys.arraySize++;
+                }
+            }
+            else
+            {
+                for (int x = 0; x < actionsKeysOculus.arraySize; x++)
+                {
+                    SerializedProperty property = actionsKeysOculus.GetArrayElementAtIndex(x);
+                    GUILayout.BeginHorizontal();
+                    property.intValue = EditorGUILayout.Popup(displayNameOculus, property.intValue, input.VRActions);
+                    if (GUILayout.Button("-"))
+                    {
+                        actionsKeysOculus.DeleteArrayElementAtIndex(x);
+                        break;
+                    }
+                    GUILayout.EndHorizontal();
+                }
+                if (GUILayout.Button("+"))
+                {
+                    actionsKeysOculus.arraySize++;
+                }
+            }
+        }
+
+        public void ResetToInteractbaleDefault()
 		{
 			input.VRActions = new string[] { "NONE", "ACTION", "PICKUP_DROP" };
 			#if Int_Oculus || (Int_SteamVR && !Int_SteamVR2)

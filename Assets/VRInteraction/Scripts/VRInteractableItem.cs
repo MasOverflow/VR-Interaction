@@ -50,28 +50,112 @@ namespace VRInteraction
 		//Variables
 		public string itemId;
 		public bool canBeHeld = true;
+        
 		public bool interactionDisabled = false;
-		public HoldType holdType = HoldType.FIXED_POSITION;
-		public bool useBreakDistance = false;
-		public float breakDistance = 0.1f;
-		public bool linkedLeftAndRightHeldPositions = true;
+        public bool globalHoldType;
+        public HoldType holdType = HoldType.FIXED_POSITION;
+        public HoldType getHoldType
+        {
+            get
+            {
+                if (globalHoldType) return VRInteractionSettings.instance.settings.holdType;
+                return holdType;
+            }
+        }
+
+        public bool globalUseBreakDistance;
+        public bool useBreakDistance = false;
+        public bool getUseBreakDistance
+        {
+            get
+            {
+                if (globalUseBreakDistance) return VRInteractionSettings.instance.settings.useBreakDistance;
+                return useBreakDistance;
+            }
+        }
+        public bool globalBreakDistance;
+        public float breakDistance = 0.1f;
+        public float getBreakDistance
+        {
+            get
+            {
+                if (globalBreakDistance) return VRInteractionSettings.instance.settings.breakDistance;
+                return breakDistance;
+            }
+        }
+        public bool linkedLeftAndRightHeldPositions = true;
 		public Vector3 heldPosition = Vector3.zero;
 		public Quaternion heldRotation = Quaternion.identity;
 		public Vector3 heldPositionRightHand = Vector3.zero;
 		public Quaternion heldRotationRightHand = Quaternion.identity;
+        public bool globalThrowBoost;
 		public float throwBoost = 1f;
+        public float getThrowBoost
+        {
+            get
+            {
+                if (globalThrowBoost) return VRInteractionSettings.instance.settings.throwBoost;
+                return throwBoost;
+            }
+        }
+        public bool globalFollowForce;
 		public float followForce = 1f;
-		public float interactionDistance = 0.1f;
-		public bool limitAcceptedAction;
-		public List<string> acceptedActions = new List<string>();
+        public float getFollowForce
+        {
+            get
+            {
+                if (globalFollowForce) return VRInteractionSettings.instance.settings.followForce;
+                return followForce;
+            }
+        }
+        public bool globalInteractionDistance;
+        public float interactionDistance = 0.1f;
+        public float getInteractionDistance
+        {
+            get
+            {
+                if (globalInteractionDistance) return VRInteractionSettings.instance.settings.interactionDistance;
+                return interactionDistance;
+            }
+        }
+        public bool globalLimitAcceptedAction;
+        public bool limitAcceptedAction;
+        public bool getLimitAcceptedAction
+        {
+            get
+            {
+                if (globalLimitAcceptedAction) return VRInteractionSettings.instance.settings.limitAcceptedAction;
+                return limitAcceptedAction;
+            }
+        }
+        public bool globalAcceptedActions;
+        public bool acceptedActionsFoldout;
+        public List<string> acceptedActions = new List<string>();
+        public List<string> getAcceptedActions
+        {
+            get
+            {
+                if (globalAcceptedActions) return VRInteractionSettings.instance.settings.acceptedActions;
+                return acceptedActions;
+            }
+        }
 
-		public List<HoverMode> hoverModes = new List<HoverMode>();
+        public List<HoverMode> hoverModes = new List<HoverMode>();
 		public List<Shader> defaultShaders = new List<Shader>();
 		public List<Shader> hoverShaders = new List<Shader>();
 		public List<Material> defaultMats = new List<Material>();
 		public List<Material> hoverMats = new List<Material>();
-		public bool toggleToPickup;
-		public UnityEvent pickupEvent;
+        public bool globalToggleToPickup;
+        public bool toggleToPickup;
+        public bool getToggleToPickup
+        {
+            get
+            {
+                if (globalToggleToPickup) return VRInteractionSettings.instance.settings.toggleToPickup;
+                return toggleToPickup;
+            }
+        }
+        public UnityEvent pickupEvent;
 		public UnityEvent dropEvent;
 		public UnityEvent enableHoverEvent;
 		public UnityEvent disableHoverEvent;
@@ -230,9 +314,9 @@ namespace VRInteraction
 
 		virtual protected void Step()
 		{
-			if (item == null || heldBy == null || interactionDisabled || holdType == HoldType.SPRING_JOINT) return;
+			if (item == null || heldBy == null || interactionDisabled || getHoldType == HoldType.SPRING_JOINT) return;
 
-			if (useBreakDistance && Vector3.Distance(heldBy.getControllerAnchorOffset.position, GetWorldHeldPosition(heldBy)) > breakDistance)
+			if (getUseBreakDistance && Vector3.Distance(heldBy.getControllerAnchorOffset.position, GetWorldHeldPosition(heldBy)) > getBreakDistance)
 			{
 				heldBy.Drop();
 				return;
@@ -258,7 +342,7 @@ namespace VRInteraction
 			if (angle > 180)
 				angle -= 360;
 
-			if (currentFollowForce < 0f) currentFollowForce = followForce;
+			if (currentFollowForce < 0f) currentFollowForce = getFollowForce;
 
 			if (angle != 0)
 			{
@@ -297,7 +381,7 @@ namespace VRInteraction
 		{
 			if (canBeHeld && item != null)
 			{
-				switch(holdType)
+				switch(getHoldType)
 				{
 				case HoldType.FIXED_POSITION:
 					item.SetParent(hand.GetVRRigRoot);
@@ -305,7 +389,7 @@ namespace VRInteraction
 					VRInteractableItem.HeldFreezeItem(item.gameObject);
 					break;
 				case HoldType.PICKUP_POSITION:
-					if (Vector3.Distance(hand.getControllerAnchorOffset.position, item.position) < interactionDistance)
+					if (Vector3.Distance(hand.getControllerAnchorOffset.position, item.position) < getInteractionDistance)
 						heldPosition = hand.getControllerAnchorOffset.InverseTransformPoint(item.position);
 					else
 						heldPosition = Vector3.zero;
@@ -325,14 +409,14 @@ namespace VRInteraction
 					springJoint.anchor = item.InverseTransformPoint(hand.getControllerAnchorOffset.position);
 					springJoint.autoConfigureConnectedAnchor = false;
 					springJoint.connectedAnchor = Vector3.zero;
-					springJoint.spring = followForce*100f;
+					springJoint.spring = getFollowForce * 100f;
 					springJoint.damper = 100f;
 					_springJoints.Add(springJoint);
 					_heldBys.Add(hand);
 					break;
 				}
 
-				if (Vector3.Distance(hand.getControllerAnchorOffset.position, item.position) < interactionDistance)
+				if (Vector3.Distance(hand.getControllerAnchorOffset.position, item.position) < getInteractionDistance)
 					PlaySound(pickupSound);
 				else PlaySound(forceGrabSound, hand.getControllerAnchorOffset.position);
 			} else CheckIK(true, hand);
@@ -356,18 +440,18 @@ namespace VRInteraction
 				float percent = -((dist / baseDist)-1f);
 				if (baseDist > 1f && percent < 0.3f) percent *= 0.2f;
 				if (percent < 0.05f) percent = 0.05f;
-				currentFollowForce = followForce*percent;
+				currentFollowForce = getFollowForce * percent;
 				yield return null;
 				if (this.heldBy != heldBy) 
 				{
-					currentFollowForce = followForce;
+					currentFollowForce = getFollowForce;
 					_pickingUp = false;
 					break;
 				}
 			}
 			CheckIK(true, heldBy);
 			_pickingUp = false;
-			currentFollowForce = followForce;
+			currentFollowForce = getFollowForce;
 		}
 
 		virtual public void Drop(bool addControllerVelocity, VRInteractor hand = null)
@@ -375,7 +459,7 @@ namespace VRInteraction
 			if (canBeHeld && item != null)
 			{
 				item.parent = null;
-				switch(holdType)
+				switch(getHoldType)
 				{
 				case HoldType.FIXED_POSITION:
 				case HoldType.PICKUP_POSITION:
@@ -385,7 +469,7 @@ namespace VRInteraction
 						if (hand != null && addControllerVelocity)
 						{
 							bool useBoost = hand.Velocity.magnitude > 1f;
-							selfBody.velocity = hand.Velocity * (useBoost ? throwBoost : 1f);
+							selfBody.velocity = hand.Velocity * (useBoost ? getThrowBoost : 1f);
 							selfBody.angularVelocity = hand.AngularVelocity;
 							selfBody.maxAngularVelocity = selfBody.angularVelocity.magnitude;
 						}
@@ -413,12 +497,12 @@ namespace VRInteraction
 		virtual protected void PICKUP_DROP(VRInteractor hand)
 		{
 			if (hand.heldItem == null) hand.TryPickup();
-			else if (toggleToPickup) hand.Drop();
+			else if (getToggleToPickup) hand.Drop();
 		}
 
 		virtual protected void PICKUP_DROPReleased(VRInteractor hand)
 		{
-			if (hand.heldItem == null || toggleToPickup || hand.vrInput.ActionPressed("PICKUP") || hand.vrInput.ActionPressed("ACTION") || hand.vrInput.ActionPressed("PICKUP_DROP")) return;
+			if (hand.heldItem == null || getToggleToPickup || hand.vrInput.ActionPressed("PICKUP") || hand.vrInput.ActionPressed("ACTION") || hand.vrInput.ActionPressed("PICKUP_DROP")) return;
 
 			hand.Drop();
 		}
@@ -500,7 +584,7 @@ namespace VRInteraction
 		virtual public Vector3 GetWorldHeldPosition(VRInteractor hand)
 		{
 			if (item == null) return Vector3.zero;
-			switch(holdType)
+			switch(getHoldType)
 			{
 			case HoldType.FIXED_POSITION:
 				return item.position - (item.rotation * (Quaternion.Inverse(GetLocalHeldRotation(hand)) * GetLocalHeldPosition(hand)));
@@ -729,9 +813,9 @@ namespace VRInteraction
 
 		public bool CanAcceptMethod(string method)
 		{
-			if (!limitAcceptedAction) return true;
+			if (!getLimitAcceptedAction) return true;
 
-			foreach(string acceptedAction in acceptedActions)
+			foreach(string acceptedAction in getAcceptedActions)
 			{
 				if (method != acceptedAction) continue;
 				return true;

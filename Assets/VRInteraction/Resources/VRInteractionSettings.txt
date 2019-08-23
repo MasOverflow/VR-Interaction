@@ -1,0 +1,1 @@
+{"holdType":1,"followForce":1.0,"throwBoost":1.0,"toggleToPickup":false,"useBreakDistance":false,"breakDistance":0.10000000149011612,"interactionDistance":0.10000000149011612,"limitAcceptedAction":false,"acceptedActions":[]}

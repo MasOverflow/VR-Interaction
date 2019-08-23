@@ -47,6 +47,23 @@
 	</p>
 	<IMG SRC="Images/steamvrInput.png" NAME="graphics28" ALIGN=CENTER WIDTH=567 HEIGHT=651 BORDER=0><BR CLEAR=LEFT><BR>
 
+	<h3>Global Settings</h3>
+	<P>
+		If you enable the global toggle on compatable variables in the inspector the item will use the global variable. The can allow you to quickly change how all items behave with one change.
+		The primary reason for this is to allow you to add these settings to your games options menu. As an example if you wanted to add the options for players to change all items to use
+		"Toggle to pickup" in your options menu you would add a line like this:
+	</p>
+	<p>
+		VRInteractionSettings.instance.settings.toggleToPickup = //Your gui code here
+		VRInteractionSettings.instance.Save();
+	</p>
+	<p> 
+		In the editor the global settings are saved in a text file at "Assets/VRInteraction/Resources/VRInteractionSettings.txt" and also as a player prefs string. This means settings you save
+		before building will be the default settings when a new player installs, then if they change the settings it will be saved to their player prefs so will persist when closing and opening
+		the game.
+	</P>
+	<IMG SRC="Images/Global1.png" NAME="graphics32" ALIGN=CENTER WIDTH=367 HEIGHT=256 BORDER=0><BR CLEAR=LEFT><BR>
+
 	<h3>Final IK Hand Poser</h3>
 	<p>
 		If you have the FinalIK asset you can create IK Hand poses for when holding. First you'll want to setup your finalIK character. you can check 
