@@ -11,6 +11,8 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.XR;
+using UnityEngine.XR.LegacyInputHelpers;
 #if Int_SteamVR
 using Valve.VR;
 #endif
@@ -288,9 +290,15 @@ namespace VRInteraction
 
 		public OVRInput.Controller controllerHand;
 
-		#endif
+#endif
 
-		virtual public bool isSteamVR()
+#if Int_UnityXR
+
+        public InputDevice xrInputDevice;
+
+#endif
+
+        virtual public bool isSteamVR()
 		{
 			#if Int_SteamVR
 			if (GetComponent<SteamVR_TrackedObject>() != null || GetComponentInParent<SteamVR_PlayArea>() != null)
@@ -330,10 +338,10 @@ namespace VRInteraction
 		{
 			get 
 			{
-				#if Int_SteamVR
+#if Int_SteamVR
 				if (isSteamVR())
 				{
-					#if !Int_SteamVR2
+#if !Int_SteamVR2
 					SteamVR_ControllerManager controllerManager = null;
 					if (transform.parent != null) controllerManager = transform.parent.GetComponent<SteamVR_ControllerManager>();
 					else controllerManager = FindObjectOfType<SteamVR_ControllerManager>();
@@ -342,19 +350,28 @@ namespace VRInteraction
 					{
 						Debug.LogError("Can't find SteamVR_ControllerManager in scene");
 					}
-					#else
+#else
 					if (name.ToUpper().Contains("LEFT"))
 						handType = SteamVR_Input_Sources.LeftHand;
 					else handType = SteamVR_Input_Sources.RightHand;
 					return handType == SteamVR_Input_Sources.LeftHand;
-					#endif
+#endif
 				}
-				#endif
-				
-				#if Int_Oculus
-				if (!isSteamVR())
+#endif
+
+#if Int_UnityXR
+                if (name.ToUpper().Contains("LEFT"))
+                    xrInputDevice = InputDevices.GetDeviceAtXRNode(XRNode.LeftHand);
+                else
+                    xrInputDevice = InputDevices.GetDeviceAtXRNode(XRNode.RightHand);
+#endif
+
+#if Int_Oculus
+                if (!isSteamVR())
 				{
-					OvrAvatar avatar = GetComponentInParent<OvrAvatar>();
+                    
+
+                    OvrAvatar avatar = GetComponentInParent<OvrAvatar>();
 					if (avatar == null)
 					{
 						if (name.ToUpper().Contains("LEFT"))
@@ -372,16 +389,17 @@ namespace VRInteraction
 				}
 				#endif
 				return false;
-			}
-		}
 
-		public bool ActionPressed(string action)
+            }
+        }
+
+        public bool ActionPressed(string action)
 		{
-		#if Int_SteamVR && !Int_SteamVR2
+#if Int_SteamVR && !Int_SteamVR2
 			if (VRActions != null)
-		#else
+#else
 			if (VRActions != null && !isSteamVR())
-		#endif
+#endif
 			{
 				for(int i=0; i<VRActions.Length; i++)
 				{
@@ -391,7 +409,7 @@ namespace VRInteraction
 					}
 				}
 			}
-			#if Int_SteamVR2
+#if Int_SteamVR2
 			foreach (SteamVR_Action_Boolean booleanAction in booleanActions)
 			{
 				if (booleanAction == null)
@@ -404,7 +422,7 @@ namespace VRInteraction
 					return booleanAction.GetState(handType);
 				}
 			}
-			#endif
+#endif
 			return false;
 		}
 
@@ -432,8 +450,9 @@ namespace VRInteraction
 					return true;
 				if ((AXKey == action || AXKeys.Contains(action))  && AXPressed)
 					return true;
-			} else
-			{
+			} 
+			else
+            {
 				if ((triggerKeyOculus == action || triggerKeysOculus.Contains(action)) && TriggerPressed)
 					return true;
 				if ((padTopOculus == action || padTopsOculus.Contains(action)) && PadTopPressed)
@@ -469,26 +488,32 @@ namespace VRInteraction
 		{
 			get
 			{
-			#if Int_SteamVR
+#if Int_UnityXR
+                float triggerValue;
+                xrInputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.trigger, out triggerValue);
+                return triggerValue;
+#endif
+
+#if Int_SteamVR
 			if (isSteamVR())
 			{
-			#if !Int_SteamVR2
+#if !Int_SteamVR2
 
 				var device = SteamVR_Controller.Input((int)controller.controllerIndex);
 				return device.GetAxis(EVRButtonId.k_EButton_SteamVR_Trigger).x;
-			#else
+#else
 				if (triggerPressure != null) return triggerPressure.GetAxis(handType);
 				else Debug.LogError("SteamVR Inputs have not been setup. Refer to the SteamVR 2.0 section of the Setup Guide. Found in Assets/VRInteraction/Docs.");
-			#endif
+#endif
 			}
-			#endif
+#endif
 
-			#if Int_Oculus
-			if (!isSteamVR())
+#if Int_Oculus
+            if (!isSteamVR())
 			{
 				return OVRInput.Get(OVRInput.Axis1D.PrimaryIndexTrigger, controllerHand);
 			}
-			#endif
+#endif
 			return 0f;
 			}
 		}
@@ -497,7 +522,18 @@ namespace VRInteraction
 		{
 			get
 			{
-				#if Int_SteamVR
+#if Int_UnityXR
+                Vector2 padValue;
+                bool pressed;
+                xrInputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxis, out padValue);
+                xrInputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out pressed);
+                return pressed &&
+                    padValue.y > (hmdType == HMDType.VIVE ? 0.4f : 0.8f) &&
+                    padValue.x < padValue.y &&
+                    padValue.x > -padValue.y;
+#endif
+
+#if Int_SteamVR
 				if (isSteamVR())
 				{
 					if (PadPressed || (hmdType == HMDType.OCULUS && PadTouched))
@@ -509,10 +545,10 @@ namespace VRInteraction
 							return true;
 					}
 				}
-				#endif
+#endif
 
-				#if Int_Oculus	
-				if (!isSteamVR())
+#if Int_Oculus
+                if (!isSteamVR())
 				{
 					Vector2 axis = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick, controllerHand);
 					if (axis.y > 0.8f &&
@@ -520,7 +556,7 @@ namespace VRInteraction
 						axis.x > -axis.y)
 						return true;
 				}
-				#endif
+#endif
 				return false;
 			}
 		}
@@ -528,7 +564,18 @@ namespace VRInteraction
 		{
 			get
 			{
-				#if Int_SteamVR
+#if Int_UnityXR
+                Vector2 padValue;
+                bool pressed;
+                xrInputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxis, out padValue);
+                xrInputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out pressed);
+                return pressed &&
+                    padValue.x < (hmdType == HMDType.VIVE ? -0.4f : -0.5f) &&
+                    padValue.y > padValue.x &&
+                    padValue.y < -padValue.y;
+#endif
+
+#if Int_SteamVR
 				if (isSteamVR())
 				{
 					if (PadPressed || (hmdType == HMDType.OCULUS && PadTouched))
@@ -540,9 +587,9 @@ namespace VRInteraction
 							return true;
 					}
 				}
-				#endif
-				#if Int_Oculus
-				if (!isSteamVR())
+#endif
+#if Int_Oculus
+                if (!isSteamVR())
 				{
 					Vector2 axis = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick, controllerHand);
 					if (axis.x < -0.5f &&
@@ -550,7 +597,7 @@ namespace VRInteraction
 						axis.y < -axis.x)
 						return true;
 				}
-				#endif
+#endif
 				return false;
 			}
 		}
@@ -558,7 +605,18 @@ namespace VRInteraction
 		{
 			get
 			{
-				#if Int_SteamVR
+#if Int_UnityXR
+                Vector2 padValue;
+                bool pressed;
+                xrInputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxis, out padValue);
+                xrInputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out pressed);
+                return pressed &&
+                    padValue.x > (hmdType == HMDType.VIVE ? 0.4f : 0.5f) &&
+                    padValue.y < padValue.x &&
+                    padValue.y > -padValue.y;
+#endif
+
+#if Int_SteamVR
 				if (isSteamVR())
 				{
 					if (PadPressed || (hmdType == HMDType.OCULUS && PadTouched))
@@ -570,9 +628,9 @@ namespace VRInteraction
 							return true;
 					}
 				}
-				#endif
-				#if Int_Oculus
-				if (!isSteamVR())
+#endif
+#if Int_Oculus
+                if (!isSteamVR())
 				{
 					Vector2 axis = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick, controllerHand);
 					if (axis.x > 0.5f &&
@@ -580,7 +638,7 @@ namespace VRInteraction
 						axis.y > -axis.x)
 						return true;
 				}
-				#endif
+#endif
 				return false;
 			}
 		}
@@ -588,7 +646,18 @@ namespace VRInteraction
 		{
 			get
 			{
-				#if Int_SteamVR
+#if Int_UnityXR
+                Vector2 padValue;
+                bool pressed;
+                xrInputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxis, out padValue);
+                xrInputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out pressed);
+                return pressed &&
+                    padValue.y < (hmdType == HMDType.VIVE ? -0.4f : -0.8f) &&
+                    padValue.x > padValue.y &&
+                    padValue.x < -padValue.y;
+#endif
+
+#if Int_SteamVR
 				if (isSteamVR())
 				{
 					if (PadPressed || (hmdType == HMDType.OCULUS && PadTouched))
@@ -600,9 +669,9 @@ namespace VRInteraction
 							return true;
 					}
 				}
-				#endif
-				#if Int_Oculus
-				if (!isSteamVR())
+#endif
+#if Int_Oculus
+                if (!isSteamVR())
 				{
 					Vector2 axis = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick, controllerHand);
 					if ((axis.y < -0.8f &&
@@ -610,7 +679,7 @@ namespace VRInteraction
 						axis.x < -axis.y))
 						return true;
 				}
-				#endif
+#endif
 				return false;
 			}
 		}
@@ -618,7 +687,19 @@ namespace VRInteraction
 		{
 			get
 			{
-				#if Int_SteamVR
+#if Int_UnityXR
+                Vector2 padValue;
+                bool pressed;
+                xrInputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxis, out padValue);
+                xrInputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out pressed);
+                return pressed &&
+                    padValue.y >= -0.4f &&
+                    padValue.y <= 0.4f &&
+                    padValue.x >= -0.4f &&
+                    padValue.x <= 0.4f;
+#endif
+
+#if Int_SteamVR
 				if (isSteamVR())
 				{
 					if (PadPressed)
@@ -628,9 +709,9 @@ namespace VRInteraction
 							return true;
 					}
 				}
-				#endif
-				#if Int_Oculus
-				if (!isSteamVR())
+#endif
+#if Int_Oculus
+                if (!isSteamVR())
 				{
 					if (OVRInput.Get(OVRInput.Button.DpadDown, controllerHand))
 					{
@@ -639,7 +720,7 @@ namespace VRInteraction
 							return true;
 					}
 				}
-				#endif
+#endif
 				return false;
 			}
 		}
@@ -647,23 +728,29 @@ namespace VRInteraction
 		{
 			get
 			{
-				#if Int_SteamVR
+#if Int_UnityXR
+                bool touched;
+                xrInputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisTouch, out touched);
+                return touched;
+#endif
+
+#if Int_SteamVR
 				if (isSteamVR())
 				{
-					#if !Int_SteamVR2
+#if !Int_SteamVR2
 					return controller.padTouched;
-					#else
+#else
 					if (padTouched != null) return padTouched.GetState(handType);
 					else Debug.LogError("SteamVR Inputs have not been setup. Refer to the SteamVR 2.0 section of the Setup Guide. Found in Assets/VRInteraction/Docs.");
-					#endif
+#endif
 				}
-				#endif
-				#if Int_Oculus
-				if (!isSteamVR())
+#endif
+#if Int_Oculus
+                if (!isSteamVR())
 				{
 					return OVRInput.Get(OVRInput.Touch.PrimaryThumbstick, controllerHand);
 				}
-				#endif
+#endif
 				return false;
 			}
 		}
@@ -671,23 +758,23 @@ namespace VRInteraction
 		{
 			get 
 			{
-				#if Int_SteamVR
+#if Int_SteamVR
 				if (isSteamVR())
 				{
-					#if !Int_SteamVR2
+#if !Int_SteamVR2
 					return controller.padPressed;
-					#else
+#else
 					if (padPressed != null) return padPressed.GetState(handType);
 					else Debug.LogError("SteamVR Inputs have not been setup. Refer to the SteamVR 2.0 section of the Setup Guide. Found in Assets/VRInteraction/Docs.");
-					#endif
+#endif
 				}
-				#endif
-				#if Int_Oculus
+#endif
+#if Int_Oculus
 				if (!isSteamVR())
 				{
 					return OVRInput.Get(OVRInput.Button.PrimaryThumbstick, controllerHand);
 				}
-				#endif
+#endif
 				return false;
 			}
 		}
@@ -695,24 +782,24 @@ namespace VRInteraction
 		{
 			get
 			{
-				#if Int_SteamVR
+#if Int_SteamVR
 				if (isSteamVR())
 				{
-					#if !Int_SteamVR2
+#if !Int_SteamVR2
 					var device = SteamVR_Controller.Input((int)controller.controllerIndex);
 					return device.GetAxis(EVRButtonId.k_EButton_SteamVR_Touchpad);
-					#else
+#else
 					if (touchPosition != null) return touchPosition.GetAxis(handType);
 					else Debug.LogError("SteamVR Inputs have not been setup. Refer to the SteamVR 2.0 section of the Setup Guide. Found in Assets/VRInteraction/Docs.");
-					#endif
+#endif
 				}
-				#endif
-				#if Int_Oculus
+#endif
+#if Int_Oculus
 				if (!isSteamVR())
 				{
 					return OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick, controllerHand);
 				}
-				#endif
+#endif
 				return Vector2.zero;
 			}
 		}
@@ -720,18 +807,23 @@ namespace VRInteraction
 		{
 			get
 			{
-				#if Int_SteamVR && !Int_SteamVR2
+#if Int_UnityXR
+                float gripValue;
+                return xrInputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.grip, out gripValue) && gripValue > 0.9f;
+#endif
+
+#if Int_SteamVR && !Int_SteamVR2
 				if (isSteamVR())
 				{
 					return controller.gripped;
 				}
-				#endif
-				#if Int_Oculus
-				if (!isSteamVR())
+#endif
+#if Int_Oculus
+                if (!isSteamVR())
 				{
-					return OVRInput.Get(OVRInput.Axis1D.PrimaryHandTrigger, controllerHand) > 0.9f;
+                    return (OVRInput.Get(OVRInput.Axis1D.PrimaryHandTrigger, controllerHand) > 0.9f);
 				}
-				#endif
+#endif
 				return false;
 			}
 		}
@@ -739,18 +831,24 @@ namespace VRInteraction
 		{
 			get
 			{
-				#if Int_SteamVR && !Int_SteamVR2
+#if Int_UnityXR
+                bool pressed;
+                xrInputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.secondaryButton, out pressed);
+                return pressed;
+#endif
+
+#if Int_SteamVR && !Int_SteamVR2
 				if (isSteamVR())
 				{
 					return controller.menuPressed;
 				}
-				#endif
-				#if Int_Oculus
-				if (!isSteamVR())
+#endif
+#if Int_Oculus
+                if (!isSteamVR())
 				{
 					return OVRInput.Get(OVRInput.Button.Two, controllerHand);
 				}
-				#endif
+#endif
 				return false;
 			}
 		}
@@ -758,7 +856,13 @@ namespace VRInteraction
 		{
 			get
 			{
-				#if Int_SteamVR && !Int_SteamVR2
+#if Int_UnityXR
+                bool pressed;
+                xrInputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out pressed);
+                return pressed;
+#endif
+
+#if Int_SteamVR && !Int_SteamVR2
 				if (isSteamVR())
 				{
 					var system = OpenVR.System;
@@ -768,13 +872,13 @@ namespace VRInteraction
 						return AButton > 0L;
 					}
 				}
-				#endif
-				#if Int_Oculus
-				if (!isSteamVR())
+#endif
+#if Int_Oculus
+                if (!isSteamVR())
 				{
 					return OVRInput.Get(OVRInput.Button.One, controllerHand);
 				}
-				#endif
+#endif
 				return false;
 			}
 		}
@@ -983,6 +1087,7 @@ namespace VRInteraction
 		{
             SendMessageToInteractor(GetAllActionsForButton(hmdType == HMDType.OCULUS ? Keys.AX_OCULUS : Keys.AX, true));
 		}
-	}
+
+    }
 
 }
