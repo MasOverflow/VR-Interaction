@@ -11,7 +11,6 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.Networking;
 #if Int_SteamVR
 using Valve.VR;
 #endif
@@ -26,6 +25,30 @@ namespace VRInteraction
 			OCULUS
 		}
 
+        protected enum Keys
+        {
+            TRIGGER,
+            PAD_TOP,
+            PAD_LEFT,
+            PAD_RIGHT,
+            PAD_BOTTOM,
+            PAD_CENTRE,
+            PAD_TOUCH,
+            GRIP,
+            MENU,
+            AX,
+            TRIGGER_OCULUS,
+            PAD_TOP_OCULUS,
+            PAD_LEFT_OCULUS,
+            PAD_RIGHT_OCULUS,
+            PAD_BOTTOM_OCULUS,
+            PAD_CENTRE_OCULUS,
+            PAD_TOUCH_OCULUS,
+            GRIP_OCULUS,
+            MENU_OCULUS,
+            AX_OCULUS
+        }
+
 		public string[] VRActions;
 
 		//Used in the editor
@@ -34,31 +57,51 @@ namespace VRInteraction
 		public bool displayViveButtons;
 
 		public int triggerKey;
-		public int padTop;
-		public int padLeft;
-		public int padRight;
-		public int padBottom;
-		public int padCentre;
-		public int padTouch;
-		public int gripKey;
-		public int menuKey;
-		public int AXKey;
+        public List<int> triggerKeys = new List<int>();
+        public int padTop;
+        public List<int> padTops = new List<int>();
+        public int padLeft;
+        public List<int> padLefts = new List<int>();
+        public int padRight;
+        public List<int> padRights = new List<int>();
+        public int padBottom;
+        public List<int> padBottoms = new List<int>();
+        public int padCentre;
+        public List<int> padCentres = new List<int>();
+        public int padTouch;
+        public List<int> padTouchs = new List<int>();
+        public int gripKey;
+        public List<int> gripKeys = new List<int>();
+        public int menuKey;
+        public List<int> menuKeys = new List<int>();
+        public int AXKey;
+        public List<int> AXKeys = new List<int>();
 
-		//Oculus alternative buttons
-		public int triggerKeyOculus;
-		public int padTopOculus;
-		public int padLeftOculus;
-		public int padRightOculus;
-		public int padBottomOculus;
-		public int padCentreOculus;
-		public int padTouchOculus;
-		public int gripKeyOculus;
-		public int menuKeyOculus;
-		public int AXKeyOculus;
+        //Oculus alternative buttons
+        public int triggerKeyOculus;
+        public List<int> triggerKeysOculus = new List<int>();
+        public int padTopOculus;
+        public List<int> padTopsOculus = new List<int>();
+        public int padLeftOculus;
+        public List<int> padLeftsOculus = new List<int>();
+        public int padRightOculus;
+        public List<int> padRightsOculus = new List<int>();
+        public int padBottomOculus;
+        public List<int> padBottomsOculus = new List<int>();
+        public int padCentreOculus;
+        public List<int> padCentresOculus = new List<int>();
+        public int padTouchOculus;
+        public List<int> padTouchsOculus = new List<int>();
+        public int gripKeyOculus;
+        public List<int> gripKeysOculus = new List<int>();
+        public int menuKeyOculus;
+        public List<int> menuKeysOculus = new List<int>();
+        public int AXKeyOculus;
+        public List<int> AXKeysOculus = new List<int>();
 
-		#if Int_SteamVR2
+#if Int_SteamVR2
 
-		public SteamVR_Input_Sources handType;
+        public SteamVR_Input_Sources handType;
 		public List<SteamVR_Action_Boolean> booleanActions = new List<SteamVR_Action_Boolean>();
 		public SteamVR_Action_Single triggerPressure = SteamVR_Input.GetAction<SteamVR_Action_Single>("TriggerPressure");
 		public SteamVR_Action_Vector2 touchPosition = SteamVR_Input.GetAction<SteamVR_Action_Vector2>("TouchPosition");
@@ -95,106 +138,105 @@ namespace VRInteraction
 			if (!isSteamVR())
 			{
 			#endif
-			bool trigger = TriggerPressed;
-			if (trigger && !_triggerPressedFlag)
-			{
-				_triggerPressedFlag = true;
-				TriggerClicked();
-			} else if (!trigger && _triggerPressedFlag)
-			{
-				_triggerPressedFlag = false;
-				TriggerReleased();
-			}
+			    bool trigger = TriggerPressed;
+			    if (trigger && !_triggerPressedFlag)
+			    {
+				    _triggerPressedFlag = true;
+				    TriggerClicked();
+			    } else if (!trigger && _triggerPressedFlag)
+			    {
+				    _triggerPressedFlag = false;
+				    TriggerReleased();
+			    }
 
-			bool thumbstick = PadPressed;
-			if (thumbstick && !_padPressedFlag)
-			{
-				_padPressedFlag = true;
-				TrackpadDown();
-			} else if (!thumbstick && _padPressedFlag)
-			{
-				_padPressedFlag = false;
-				TrackpadUp();
-			}
+			    bool thumbstick = PadPressed;
+			    if (thumbstick && !_padPressedFlag)
+			    {
+				    _padPressedFlag = true;
+				    TrackpadDown();
+			    } else if (!thumbstick && _padPressedFlag)
+			    {
+				    _padPressedFlag = false;
+				    TrackpadUp();
+			    }
 
-			bool thumbstickTouch = PadTouched;
-			if (thumbstickTouch && !_padTouchedFlag)
-			{
-				_padTouchedFlag = true;
-				TrackpadTouch();
-			} else if (!thumbstickTouch && _padTouchedFlag)
-			{
-				_padTouchedFlag = false;
-				_stickLeftDown = false;
-				_stickTopDown = false;
-				_stickBottomDown = false;
-				_stickRightDown = false;
-				TrackpadUnTouch();
-			}
+			    bool thumbstickTouch = PadTouched;
+			    if (thumbstickTouch && !_padTouchedFlag)
+			    {
+				    _padTouchedFlag = true;
+				    TrackpadTouch();
+			    } else if (!thumbstickTouch && _padTouchedFlag)
+			    {
+				    _padTouchedFlag = false;
+				    _stickLeftDown = false;
+				    _stickTopDown = false;
+				    _stickBottomDown = false;
+				    _stickRightDown = false;
+				    TrackpadUnTouch();
+			    }
+			    if (hmdType == HMDType.OCULUS && _padTouchedFlag)
+			    {
+				    if (PadLeftPressed && !_stickLeftDown)
+				    {
+					    _stickLeftDown = true;
+                        SendMessageToInteractor(GetAllActionsForButton(Keys.PAD_LEFT_OCULUS, false));
+				    } else if (!PadLeftPressed && _stickLeftDown)
+					    _stickLeftDown = false;
 
-			if (hmdType == HMDType.OCULUS && _padTouchedFlag)
-			{
-				if (PadLeftPressed && !_stickLeftDown)
-				{
-					_stickLeftDown = true;
-					SendMessage("InputReceived", VRActions[padLeftOculus], SendMessageOptions.DontRequireReceiver);
-				} else if (!PadLeftPressed && _stickLeftDown)
-					_stickLeftDown = false;
+				    if (PadRightPressed && !_stickRightDown)
+				    {
+					    _stickRightDown = true;
+                        SendMessageToInteractor(GetAllActionsForButton(Keys.PAD_RIGHT_OCULUS, false));
+				    } else if (!PadRightPressed && _stickRightDown)
+					    _stickRightDown = false;
 
-				if (PadRightPressed && !_stickRightDown)
-				{
-					_stickRightDown = true;
-					SendMessage("InputReceived", VRActions[padRightOculus], SendMessageOptions.DontRequireReceiver);
-				} else if (!PadRightPressed && _stickRightDown)
-					_stickRightDown = false;
+				    if (PadBottomPressed && !_stickBottomDown)
+				    {
+					    _stickBottomDown = true;
+                        SendMessageToInteractor(GetAllActionsForButton(Keys.PAD_BOTTOM_OCULUS, false));
+				    } else if (!PadBottomPressed && _stickBottomDown)
+					    _stickBottomDown = false;
 
-				if (PadBottomPressed && !_stickBottomDown)
-				{
-					_stickBottomDown = true;
-					SendMessage("InputReceived", VRActions[padBottomOculus], SendMessageOptions.DontRequireReceiver);
-				} else if (!PadBottomPressed && _stickBottomDown)
-					_stickBottomDown = false;
+				    if (PadTopPressed && !_stickTopDown)
+				    {
+					    _stickTopDown = true;
+                        SendMessageToInteractor(GetAllActionsForButton(Keys.PAD_TOP_OCULUS, false));
+				    } else if (!PadTopPressed && _stickTopDown)
+					    _stickTopDown = false;
+			    }
 
-				if (PadTopPressed && !_stickTopDown)
-				{
-					_stickTopDown = true;
-					SendMessage("InputReceived", VRActions[padTopOculus], SendMessageOptions.DontRequireReceiver);
-				} else if (!PadTopPressed && _stickTopDown)
-					_stickTopDown = false;
-			}
+			    bool grip = GripPressed;
+			    if (grip && !_grippedFlag)
+			    {
+				    _grippedFlag = true;
+				    Gripped();
+			    } else if (!grip && _grippedFlag)
+			    {
+				    _grippedFlag = false;
+				    UnGripped();
+			    }
 
-			bool grip = GripPressed;
-			if (grip && !_grippedFlag)
-			{
-				_grippedFlag = true;
-				Gripped();
-			} else if (!grip && _grippedFlag)
-			{
-				_grippedFlag = false;
-				UnGripped();
-			}
+			    bool menu = MenuPressed;
+			    if (menu && !_menuPressedFlag)
+			    {
+				    _menuPressedFlag = true;
+				    MenuClicked();
+			    } else if (!menu && _menuPressedFlag)
+			    {
+				    _menuPressedFlag = false;
+				    MenuReleased();
+			    }
 
-			bool menu = MenuPressed;
-			if (menu && !_menuPressedFlag)
-			{
-				_menuPressedFlag = true;
-				MenuClicked();
-			} else if (!menu && _menuPressedFlag)
-			{
-				_menuPressedFlag = false;
-				MenuReleased();
-			}
-
-			bool AX = AXPressed;
-			if (AX && !_AX_PressedFlag)
-			{
-				_AX_PressedFlag = true;
-				AXClicked();
-			} else if (!AX && _AX_PressedFlag)
-			{
-				_AX_PressedFlag = false;
-				AXReleased();
-			}
+			    bool AX = AXPressed;
+			    if (AX && !_AX_PressedFlag)
+			    {
+				    _AX_PressedFlag = true;
+				    AXClicked();
+			    } else if (!AX && _AX_PressedFlag)
+			    {
+				    _AX_PressedFlag = false;
+				    AXReleased();
+			    }
 			
 			#if !(Int_SteamVR && !Int_SteamVR2)
 			}
@@ -203,6 +245,11 @@ namespace VRInteraction
 
 			foreach(SteamVR_Action_Boolean boolAction in booleanActions)
 			{
+				if (boolAction == null)
+				{
+					Debug.LogError("SteamVR Inputs have not been setup. Refer to the SteamVR 2.0 section of the Setup Guide. Found in Assets/VRInteraction/Docs.");
+					continue;
+				}
 				if (boolAction.GetStateDown(handType))
 				{
 					SendMessageToInteractor(boolAction.GetShortName());
@@ -249,7 +296,12 @@ namespace VRInteraction
 			if (GetComponent<SteamVR_TrackedObject>() != null || GetComponentInParent<SteamVR_PlayArea>() != null)
 				return true;
 			else
+			{
+				#if Int_SteamVR2
+				if (GetComponent<SteamVR_Behaviour_Pose>() != null) return true;
+				#endif
 				return false;
+			}
 			#elif Int_Oculus
 			return false;
 			#else
@@ -333,18 +385,23 @@ namespace VRInteraction
 			{
 				for(int i=0; i<VRActions.Length; i++)
 				{
-					if (action == VRActions[i])
+					if (action == GetAction(i))
 					{
 						return ActionPressed(i);
 					}
 				}
 			}
 			#if Int_SteamVR2
-			foreach (SteamVR_Action_Boolean booleanActions in booleanActions)
+			foreach (SteamVR_Action_Boolean booleanAction in booleanActions)
 			{
-				if (booleanActions.GetShortName() == action)
+				if (booleanAction == null)
 				{
-					return booleanActions.GetState(handType);
+					Debug.LogError("SteamVR Inputs have not been setup. Refer to the SteamVR 2.0 section of the Setup Guide. Found in Assets/VRInteraction/Docs.");
+					continue;
+				}
+				if (booleanAction.GetShortName() == action)
+				{
+					return booleanAction.GetState(handType);
 				}
 			}
 			#endif
@@ -355,47 +412,47 @@ namespace VRInteraction
 		{
 			if (hmdType == HMDType.VIVE)
 			{
-				if (triggerKey == action && TriggerPressed)
+				if ((triggerKey == action || triggerKeys.Contains(action)) && TriggerPressed)
 					return true;
-				if (padTop == action && PadTopPressed)
+				if ((padTop == action || padTops.Contains(action))  && PadTopPressed)
 					return true;
-				if (padLeft == action && PadLeftPressed)
+				if ((padLeft == action || padLefts.Contains(action))  && PadLeftPressed)
 					return true;
-				if (padRight == action && PadRightPressed)
+				if ((padRight == action || padRights.Contains(action))  && PadRightPressed)
 					return true;
-				if (padBottom == action && PadBottomPressed)
+				if ((padBottom == action || padBottoms.Contains(action))  && PadBottomPressed)
 					return true;
-				if (padCentre == action && PadCentrePressed)
+				if ((padCentre == action || padCentres.Contains(action))  && PadCentrePressed)
 					return true;
-				if (padTouch == action && PadTouched)
+				if ((padTouch == action || padTouchs.Contains(action))  && PadTouched)
 					return true;
-				if (menuKey == action && MenuPressed)
+				if ((menuKey == action || menuKeys.Contains(action))  && MenuPressed)
 					return true;
-				if (gripKey == action && GripPressed)
+				if ((gripKey == action || gripKeys.Contains(action))  && GripPressed)
 					return true;
-				if (AXKey == action && AXPressed)
+				if ((AXKey == action || AXKeys.Contains(action))  && AXPressed)
 					return true;
 			} else
 			{
-				if (triggerKeyOculus == action && TriggerPressed)
+				if ((triggerKeyOculus == action || triggerKeysOculus.Contains(action)) && TriggerPressed)
 					return true;
-				if (padTopOculus == action && PadTopPressed)
+				if ((padTopOculus == action || padTopsOculus.Contains(action)) && PadTopPressed)
 					return true;
-				if (padLeftOculus == action && PadLeftPressed)
+				if ((padLeftOculus == action || padLeftsOculus.Contains(action)) && PadLeftPressed)
 					return true;
-				if (padRightOculus == action && PadRightPressed)
+				if ((padRightOculus == action || padRightsOculus.Contains(action)) && PadRightPressed)
 					return true;
-				if (padBottomOculus == action && PadBottomPressed)
+				if ((padBottomOculus == action || padBottomsOculus.Contains(action)) && PadBottomPressed)
 					return true;
-				if (padCentreOculus == action && PadCentrePressed)
+				if ((padCentreOculus == action || padCentresOculus.Contains(action)) && PadCentrePressed)
 					return true;
-				if (padTouchOculus == action && PadTouched)
+				if ((padTouchOculus == action || padTouchsOculus.Contains(action)) && PadTouched)
 					return true;
-				if (menuKeyOculus == action && MenuPressed)
+				if ((menuKeyOculus == action || menuKeysOculus.Contains(action)) && MenuPressed)
 					return true;
-				if (gripKeyOculus == action && GripPressed)
+				if ((gripKeyOculus == action || gripKeysOculus.Contains(action)) && GripPressed)
 					return true;
-				if (AXKeyOculus == action && AXPressed)
+				if ((AXKeyOculus == action || AXKeysOculus.Contains(action)) && AXPressed)
 					return true;
 			}
 			return false;
@@ -420,7 +477,8 @@ namespace VRInteraction
 				var device = SteamVR_Controller.Input((int)controller.controllerIndex);
 				return device.GetAxis(EVRButtonId.k_EButton_SteamVR_Trigger).x;
 			#else
-				return triggerPressure.GetAxis(handType);
+				if (triggerPressure != null) return triggerPressure.GetAxis(handType);
+				else Debug.LogError("SteamVR Inputs have not been setup. Refer to the SteamVR 2.0 section of the Setup Guide. Found in Assets/VRInteraction/Docs.");
 			#endif
 			}
 			#endif
@@ -595,7 +653,8 @@ namespace VRInteraction
 					#if !Int_SteamVR2
 					return controller.padTouched;
 					#else
-					padTouched.GetState(handType);
+					if (padTouched != null) return padTouched.GetState(handType);
+					else Debug.LogError("SteamVR Inputs have not been setup. Refer to the SteamVR 2.0 section of the Setup Guide. Found in Assets/VRInteraction/Docs.");
 					#endif
 				}
 				#endif
@@ -618,7 +677,8 @@ namespace VRInteraction
 					#if !Int_SteamVR2
 					return controller.padPressed;
 					#else
-					padPressed.GetState(handType);
+					if (padPressed != null) return padPressed.GetState(handType);
+					else Debug.LogError("SteamVR Inputs have not been setup. Refer to the SteamVR 2.0 section of the Setup Guide. Found in Assets/VRInteraction/Docs.");
 					#endif
 				}
 				#endif
@@ -642,7 +702,8 @@ namespace VRInteraction
 					var device = SteamVR_Controller.Input((int)controller.controllerIndex);
 					return device.GetAxis(EVRButtonId.k_EButton_SteamVR_Touchpad);
 					#else
-					return touchPosition.GetAxis(handType);
+					if (touchPosition != null) return touchPosition.GetAxis(handType);
+					else Debug.LogError("SteamVR Inputs have not been setup. Refer to the SteamVR 2.0 section of the Setup Guide. Found in Assets/VRInteraction/Docs.");
 					#endif
 				}
 				#endif
@@ -725,167 +786,202 @@ namespace VRInteraction
 		public bool isBY_Pressed { get { return _menuPressedFlag; } }
 		public bool isAX_Pressed { get { return _AX_PressedFlag; } }
 
-        //Made public so that it could be called by VRTKv4 events
-        virtual public void SendMessageToInteractor(string message)
+        virtual public void SendMessageToInteractor(List<string> actions)
         {
-            SendMessage("InputReceived", message, SendMessageOptions.DontRequireReceiver);
+            foreach (string action in actions) SendMessageToInteractor(action);
+        }
+
+        virtual public void SendMessageToInteractor(string action)
+        {
+            SendMessage("InputReceived", action, SendMessageOptions.DontRequireReceiver);
 		}
+
+        virtual protected List<string> GetAllActionsForButton(Keys key, bool released)
+        {
+            List<string> returnList = new List<string>();
+            switch(key)
+            {
+                case Keys.TRIGGER:
+                    returnList.Add(GetAction(triggerKey) + (released ? "Released" : ""));
+                    foreach (int index in triggerKeys) returnList.Add(GetAction(index));
+                    break;
+                case Keys.PAD_TOP:
+                    returnList.Add(GetAction(padTop) + (released ? "Released" : ""));
+                    foreach (int index in padTops) returnList.Add(GetAction(index));
+                    break;
+                case Keys.PAD_LEFT:
+                    returnList.Add(GetAction(padLeft) + (released ? "Released" : ""));
+                    foreach (int index in padLefts) returnList.Add(GetAction(index));
+                    break;
+                case Keys.PAD_RIGHT:
+                    returnList.Add(GetAction(padRight) + (released ? "Released" : ""));
+                    foreach (int index in padRights) returnList.Add(GetAction(index));
+                    break;
+                case Keys.PAD_BOTTOM:
+                    returnList.Add(GetAction(padBottom) + (released ? "Released" : ""));
+                    foreach (int index in padBottoms) returnList.Add(GetAction(index));
+                    break;
+                case Keys.PAD_CENTRE:
+                    returnList.Add(GetAction(padCentre) + (released ? "Released" : ""));
+                    foreach (int index in padCentres) returnList.Add(GetAction(index));
+                    break;
+                case Keys.PAD_TOUCH:
+                    returnList.Add(GetAction(padTouch) + (released ? "Released" : ""));
+                    foreach (int index in padTouchs) returnList.Add(GetAction(index));
+                    break;
+                case Keys.GRIP:
+                    returnList.Add(GetAction(gripKey) + (released ? "Released" : ""));
+                    foreach (int index in gripKeys) returnList.Add(GetAction(index));
+                    break;
+                case Keys.MENU:
+                    returnList.Add(GetAction(menuKey) + (released ? "Released" : ""));
+                    foreach (int index in menuKeys) returnList.Add(GetAction(index));
+                    break;
+                case Keys.AX:
+                    returnList.Add(GetAction(AXKey) + (released ? "Released" : ""));
+                    foreach (int index in AXKeys) returnList.Add(GetAction(index));
+                    break;
+                case Keys.TRIGGER_OCULUS:
+                    returnList.Add(GetAction(triggerKeyOculus) + (released ? "Released" : ""));
+                    foreach (int index in triggerKeysOculus) returnList.Add(GetAction(index));
+                    break;
+                case Keys.PAD_TOP_OCULUS:
+                    returnList.Add(GetAction(padTopOculus) + (released ? "Released" : ""));
+                    foreach (int index in padTopsOculus) returnList.Add(GetAction(index));
+                    break;
+                case Keys.PAD_LEFT_OCULUS:
+                    returnList.Add(GetAction(padLeftOculus) + (released ? "Released" : ""));
+                    foreach (int index in padLeftsOculus) returnList.Add(GetAction(index));
+                    break;
+                case Keys.PAD_RIGHT_OCULUS:
+                    returnList.Add(GetAction(padRightOculus) + (released ? "Released" : ""));
+                    foreach (int index in padRightsOculus) returnList.Add(GetAction(index));
+                    break;
+                case Keys.PAD_BOTTOM_OCULUS:
+                    returnList.Add(GetAction(padBottomOculus) + (released ? "Released" : ""));
+                    foreach (int index in padBottomsOculus) returnList.Add(GetAction(index));
+                    break;
+                case Keys.PAD_CENTRE_OCULUS:
+                    returnList.Add(GetAction(padCentreOculus) + (released ? "Released" : ""));
+                    foreach (int index in padCentresOculus) returnList.Add(GetAction(index));
+                    break;
+                case Keys.PAD_TOUCH_OCULUS:
+                    returnList.Add(GetAction(padTouchOculus) + (released ? "Released" : ""));
+                    foreach (int index in padTouchsOculus) returnList.Add(GetAction(index));
+                    break;
+                case Keys.GRIP_OCULUS:
+                    returnList.Add(GetAction(gripKeyOculus) + (released ? "Released" : ""));
+                    foreach (int index in gripKeysOculus) returnList.Add(GetAction(index));
+                    break;
+                case Keys.MENU_OCULUS:
+                    returnList.Add(GetAction(menuKeyOculus) + (released ? "Released" : ""));
+                    foreach (int index in menuKeysOculus) returnList.Add(GetAction(index));
+                    break;
+                case Keys.AX_OCULUS:
+                    returnList.Add(GetAction(AXKeyOculus) + (released ? "Released" : ""));
+                    foreach (int index in AXKeysOculus) returnList.Add(GetAction(index));
+                    break;
+            }
+            return returnList;
+        }
+
+        private string GetAction(int index)
+        {
+            if (index >= VRActions.Length)
+            {
+                Debug.LogError("index (" + index + ") out of range (" + VRActions.Length + "). " +
+                    "A button is assigned an index that is bigger than the actions. Check VRInput component actions. Controller Name: " + name, gameObject);
+                return "";
+            }
+            return VRActions[index];
+        }
 
 		protected void TriggerClicked()
 		{
-			int triggerKey = this.triggerKey;
-			if (hmdType == HMDType.OCULUS) triggerKey = this.triggerKeyOculus;
-			if (triggerKey >= VRActions.Length)
-			{
-				Debug.LogWarning("Trigger key index (" + triggerKey + ") out of range (" + VRActions.Length+")");
-				return;
-			}
-			SendMessageToInteractor(VRActions[triggerKey]);
+            SendMessageToInteractor(GetAllActionsForButton(hmdType == HMDType.OCULUS ? Keys.TRIGGER_OCULUS : Keys.TRIGGER, false));
 		}
 
 		protected void TriggerReleased()
 		{
-			int triggerKey = this.triggerKey;
-			if (hmdType == HMDType.OCULUS) triggerKey = this.triggerKeyOculus;
-			if (triggerKey >= VRActions.Length)
-			{
-				Debug.LogWarning("Trigger key index (" + triggerKey + ") out of range (" + VRActions.Length+")");
-				return;
-			}
-			SendMessageToInteractor(VRActions[triggerKey]+"Released");
+            SendMessageToInteractor(GetAllActionsForButton(hmdType == HMDType.OCULUS ? Keys.TRIGGER_OCULUS : Keys.TRIGGER, true));
 		}
 
 		protected void TrackpadDown()
 		{
-			int action = 0;
+            Keys key = Keys.TRIGGER;
 			if (hmdType == HMDType.VIVE)
 			{
-				if (PadTopPressed) action = padTop;
-				else if (PadLeftPressed) action = padLeft;
-				else if (PadRightPressed) action = padRight;
-				else if (PadBottomPressed) action = padBottom;
-				else if (PadCentrePressed) action = padCentre;
-			} else
+                if (PadTopPressed) key = Keys.PAD_TOP;
+                else if (PadLeftPressed) key = Keys.PAD_LEFT;
+                else if (PadRightPressed) key = Keys.PAD_RIGHT;
+                else if (PadBottomPressed) key = Keys.PAD_BOTTOM;
+                else if (PadCentrePressed) key = Keys.PAD_CENTRE;
+            } else
 			{
-				action = padCentreOculus;
+                key = Keys.PAD_CENTRE_OCULUS;
 			}
-			if (action >= VRActions.Length)
-			{
-				Debug.LogWarning("Pad key index (" + action + ") out of range (" + VRActions.Length+")");
-				return;
-			}
-			SendMessageToInteractor(VRActions[action]);
+			
+            SendMessageToInteractor(GetAllActionsForButton(key, false));
 		}
 
 		protected void TrackpadUp()
 		{
 			if (hmdType == HMDType.VIVE)
 			{
-				for(int i=0; i<VRActions.Length; i++)
-				{
-					if (padLeft == i || padTop == i || padRight == i || padBottom == i || padCentre == i)
-						SendMessageToInteractor(VRActions[i]+"Released");
-				}
-			} else
+                SendMessageToInteractor(GetAllActionsForButton(Keys.PAD_TOP, true));
+                SendMessageToInteractor(GetAllActionsForButton(Keys.PAD_LEFT, true));
+                SendMessageToInteractor(GetAllActionsForButton(Keys.PAD_RIGHT, true));
+                SendMessageToInteractor(GetAllActionsForButton(Keys.PAD_BOTTOM, true));
+                //for(int i=0; i<VRActions.Length; i++)
+                //{
+                //	if (padLeft == i || padTop == i || padRight == i || padBottom == i || padCentre == i)
+                //		SendMessageToInteractor(VRActions[i]+"Released");
+                //}
+            } else
 			{
-				SendMessageToInteractor(VRActions[padCentreOculus]+"Released");
+                SendMessageToInteractor(GetAllActionsForButton(Keys.PAD_CENTRE_OCULUS, true));
+                //SendMessageToInteractor(VRActions[padCentreOculus]+"Released");
 			}
 		}
 
 		protected void TrackpadTouch()
 		{
-			int touchKey = this.padTouch;
-			if (hmdType == HMDType.OCULUS) touchKey = this.padTouchOculus;
-			if (touchKey >= VRActions.Length)
-			{
-				Debug.LogWarning("Touch key index (" + touchKey + ") out of range (" + VRActions.Length+")");
-				return;
-			}
-			SendMessageToInteractor(VRActions[touchKey]);
+            SendMessageToInteractor(GetAllActionsForButton(hmdType == HMDType.OCULUS ? Keys.PAD_TOUCH_OCULUS : Keys.PAD_TOUCH, false));
 		}
 
 		protected void TrackpadUnTouch()
 		{
-			int touchKey = this.padTouch;
-			if (hmdType == HMDType.OCULUS) touchKey = this.padTouchOculus;
-			if (touchKey >= VRActions.Length)
-			{
-				Debug.LogWarning("Touch key index (" + touchKey + ") out of range (" + VRActions.Length+")");
-				return;
-			}
-			SendMessageToInteractor(VRActions[touchKey]+"Released");
+            SendMessageToInteractor(GetAllActionsForButton(hmdType == HMDType.OCULUS ? Keys.PAD_TOUCH_OCULUS : Keys.PAD_TOUCH, true));
 		}
 
 		protected void Gripped()
 		{
-			int gripKey = this.gripKey;
-			if (hmdType == HMDType.OCULUS) gripKey = this.gripKeyOculus;
-			if (gripKey >= VRActions.Length)
-			{
-				Debug.LogWarning("Gripped key index (" + gripKey + ") out of range (" + VRActions.Length+")");
-				return;
-			}
-			SendMessageToInteractor(VRActions[gripKey]);
+            SendMessageToInteractor(GetAllActionsForButton(hmdType == HMDType.OCULUS ? Keys.GRIP_OCULUS : Keys.GRIP, false));
 		}
 
 		protected void UnGripped()
 		{
-			int gripKey = this.gripKey;
-			if (hmdType == HMDType.OCULUS) gripKey = this.gripKeyOculus;
-			if (gripKey >= VRActions.Length)
-			{
-				Debug.LogWarning("Gripped key index (" + gripKey + ") out of range (" + VRActions.Length+")");
-				return;
-			}
-			SendMessageToInteractor(VRActions[gripKey]+"Released");
+            SendMessageToInteractor(GetAllActionsForButton(hmdType == HMDType.OCULUS ? Keys.GRIP_OCULUS : Keys.GRIP, true));
 		}
 
 		protected void MenuClicked()
 		{
-			int menuKey = this.menuKey;
-			if (hmdType == HMDType.OCULUS) menuKey = this.menuKeyOculus;
-			if (menuKey >= VRActions.Length)
-			{
-				Debug.LogWarning("Menu key index (" + menuKey + ") out of range (" + VRActions.Length+")");
-				return;
-			}
-			SendMessageToInteractor(VRActions[menuKey]);
+            SendMessageToInteractor(GetAllActionsForButton(hmdType == HMDType.OCULUS ? Keys.MENU_OCULUS : Keys.MENU, false));
 		}
 
 		protected void MenuReleased()
 		{
-			int menuKey = this.menuKey;
-			if (hmdType == HMDType.OCULUS) menuKey = this.menuKeyOculus;
-			if (menuKey >= VRActions.Length)
-			{
-				Debug.LogWarning("Menu key index (" + menuKey + ") out of range (" + VRActions.Length+")");
-				return;
-			}
-			SendMessageToInteractor(VRActions[menuKey]+"Released");
+            SendMessageToInteractor(GetAllActionsForButton(hmdType == HMDType.OCULUS ? Keys.MENU_OCULUS : Keys.MENU, true));
 		}
 
 		protected void AXClicked()
 		{
-			int aButtonKey = this.AXKey;
-			if (hmdType == HMDType.OCULUS) aButtonKey = this.AXKeyOculus;
-			if (aButtonKey >= VRActions.Length)
-			{
-				Debug.LogWarning("A Button key index (" + aButtonKey + ") out of range (" + VRActions.Length+")");
-				return;
-			}
-			SendMessageToInteractor(VRActions[aButtonKey]);
+            SendMessageToInteractor(GetAllActionsForButton(hmdType == HMDType.OCULUS ? Keys.AX_OCULUS : Keys.AX, false));
 		}
 
 		protected void AXReleased()
 		{
-			int aButtonKey = this.AXKey;
-			if (hmdType == HMDType.OCULUS) aButtonKey = this.AXKeyOculus;
-			if (aButtonKey >= VRActions.Length)
-			{
-				Debug.LogWarning("A Button key index (" + aButtonKey + ") out of range (" + VRActions.Length+")");
-				return;
-			}
-			SendMessageToInteractor(VRActions[aButtonKey]+"Released");
+            SendMessageToInteractor(GetAllActionsForButton(hmdType == HMDType.OCULUS ? Keys.AX_OCULUS : Keys.AX, true));
 		}
 	}
 

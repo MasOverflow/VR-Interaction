@@ -1,0 +1,202 @@
+{
+  "bindings": {
+    "/actions/vrinteraction": {
+      "chords": [],
+      "poses": [
+        {
+          "output": "/actions/vrinteraction/in/pose",
+          "path": "/user/hand/left/pose/gdc2015"
+        },
+        {
+          "output": "/actions/vrinteraction/in/pose",
+          "path": "/user/hand/right/pose/gdc2015"
+        }
+      ],
+      "haptics": [
+        {
+          "output": "/actions/vrinteraction/out/haptic",
+          "path": "/user/hand/left/output/haptic"
+        },
+        {
+          "output": "/actions/vrinteraction/out/haptic",
+          "path": "/user/hand/right/output/haptic"
+        }
+      ],
+      "sources": [
+        {
+          "path": "/user/hand/left/input/trigger",
+          "mode": "trigger",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/vrinteraction/in/action"
+            },
+            "pull": {
+              "output": "/actions/vrinteraction/in/triggerpressure"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/trigger",
+          "mode": "trigger",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/vrinteraction/in/action"
+            },
+            "pull": {
+              "output": "/actions/vrinteraction/in/triggerpressure"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/left/input/thumbstick",
+          "mode": "dpad",
+          "parameters": {
+            "sub_mode": "touch"
+          },
+          "inputs": {
+            "east": {
+              "output": "/actions/vrinteraction/in/lighttoggle"
+            },
+            "north": {
+              "output": "/actions/vrinteraction/in/sliderelease"
+            },
+            "south": {
+              "output": "/actions/vrinteraction/in/eject"
+            },
+            "west": {
+              "output": "/actions/vrinteraction/in/scopetoggle"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/thumbstick",
+          "mode": "dpad",
+          "parameters": {
+            "sub_mode": "touch"
+          },
+          "inputs": {
+            "east": {
+              "output": "/actions/vrinteraction/in/lighttoggle"
+            },
+            "north": {
+              "output": "/actions/vrinteraction/in/sliderelease"
+            },
+            "south": {
+              "output": "/actions/vrinteraction/in/eject"
+            },
+            "west": {
+              "output": "/actions/vrinteraction/in/scopetoggle"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/left/input/thumbstick",
+          "mode": "joystick",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/vrinteraction/in/padpressed"
+            },
+            "position": {
+              "output": "/actions/vrinteraction/in/touchposition"
+            },
+            "touch": {
+              "output": "/actions/vrinteraction/in/padtouched"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/thumbstick",
+          "mode": "joystick",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/vrinteraction/in/padpressed"
+            },
+            "position": {
+              "output": "/actions/vrinteraction/in/touchposition"
+            },
+            "touch": {
+              "output": "/actions/vrinteraction/in/padtouched"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/left/input/trigger",
+          "mode": "button",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/vrinteraction/in/teleport"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/trigger",
+          "mode": "button",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/vrinteraction/in/teleport"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/left/input/grip",
+          "mode": "button",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/vrinteraction/in/pickup_drop"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/grip",
+          "mode": "button",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/vrinteraction/in/pickup_drop"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/left/input/a",
+          "mode": "button",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/vrinteraction/in/switch"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/a",
+          "mode": "button",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/vrinteraction/in/switch"
+            }
+          }
+        }
+      ],
+      "skeleton": [
+        {
+          "output": "/actions/vrinteraction/in/skeletonrighthand",
+          "path": "/user/hand/left/input/skeleton/right"
+        },
+        {
+          "output": "/actions/vrinteraction/in/skeletonrighthand",
+          "path": "/user/hand/right/input/skeleton/right"
+        }
+      ]
+    }
+  },
+  "controller_type": "knuckles",
+  "description": "Binding_VRInteraction_Knuckles",
+  "name": "Binding_VRInteraction_Knuckles"
+}

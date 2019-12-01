@@ -55,26 +55,84 @@ namespace VRInteraction
 				SerializedProperty canBeHeld = interactableItem.FindProperty("canBeHeld");
 				if (showPickupVars)
 				{
-					SerializedProperty holdType = interactableItem.FindProperty("holdType");
-					var oldJointHold = holdType.enumValueIndex;
-					holdType.enumValueIndex = (int)(VRInteractableItem.HoldType)EditorGUILayout.EnumPopup("Hold Type", (VRInteractableItem.HoldType)holdType.enumValueIndex);
-					if (oldJointHold != holdType.enumValueIndex) changed = true;
-					if (GUILayout.Button("Setup Held Position"))
+                    EditorGUILayout.BeginHorizontal();
+                    SerializedProperty globalHoldType = interactableItem.FindProperty("globalHoldType");
+                    
+                    if (globalHoldType.boolValue)
+                    {
+                        int oldJointHold = (int)VRInteractionSettings.instance.settings.holdType;
+                        VRInteractionSettings.instance.settings.holdType = (VRInteractableItem.HoldType)EditorGUILayout.EnumPopup("Hold Type", VRInteractionSettings.instance.settings.holdType/*, GUILayout.ExpandWidth(true)*/);
+                        if (oldJointHold != (int)VRInteractionSettings.instance.settings.holdType)
+                        {
+                            VRInteractionSettings.instance.Save();
+                            changed = true;
+                        }
+                    }
+                    else
+                    {
+                        SerializedProperty holdType = interactableItem.FindProperty("holdType");
+                        var oldJointHold = holdType.enumValueIndex;
+                        holdType.enumValueIndex = (int)(VRInteractableItem.HoldType)EditorGUILayout.EnumPopup("Hold Type", (VRInteractableItem.HoldType)holdType.enumValueIndex);
+                        if (oldJointHold != holdType.enumValueIndex) changed = true;
+                    }
+                    GUIContent globalHoldTypeContent = new GUIContent("", "Use Global Variable");
+                    EditorGUILayout.LabelField("Global", GUILayout.Width(40f));
+                    EditorGUILayout.PropertyField(globalHoldType, globalHoldTypeContent, GUILayout.Width(20f));
+                    EditorGUILayout.EndHorizontal();
+                    if (GUILayout.Button("Setup Held Position"))
 					{
 						HeldPositionWindow newWindow = (HeldPositionWindow)EditorWindow.GetWindow(typeof(HeldPositionWindow), true, "Held Position", true);
 						newWindow.interactableItem = (VRInteractableItem)interactableItem.targetObject;
 						newWindow.Init();
 					}
 
-					SerializedProperty followForce = interactableItem.FindProperty("followForce");
-					var oldFollowForce = followForce.floatValue;
-					EditorGUILayout.PropertyField(followForce);
-					if (followForce.floatValue != oldFollowForce) changed = true;
+                    EditorGUILayout.BeginHorizontal();
+                    SerializedProperty globalFollowForce = interactableItem.FindProperty("globalFollowForce");
+                    if (globalFollowForce.boolValue)
+                    {
+                        float oldFollowForce = VRInteractionSettings.instance.settings.followForce;
+                        VRInteractionSettings.instance.settings.followForce = EditorGUILayout.FloatField("Follow Force", VRInteractionSettings.instance.settings.followForce);
+                        if (oldFollowForce != VRInteractionSettings.instance.settings.followForce)
+                        {
+                            VRInteractionSettings.instance.Save();
+                            changed = true;
+                        }
+                    }
+                    else
+                    {
+                        SerializedProperty followForce = interactableItem.FindProperty("followForce");
+                        var oldFollowForce = followForce.floatValue;
+                        EditorGUILayout.PropertyField(followForce);
+                        if (followForce.floatValue != oldFollowForce) changed = true;
+                    }
+                    GUIContent globalFollowForceContent = new GUIContent("", "Use Global Variable");
+                    EditorGUILayout.LabelField("Global", GUILayout.Width(40f));
+                    EditorGUILayout.PropertyField(globalFollowForce, globalFollowForceContent, GUILayout.Width(20f));
+                    EditorGUILayout.EndHorizontal();
 
-					SerializedProperty throwBoost = interactableItem.FindProperty("throwBoost");
-					var oldThrowBoost = throwBoost.floatValue;
-					throwBoost.floatValue = EditorGUILayout.FloatField("Throw Boost", throwBoost.floatValue);
-					if (throwBoost.floatValue != oldThrowBoost) changed = true;
+                    EditorGUILayout.BeginHorizontal();
+                    SerializedProperty globalThrowBoost = interactableItem.FindProperty("globalThrowBoost");
+                    if (globalThrowBoost.boolValue)
+                    {
+                        float oldThrowBoost = VRInteractionSettings.instance.settings.throwBoost;
+                        VRInteractionSettings.instance.settings.throwBoost = EditorGUILayout.FloatField("Throw Boost", VRInteractionSettings.instance.settings.throwBoost);
+                        if (oldThrowBoost != VRInteractionSettings.instance.settings.throwBoost)
+                        {
+                            VRInteractionSettings.instance.Save();
+                            changed = true;
+                        }
+                    }
+                    else
+                    {
+                        SerializedProperty throwBoost = interactableItem.FindProperty("throwBoost");
+                        var oldThrowBoost = throwBoost.floatValue;
+                        throwBoost.floatValue = EditorGUILayout.FloatField("Throw Boost", throwBoost.floatValue);
+                        if (throwBoost.floatValue != oldThrowBoost) changed = true;
+                    }
+                    GUIContent globalThrowBoostContent = new GUIContent("", "Use Global Variable");
+                    EditorGUILayout.LabelField("Global", GUILayout.Width(40f));
+                    EditorGUILayout.PropertyField(globalThrowBoost, globalThrowBoostContent, GUILayout.Width(20f));
+                    EditorGUILayout.EndHorizontal();
 
 					var oldCanBeHeld = canBeHeld.boolValue;
 					EditorGUILayout.PropertyField(canBeHeld);
@@ -93,44 +151,187 @@ namespace VRInteraction
 					}
 				}
 
-				SerializedProperty toggleToPickup = interactableItem.FindProperty("toggleToPickup");
-				var oldToggleToPickup = toggleToPickup.boolValue;
-				toggleToPickup.boolValue = EditorGUILayout.Toggle("Toggle To Pickup", toggleToPickup.boolValue);
-				if (toggleToPickup.boolValue != oldToggleToPickup) changed = true;
+                EditorGUILayout.BeginHorizontal();
+                SerializedProperty globalToggleToPickup = interactableItem.FindProperty("globalToggleToPickup");
+                if (globalToggleToPickup.boolValue)
+                {
+                    bool oldToggleToPickup = VRInteractionSettings.instance.settings.toggleToPickup;
+                    VRInteractionSettings.instance.settings.toggleToPickup = EditorGUILayout.Toggle("Toggle To Pickup", VRInteractionSettings.instance.settings.toggleToPickup);
+                    if (oldToggleToPickup != VRInteractionSettings.instance.settings.toggleToPickup)
+                    {
+                        VRInteractionSettings.instance.Save();
+                        changed = true;
+                    }
+                }
+                else
+                {
+                    SerializedProperty toggleToPickup = interactableItem.FindProperty("toggleToPickup");
+                    var oldToggleToPickup = toggleToPickup.boolValue;
+                    toggleToPickup.boolValue = EditorGUILayout.Toggle("Toggle To Pickup", toggleToPickup.boolValue);
+                    if (toggleToPickup.boolValue != oldToggleToPickup) changed = true;
+                }
+                GUIContent globalToggleToPickupContent = new GUIContent("", "Use Global Variable");
+                EditorGUILayout.LabelField("Global", GUILayout.Width(40f));
+                EditorGUILayout.PropertyField(globalToggleToPickup, globalToggleToPickupContent, GUILayout.Width(20f));
+                EditorGUILayout.EndHorizontal();
 
-				SerializedProperty useBreakDistance = interactableItem.FindProperty("useBreakDistance");
-				string breakDistanceTooltip = "If the distance between the controller and held position is greater than " +
-					"the break distance it will drop the item. Useful for items that cannot be held.";
-				GUIContent useBreakDistanceContent = new GUIContent("Use Break Distance", breakDistanceTooltip);
-				EditorGUILayout.PropertyField(useBreakDistance, useBreakDistanceContent);
-				if (useBreakDistance.boolValue)
+                EditorGUILayout.BeginHorizontal();
+                SerializedProperty globalUseBreakDistance = interactableItem.FindProperty("globalUseBreakDistance");
+                SerializedProperty useBreakDistance = interactableItem.FindProperty("useBreakDistance");
+                string breakDistanceTooltip = "If the distance between the controller and held position is greater than " +
+                        "the break distance it will drop the item. Useful for items that cannot be held.";
+                GUIContent useBreakDistanceContent = new GUIContent("Use Break Distance", breakDistanceTooltip);
+                if (globalUseBreakDistance.boolValue)
+                {
+                    bool oldUseBreakDistance = VRInteractionSettings.instance.settings.useBreakDistance;
+                    VRInteractionSettings.instance.settings.useBreakDistance = EditorGUILayout.Toggle(useBreakDistanceContent, VRInteractionSettings.instance.settings.useBreakDistance);
+                    if (oldUseBreakDistance != VRInteractionSettings.instance.settings.useBreakDistance)
+                    {
+                        VRInteractionSettings.instance.Save();
+                        changed = true;
+                    }
+                }
+                else
+                {
+                    EditorGUILayout.PropertyField(useBreakDistance, useBreakDistanceContent);
+                }
+                GUIContent globalUseBreakDistanceContent = new GUIContent("", "Use Global Variable");
+                EditorGUILayout.LabelField("Global", GUILayout.Width(40f));
+                EditorGUILayout.PropertyField(globalUseBreakDistance, globalUseBreakDistanceContent, GUILayout.Width(20f));
+                EditorGUILayout.EndHorizontal();
+
+				if (globalUseBreakDistance.boolValue ? VRInteractionSettings.instance.settings.useBreakDistance : useBreakDistance.boolValue)
 				{
-					SerializedProperty breakDistance = interactableItem.FindProperty("breakDistance");
-					GUIContent breakDistanceContent = new GUIContent("Break Distance", breakDistanceTooltip);
-					EditorGUILayout.PropertyField(breakDistance, breakDistanceContent);
+                    EditorGUILayout.BeginHorizontal();
+                    SerializedProperty globalBreakDistance = interactableItem.FindProperty("globalBreakDistance");
+                    GUIContent breakDistanceContent = new GUIContent("Break Distance", breakDistanceTooltip);
+                    if (globalBreakDistance.boolValue)
+                    {
+                        float oldBreakDistance = VRInteractionSettings.instance.settings.breakDistance;
+                        VRInteractionSettings.instance.settings.breakDistance = EditorGUILayout.FloatField(breakDistanceContent, VRInteractionSettings.instance.settings.breakDistance);
+                        if (oldBreakDistance != VRInteractionSettings.instance.settings.breakDistance)
+                        {
+                            VRInteractionSettings.instance.Save();
+                            changed = true;
+                        }
+                    }
+                    else
+                    {
+                        SerializedProperty breakDistance = interactableItem.FindProperty("breakDistance");
+                        EditorGUILayout.PropertyField(breakDistance, breakDistanceContent);
+                    }
+                    GUIContent globalBreakDistanceContent = new GUIContent("", "Use Global Variable");
+                    EditorGUILayout.LabelField("Global", GUILayout.Width(40f));
+                    EditorGUILayout.PropertyField(globalBreakDistance, globalBreakDistanceContent, GUILayout.Width(20f));
+                    EditorGUILayout.EndHorizontal();
 				}
 
-				SerializedProperty interactionDistance = interactableItem.FindProperty("interactionDistance");
-				var oldInteractionDistance = interactionDistance.floatValue;
-				EditorGUILayout.PropertyField(interactionDistance);
-				if (interactionDistance.floatValue != oldInteractionDistance) changed = true;
+                EditorGUILayout.BeginHorizontal();
+                SerializedProperty globalInteractionDistance = interactableItem.FindProperty("globalInteractionDistance");
+                if (globalInteractionDistance.boolValue)
+                {
+                    float oldInteractionDistance = VRInteractionSettings.instance.settings.interactionDistance;
+                    VRInteractionSettings.instance.settings.interactionDistance = EditorGUILayout.FloatField("Interaction Distance", VRInteractionSettings.instance.settings.interactionDistance);
+                    if (oldInteractionDistance != VRInteractionSettings.instance.settings.interactionDistance)
+                    {
+                        VRInteractionSettings.instance.Save();
+                        changed = true;
+                    }
+                }
+                else
+                {
+                    SerializedProperty interactionDistance = interactableItem.FindProperty("interactionDistance");
+                    var oldInteractionDistance = interactionDistance.floatValue;
+                    EditorGUILayout.PropertyField(interactionDistance);
+                    if (interactionDistance.floatValue != oldInteractionDistance) changed = true;
+                }
+                GUIContent globalInteractionDistanceContent = new GUIContent("", "Use Global Variable");
+                EditorGUILayout.LabelField("Global", GUILayout.Width(40f));
+                EditorGUILayout.PropertyField(globalInteractionDistance, globalInteractionDistanceContent, GUILayout.Width(20f));
+                EditorGUILayout.EndHorizontal();
 
 				SerializedProperty interactionDisabled = interactableItem.FindProperty("interactionDisabled");
 				var oldInteractionDisabled = interactionDisabled.boolValue;
 				EditorGUILayout.PropertyField(interactionDisabled);
 				if (interactionDisabled.boolValue != oldInteractionDisabled) changed = true;
 
-				SerializedProperty limitAcceptedAction = interactableItem.FindProperty("limitAcceptedAction");
-				var oldLimitAcceptedActions = limitAcceptedAction.boolValue;
-				EditorGUILayout.PropertyField(limitAcceptedAction);
-				if (limitAcceptedAction.boolValue != oldLimitAcceptedActions) changed = true;
+                EditorGUILayout.BeginHorizontal();
+                SerializedProperty globalLimitAcceptedAction = interactableItem.FindProperty("globalLimitAcceptedAction");
+                SerializedProperty limitAcceptedAction = interactableItem.FindProperty("limitAcceptedAction");
+                if (globalLimitAcceptedAction.boolValue)
+                {
+                    bool oldLimitAcceptedAction = VRInteractionSettings.instance.settings.limitAcceptedAction;
+                    VRInteractionSettings.instance.settings.limitAcceptedAction = EditorGUILayout.Toggle("Limit Accepted Actions", VRInteractionSettings.instance.settings.limitAcceptedAction);
+                    if (oldLimitAcceptedAction != VRInteractionSettings.instance.settings.limitAcceptedAction)
+                    {
+                        VRInteractionSettings.instance.Save();
+                        changed = true;
+                    }
+                }
+                else
+                {
+                    var oldLimitAcceptedActions = limitAcceptedAction.boolValue;
+                    EditorGUILayout.PropertyField(limitAcceptedAction);
+                    if (limitAcceptedAction.boolValue != oldLimitAcceptedActions) changed = true;
+                }
+                GUIContent globalLimitAcceptedActionContent = new GUIContent("", "Use Global Variable");
+                EditorGUILayout.LabelField("Global", GUILayout.Width(40f));
+                EditorGUILayout.PropertyField(globalLimitAcceptedAction, globalLimitAcceptedActionContent, GUILayout.Width(20f));
+                EditorGUILayout.EndHorizontal();
 
-				if (limitAcceptedAction.boolValue)
+				if (globalLimitAcceptedAction.boolValue ? VRInteractionSettings.instance.settings.limitAcceptedAction : limitAcceptedAction.boolValue)
 				{
-					SerializedProperty acceptedActions = interactableItem.FindProperty("acceptedActions");
-					var oldAcceptedAction = acceptedActions;
-					EditorGUILayout.PropertyField(acceptedActions, true);
-					if (acceptedActions != oldAcceptedAction) changed = true;
+                    EditorGUILayout.BeginHorizontal();
+                    SerializedProperty globalAcceptedActions = interactableItem.FindProperty("globalAcceptedActions");
+                    if (globalAcceptedActions.boolValue)
+                    {
+                        EditorGUILayout.BeginVertical();
+                        SerializedProperty acceptedActionsFoldout = interactableItem.FindProperty("acceptedActionsFoldout");
+                        acceptedActionsFoldout.boolValue = EditorGUILayout.Foldout(acceptedActionsFoldout.boolValue, "Accepted Actions");
+                        if (acceptedActionsFoldout.boolValue)
+                        {
+                            EditorGUI.indentLevel++;
+                            int acceptedActionsCount = VRInteractionSettings.instance.settings.acceptedActions.Count;
+                            int oldAcceptedActionsCount = acceptedActionsCount;
+                            acceptedActionsCount = EditorGUILayout.IntField("Size", acceptedActionsCount);
+                            if (oldAcceptedActionsCount != acceptedActionsCount)
+                            {
+                                if (acceptedActionsCount <= 0) VRInteractionSettings.instance.settings.acceptedActions.Clear();
+                                else
+                                {
+                                    while (VRInteractionSettings.instance.settings.acceptedActions.Count > acceptedActionsCount)
+                                        VRInteractionSettings.instance.settings.acceptedActions.RemoveAt(VRInteractionSettings.instance.settings.acceptedActions.Count - 1);
+                                    while (VRInteractionSettings.instance.settings.acceptedActions.Count < acceptedActionsCount)
+                                        VRInteractionSettings.instance.settings.acceptedActions.Add("");
+                                }
+                                VRInteractionSettings.instance.Save();
+                                changed = true;
+                            }
+                            for (int i = 0; i < VRInteractionSettings.instance.settings.acceptedActions.Count; i++)
+                            {
+                                string oldAction = VRInteractionSettings.instance.settings.acceptedActions[i];
+                                VRInteractionSettings.instance.settings.acceptedActions[i] = EditorGUILayout.TextField("Element " + i, VRInteractionSettings.instance.settings.acceptedActions[i]);
+                                if (oldAction != VRInteractionSettings.instance.settings.acceptedActions[i])
+                                {
+                                    VRInteractionSettings.instance.Save();
+                                    changed = true;
+                                }
+                            }
+                            EditorGUI.indentLevel--;
+                        }
+                        EditorGUILayout.EndVertical();
+                    }
+                    else
+                    {
+                        SerializedProperty acceptedActions = interactableItem.FindProperty("acceptedActions");
+                        var oldAcceptedAction = acceptedActions;
+                        EditorGUILayout.PropertyField(acceptedActions, true);
+                        if (acceptedActions != oldAcceptedAction) changed = true;
+                    }
+                    GUIContent globalAcceptedActionsContent = new GUIContent("", "Use Global Variable");
+                    EditorGUILayout.LabelField("Global", GUILayout.Width(40f));
+                    EditorGUILayout.PropertyField(globalAcceptedActions, globalAcceptedActionsContent, GUILayout.Width(20f));
+                    EditorGUILayout.EndHorizontal();
 				}
 
 				SerializedProperty itemId = interactableItem.FindProperty("itemId");

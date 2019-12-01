@@ -1,0 +1,103 @@
+{
+   "action_sets" : [
+      {
+         "name" : "/actions/VRInteraction",
+         "usage" : "single"
+      }
+   ],
+   "actions" : [
+      {
+         "name" : "/actions/VRInteraction/in/ACTION",
+         "type" : "boolean"
+      },
+      {
+         "name" : "/actions/VRInteraction/in/PICKUP_DROP",
+         "type" : "boolean"
+      },
+      {
+         "name" : "/actions/VRInteraction/in/PICKUP",
+         "type" : "boolean"
+      },
+      {
+         "name" : "/actions/VRInteraction/in/DROP",
+         "type" : "boolean"
+      },
+      {
+         "name" : "/actions/VRInteraction/in/Pose",
+         "type" : "pose"
+      },
+      {
+         "name" : "/actions/VRInteraction/in/SkeletonLeftHand",
+         "skeleton" : "/skeleton/hand/left",
+         "type" : "skeleton"
+      },
+      {
+         "name" : "/actions/VRInteraction/in/SkeletonRightHand",
+         "skeleton" : "/skeleton/hand/right",
+         "type" : "skeleton"
+      },
+      {
+         "name" : "/actions/VRInteraction/in/TriggerPressure",
+         "type" : "vector1"
+      },
+      {
+         "name" : "/actions/VRInteraction/in/TouchPosition",
+         "type" : "vector2"
+      },
+      {
+         "name" : "/actions/VRInteraction/in/PadTouched",
+         "type" : "boolean"
+      },
+      {
+         "name" : "/actions/VRInteraction/in/PadPressed",
+         "type" : "boolean"
+      },
+      {
+         "name" : "/actions/VRInteraction/in/Eject",
+         "type" : "boolean"
+      },
+      {
+         "name" : "/actions/VRInteraction/in/SlideRelease",
+         "type" : "boolean"
+      },
+      {
+         "name" : "/actions/VRInteraction/in/LightToggle",
+         "type" : "boolean"
+      },
+      {
+         "name" : "/actions/VRInteraction/in/ScopeToggle",
+         "type" : "boolean"
+      },
+      {
+         "name" : "/actions/VRInteraction/in/TELEPORT",
+         "type" : "boolean"
+      },
+      {
+         "name" : "/actions/VRInteraction/in/SWITCH",
+         "type" : "boolean"
+      },
+      {
+         "name" : "/actions/VRInteraction/out/Haptic",
+         "type" : "vibration"
+      }
+   ],
+   "default_bindings" : [
+      {
+         "binding_url" : "application_generated_unity_vrweaponinteractortest_exe_binding_vive_controller.json",
+         "controller_type" : "vive_controller"
+      },
+      {
+         "binding_url" : "application_generated_unity_vrinteraction_exe_binding_knuckles.json",
+         "controller_type" : "knuckles"
+      },
+      {
+         "binding_url" : "application_generated_unity_vrinteraction_exe_binding_oculus_touch.json",
+         "controller_type" : "oculus_touch"
+      }
+   ],
+   "localization" : [
+      {
+         "language_tag" : "en_US"
+      }
+   ]
+}

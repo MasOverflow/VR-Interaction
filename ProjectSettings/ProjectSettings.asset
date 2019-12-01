@@ -151,11 +151,11 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.Company.ProductName
+    Android: com.oculus.UnitySample
     Standalone: unity.Valve.SteamVR
     Tizen: com.Company.ProductName
-    iOS: com.Company.ProductName
-    tvOS: com.Company.ProductName
+    iOS: com.oculus.UnitySample
+    tvOS: com.oculus.UnitySample
   buildNumber:
     iOS: 0
   AndroidBundleVersionCode: 1
@@ -277,7 +277,7 @@ PlayerSettings:
   m_BuildTargetGraphicsAPIs: []
   m_BuildTargetVRSettings:
   - m_BuildTarget: Android
-    m_Enabled: 0
+    m_Enabled: 1
     m_Devices:
     - Oculus
   - m_BuildTarget: Metro
@@ -326,10 +326,11 @@ PlayerSettings:
     m_Enabled: 0
     m_Devices: []
   - m_BuildTarget: iOS
-    m_Enabled: 0
-    m_Devices: []
+    m_Enabled: 1
+    m_Devices:
+    - OpenVR
   - m_BuildTarget: tvOS
-    m_Enabled: 0
+    m_Enabled: 1
     m_Devices: []
   m_BuildTargetEnableVuforiaSettings: []
   openGLRequireES31: 0
@@ -614,6 +615,7 @@ PlayerSettings:
   webGLLinkerTarget: 1
   scriptingDefineSymbols:
     1: VRInteraction;Int_Oculus;Int_SteamVR;Int_SteamVR2
+    4: VRInteraction;Int_Oculus;Int_SteamVR;Int_SteamVR2
   platformArchitecture: {}
   scriptingBackend:
     Standalone: 0

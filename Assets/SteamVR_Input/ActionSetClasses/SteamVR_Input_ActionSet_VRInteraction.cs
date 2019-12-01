@@ -105,35 +105,35 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Boolean BUTTON_1
+        public virtual SteamVR_Action_Boolean Eject
         {
             get
             {
-                return SteamVR_Actions.vRInteraction_BUTTON_1;
+                return SteamVR_Actions.vRInteraction_Eject;
             }
         }
         
-        public virtual SteamVR_Action_Boolean BUTTON_2
+        public virtual SteamVR_Action_Boolean SlideRelease
         {
             get
             {
-                return SteamVR_Actions.vRInteraction_BUTTON_2;
+                return SteamVR_Actions.vRInteraction_SlideRelease;
             }
         }
         
-        public virtual SteamVR_Action_Boolean BUTTON_3
+        public virtual SteamVR_Action_Boolean LightToggle
         {
             get
             {
-                return SteamVR_Actions.vRInteraction_BUTTON_3;
+                return SteamVR_Actions.vRInteraction_LightToggle;
             }
         }
         
-        public virtual SteamVR_Action_Boolean BUTTON_4
+        public virtual SteamVR_Action_Boolean ScopeToggle
         {
             get
             {
-                return SteamVR_Actions.vRInteraction_BUTTON_4;
+                return SteamVR_Actions.vRInteraction_ScopeToggle;
             }
         }
         
