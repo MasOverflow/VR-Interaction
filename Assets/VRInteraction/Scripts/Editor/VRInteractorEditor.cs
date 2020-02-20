@@ -81,14 +81,15 @@ namespace VRInteraction
 			{
 				SerializedProperty objectReferenceIsPrefab = serializedObject.FindProperty("objectReferenceIsPrefab");
 				badObjectReference = false;
-				PrefabType objectPrefabType = PrefabUtility.GetPrefabType(referenceObject.objectReferenceValue);
+                PrefabAssetType objectPrefabType = PrefabUtility.GetPrefabAssetType(referenceObject.objectReferenceValue);
+				//PrefabType objectPrefabType = PrefabUtility.GetPrefabType(referenceObject.objectReferenceValue);
 				VRInteractableItem interactableItem = ((GameObject)referenceObject.objectReferenceValue).GetComponentInChildren<VRInteractableItem>();
 				if (interactableItem == null)
 				{
 					badObjectReference = true;
 					referenceObject.objectReferenceValue = null;
 				}
-				objectReferenceIsPrefab.boolValue = objectPrefabType == PrefabType.ModelPrefab || objectPrefabType == PrefabType.Prefab;
+				objectReferenceIsPrefab.boolValue = objectPrefabType == PrefabAssetType.Model || objectPrefabType == PrefabAssetType.Regular;
 			}
 
 			SerializedProperty useHoverLine = serializedObject.FindProperty("useHoverLine");

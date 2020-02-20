@@ -109,10 +109,10 @@ public class DependencyChecker : EditorWindow
 			if (AssetDatabase.IsValidFolder(userInterfaceFolderPath)) AssetDatabase.ImportAsset(userInterfaceFolderPath, ImportAssetOptions.ImportRecursive);
 		}
 		if (action != "") Debug.Log(action);
-		if (!hasOculusSDK && !hasSteamVR)
+		/*if (!hasOculusSDK && !hasSteamVR)
 		{
 			EditorWindow.GetWindow(typeof(DependencyChecker), true, "VR Dependency", true);
-		}
+		}*/
 	}
 
 	void OnGUI()

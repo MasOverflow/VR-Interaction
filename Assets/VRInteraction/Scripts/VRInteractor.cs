@@ -9,6 +9,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.XR;
 #if Int_SteamVR
 using Valve.VR;
 #endif
@@ -43,11 +44,6 @@ namespace VRInteraction
 		protected Transform _ikTargetParent;
 		protected float _lastDropped;
 		protected LineRenderer _hoverLine;
-
-		#if Int_Oculus
-		private Quaternion _currentRotation;
-		private Quaternion _lastRotation;
-		#endif
 
 		virtual public VRInput vrInput
 		{
@@ -84,115 +80,90 @@ namespace VRInteraction
 		{
 			get
 			{
-				#if Int_SteamVR
-				if (vrInput.isSteamVR())
+                if (_vrRigRoot != null) return _vrRigRoot;
+#if Int_SteamVR
+				SteamVR_PlayArea playArea = GetComponentInParent<SteamVR_PlayArea>();
+				if (playArea != null) 
+                {
+                    _vrRigRoot = playArea.transform;
+                    return _vrRigRoot;
+                }
+#endif
+#if Int_Oculus
+				OvrAvatar ovrAvatar = GetComponentInParent<OvrAvatar>();
+				if (ovrAvatar != null)
 				{
-					if (_vrRigRoot == null)
-					{
-						SteamVR_PlayArea playArea = GetComponentInParent<SteamVR_PlayArea>();
-						if (playArea != null) _vrRigRoot = playArea.transform;
-						else _vrRigRoot = transform.root;
-					}
+					if (ovrAvatar.transform.parent != null) _vrRigRoot = ovrAvatar.transform.parent;
+					else _vrRigRoot = ovrAvatar.transform;
+                    return _vrRigRoot;
 				}
-				#endif
-				#if Int_Oculus 
-				if (!vrInput.isSteamVR())
-				{
-					if (_vrRigRoot == null)
-					{
-						OvrAvatar ovrAvatar = GetComponentInParent<OvrAvatar>();
-						if (ovrAvatar != null)
-						{
-							if (ovrAvatar.transform.parent != null) _vrRigRoot = ovrAvatar.transform.parent;
-							else _vrRigRoot = ovrAvatar.transform;
-						} else _vrRigRoot = transform.root;
-					}
-				}
-				#endif
-				return _vrRigRoot;
+#endif
+                _vrRigRoot = transform.root;
+                return _vrRigRoot;
 			}
 		}
 		virtual public Vector3 Velocity
 		{
 			get
 			{
-				#if Int_SteamVR
-				if (vrInput.isSteamVR())
-				{
-					Vector3 deviceVel = Vector3.zero;
-					#if !Int_SteamVR2
-					var device = SteamVR_Controller.Input((int)vrInput.controller.controllerIndex);
-					deviceVel = device.velocity;
-					#else
-					SteamVR_Behaviour_Pose poseComp = GetComponent<SteamVR_Behaviour_Pose>();
-					if (poseComp != null) deviceVel = poseComp.GetVelocity();
-					#endif
-					Rigidbody body = transform.parent.GetComponent<Rigidbody>();
-					Vector3 bodyVel = Vector3.zero;
-					if (body != null) bodyVel = body.velocity;
-					return bodyVel + (transform.parent.rotation * deviceVel);
-				}
-				#endif
-				#if Int_Oculus 
-				if (!vrInput.isSteamVR())
-				{
-					return GetVRRigRoot.rotation * OVRInput.GetLocalControllerVelocity(vrInput.controllerHand);
-				}
-				#endif
-				return Vector3.zero;
+#if UNITY_2017_2_OR_NEWER
+                List<XRNodeState> nodeStates = new List<XRNodeState>();
+                InputTracking.GetNodeStates(nodeStates);
+                XRNodeState nodeState = new XRNodeState();
+                foreach (XRNodeState posNodeState in nodeStates)
+                {
+                    if (vrInput.LeftHand && posNodeState.nodeType == XRNode.LeftHand) nodeState = posNodeState;
+                    else if (!vrInput.LeftHand && posNodeState.nodeType == XRNode.RightHand) nodeState = posNodeState;
+                }
+                
+                Vector3 velocity = Vector3.zero;
+                nodeState.TryGetVelocity(out velocity);
+                return GetVRRigRoot.rotation * velocity;
+#else
+                return Vector3.zero;
+#endif
 			}
 		}
 		virtual public Vector3 AngularVelocity
 		{
 			get
 			{
-				#if Int_SteamVR
-				if (vrInput.isSteamVR())
-				{
-					Vector3 deviceAngularVel = Vector3.zero;
-					#if !Int_SteamVR2
-					var device = SteamVR_Controller.Input((int)vrInput.controller.controllerIndex);
-					deviceAngularVel = device.angularVelocity;
-					#else
-					SteamVR_Behaviour_Pose poseComp = GetComponent<SteamVR_Behaviour_Pose>();
-					if (poseComp != null) deviceAngularVel = poseComp.GetAngularVelocity();
-					#endif
-					return transform.parent.TransformVector(deviceAngularVel);
-				}
-				#endif
-				#if Int_Oculus 
-				if (!vrInput.isSteamVR())
-				{
-					Quaternion deltaRotation = (_currentRotation*Quaternion.Inverse(_lastRotation));
-					return new Vector3(Mathf.DeltaAngle(0, deltaRotation.eulerAngles.x), Mathf.DeltaAngle(0, deltaRotation.eulerAngles.y), Mathf.DeltaAngle(0, deltaRotation.eulerAngles.z));
-				}
-				#endif
-				return Vector3.zero;
+#if UNITY_2017_2_OR_NEWER
+                List<XRNodeState> nodeStates = new List<XRNodeState>();
+                InputTracking.GetNodeStates(nodeStates);
+                XRNodeState nodeState = new XRNodeState();
+                foreach (XRNodeState posNodeState in nodeStates)
+                {
+                    if (vrInput.LeftHand && posNodeState.nodeType == XRNode.LeftHand) nodeState = posNodeState;
+                    else if (!vrInput.LeftHand && posNodeState.nodeType == XRNode.RightHand) nodeState = posNodeState;
+                }
+                Vector3 velocity = Vector3.zero;
+                nodeState.TryGetAngularVelocity(out velocity);
+
+                return transform.parent.TransformVector(velocity);
+#else
+                return Vector3.zero;
+#endif
 			}
 		}
 		virtual public void TriggerHapticPulse(int frames)
 		{
             if (!triggerHapticPulse) return;
 
-			#if Int_SteamVR && !Int_SteamVR2
-			if (vrInput.isSteamVR())
-			{
-				var device = SteamVR_Controller.Input((int)vrInput.controller.controllerIndex);
-				device.TriggerHapticPulse((ushort)(frames*50));
-			}
-			#endif
-			#if Int_Oculus 
-			if (!vrInput.isSteamVR())
-			{
-				var pulse = new byte[frames];
-				for (int i=0; i<frames;i++) pulse[i] = (byte)255;
-				if (vrInput.controllerHand == OVRInput.Controller.LTouch)
-					OVRHaptics.LeftChannel.Mix(new OVRHapticsClip(pulse, 1));
-				else
-					OVRHaptics.RightChannel.Mix(new OVRHapticsClip(pulse, 1));
-			}
-			#endif
-		}
+            HapticCapabilities capabilities;
+            if (vrInput.currentInputDevice.TryGetHapticCapabilities(out capabilities))
+            {
+                if (capabilities.supportsImpulse)
+                {
+                    vrInput.currentInputDevice.SendHapticImpulse(0, frames * 0.001f);
+                } else if (capabilities.supportsBuffer)
+                {
+                    var pulse = new byte[frames];
+                    for (int i = 0; i < frames; i++) pulse[i] = (byte)255;
+                    vrInput.currentInputDevice.SendHapticBuffer(0, pulse);
+                }
+            }
+        }
 
 		virtual public Transform getControllerAnchor
 		{
@@ -262,9 +233,9 @@ namespace VRInteraction
 
 		virtual protected void Start()
 		{
-			#if Int_Oculus
+#if Int_Oculus
 			if (!vrInput.isSteamVR()) Time.fixedDeltaTime = 0.006f;
-			#endif
+#endif
 
 			if (objectReference != null) StartCoroutine(LockObjectToController());
 		}
@@ -273,14 +244,6 @@ namespace VRInteraction
 			if (!enabled) return;
 			CheckHover();
 			PositionHoverLine();
-
-			#if Int_Oculus
-			if (_heldItem != null)
-			{
-				_lastRotation = _currentRotation;
-				_currentRotation = _heldItem.transform.rotation;
-			}
-			#endif
 		}
 			
 		virtual protected void OnDestroy()
@@ -458,7 +421,7 @@ namespace VRInteraction
 				ToggleAllChildRenderers(gameObject, enable);
 			} else
 			{
-				#if Int_Oculus
+#if Int_Oculus
 				OvrAvatar avatar = GetComponentInParent<OvrAvatar>();
 				if (avatar == null)
 				{
@@ -475,7 +438,7 @@ namespace VRInteraction
 					ToggleAllChildRenderers(avatar.ControllerRight.gameObject, enable);
 					ToggleAllChildRenderers(avatar.HandRight.gameObject, enable);
 				}
-				#endif
+#endif
 			}
 		}
 

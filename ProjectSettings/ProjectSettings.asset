@@ -614,7 +614,7 @@ PlayerSettings:
   webGLCompressionFormat: 1
   webGLLinkerTarget: 1
   scriptingDefineSymbols:
-    1: VRInteraction;Int_Oculus;Int_SteamVR;Int_SteamVR2
+    1: VRInteraction
     4: VRInteraction;Int_Oculus;Int_SteamVR;Int_SteamVR2
   platformArchitecture: {}
   scriptingBackend:
