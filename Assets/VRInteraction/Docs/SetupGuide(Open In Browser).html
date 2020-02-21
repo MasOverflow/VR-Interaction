@@ -12,15 +12,11 @@
 	<h3>
 	Setting The Scene:
 	</h3>
-	<P>
-		In the scene you must have either the SteamVR camera rig or Oculus Avatar rig with a VRInteractor and VRInput script attached to either or both
-		controller objects. It should add all the scripts it needs.
-	</P>
 
 	<p>For Tutorial videos please check out the <a href="https://www.youtube.com/channel/UCfMxMaCkR3TlDb0Bu7BkdEA">youtube channel here</a>.</p>
 
 	<h3>VRInteractor / VRInput</h3>
-	<IMG SRC="Images/InteractorInspector.png" NAME="graphics26" ALIGN=CENTER WIDTH=446 HEIGHT=653 BORDER=0><BR CLEAR=LEFT><BR>
+	<IMG SRC="Images/InteractorInspector.png" NAME="graphics26" ALIGN=CENTER WIDTH=486 HEIGHT=916 BORDER=0><BR CLEAR=LEFT><BR>
 	<P>
 		The VRInteractor and VRInput scripts need to be attached to either or both controllers in order to pick up anything.
 		You are able to configure exactly what you want each controller button to do from here.
@@ -32,9 +28,9 @@
 		public void PICKUP_DROP(VRInteractor hand)<br>
 		public void PICKUP_DROPReleased(VRInteractor hand)
 	</p>
-	<p>Weapon Reference:</p>
+	<p>Object Reference:</p>
 	<p>
-		The weapon reference can be used to attached a weapon to a controller at startup. You can use this in conjunction
+		The object reference can be used to attached any VRInteractableItem to a controller at startup. You can use this in conjunction
 		with setting PICKUP_DROP buttons to none which will lock the weapon to your hand permanently.
 	</P>
 

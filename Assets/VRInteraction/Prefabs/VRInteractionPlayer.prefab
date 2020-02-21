@@ -307,7 +307,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2904246526760607332}
   m_Layer: 0
-  m_Name: NativeVRRig
+  m_Name: VRInteractionPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -425,8 +425,10 @@ MonoBehaviour:
   gripKeys: 
   menuKey: 0
   menuKeys: 
-  AXKey: 0
-  AXKeys: 
+  primaryKey: 0
+  primaryKeys: 
+  secondaryKey: 0
+  secondaryKeys: 
 --- !u!1 &2902169371162842498
 GameObject:
   m_ObjectHideFlags: 0
@@ -518,9 +520,11 @@ MonoBehaviour:
   padCentres: 
   padTouch: 0
   padTouchs: 
-  gripKey: 0
+  gripKey: 2
   gripKeys: 
   menuKey: 0
   menuKeys: 
-  AXKey: 0
-  AXKeys: 
+  primaryKey: 0
+  primaryKeys: 
+  secondaryKey: 0
+  secondaryKeys: 

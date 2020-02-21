@@ -35,3 +35,6 @@ sysinfo.txt
 *.apk
 Assets/Plugins/RootMotion/
 Assets/Plugins/RootMotion.meta
+Assets/_TerrainAutoUpgrade/
+Assets/_TerrainAutoUpgrade.meta
+Assets/Plugins.meta

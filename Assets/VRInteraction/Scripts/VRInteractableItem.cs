@@ -718,15 +718,18 @@ namespace VRInteraction
 				if (ii != null && (ii.parents.Count != 0 || !ii.enabled || ii.interactionDisabled)) continue;
 				col.enabled = true;
 			}
-			RigidbodyMarker bodyMarker = item.GetComponent<RigidbodyMarker>();
+            RigidbodyMarker bodyMarker = item.GetComponent<RigidbodyMarker>();
 			if (bodyMarker != null) 
 			{
 				Rigidbody body = bodyMarker.ReplaceMarkerWithRigidbody();
 				body.isKinematic = false;
 			} else
 			{
-				Rigidbody body = item.GetComponent<Rigidbody>();
-				if (body != null) body.isKinematic = false;
+                Rigidbody body = item.GetComponent<Rigidbody>();
+                if (body != null)
+                {
+                    body.isKinematic = false;
+                }
 			}
 		}
 

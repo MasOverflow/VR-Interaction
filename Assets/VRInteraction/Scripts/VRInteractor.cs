@@ -233,9 +233,7 @@ namespace VRInteraction
 
 		virtual protected void Start()
 		{
-#if Int_Oculus
-			if (!vrInput.isSteamVR()) Time.fixedDeltaTime = 0.006f;
-#endif
+			Time.fixedDeltaTime = 0.006f;
 
 			if (objectReference != null) StartCoroutine(LockObjectToController());
 		}

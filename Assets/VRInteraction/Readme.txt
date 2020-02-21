@@ -4,16 +4,17 @@ For tutorials check the youtube: https://www.youtube.com/channel/UCfMxMaCkR3TlDb
 Refer to the Setup Guide found in Assets/VRInteraction/Docs for more setup info.
 
 To setup the 
-To setup for SteamVR:
-Drag the '[CameraRig]' prefab from the prefabs folder in SteamVR into the scene, on each controller object click 'Add Component' and search for 
-'VR Interactor'. Refer to the setup guide SteamVR 2.0 section for setting SteamVR Inputs.
+To setup for SteamVR Input:
+Refer to the setup guide SteamVR 2.0 section for setting SteamVR Inputs.
 For setting up SteamVR 2.0 there are some premade actions in Assets/VRInteraction/SteamVR_Actions, if you copy and paste them to the root folder (That's where the Assembly .csproj files are)
 then open the Window->SteamVR Input window, you should be able to see them, click Save and generate and they should appear in the VRInput script and should be assigned to bindings already
 if not then you can assign them in the binding UI page.
 
-To Setup for Oculus Native:
-Drag the 'OVRCameraRig' prefab into the scene (optionally make sure 'Tracking Origin Type' is set to 'Floor Level' on the OVRManager component),
-on either or both hand anchors click 'Add Component' and search for 'VR Interactor'.
+To setup vr player:
+Drag the VRInteractionPlayer prefab into the scene. If the prefab is corrupt you can make the player as follows:
+Create an empty gameobject in the scene, then add a camera and two more empty gameobjects as children.
+Add Component "VRInteractor" to each of the empty objects that will now work as controllers, make sure to set left hand and track booleans
+Add a controller mesh object as a child of the controllers so you can see the hands are tracking.
 
 There are Items setup in the ExampleScene, if you can pick them up then everything is working.
 
