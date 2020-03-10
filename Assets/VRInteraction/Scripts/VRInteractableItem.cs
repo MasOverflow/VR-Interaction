@@ -860,7 +860,7 @@ namespace VRInteraction
 		public void PlaySound(AudioClip clip, Vector3 worldPosition)
 		{
 			if (clip == null) return;
-			if (audioSource != null) 
+			if (audioSource != null && audioSource.isActiveAndEnabled) 
 			{
 				audioSource.clip = clip;
 				audioSource.Play();

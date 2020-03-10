@@ -102,7 +102,7 @@ namespace VRInteraction
         {
         }
         
-        virtual protected void Update()
+        virtual protected void FixedUpdate()
         {
 #if UNITY_2017_2_OR_NEWER
             if (trackPositionNatively)
@@ -112,8 +112,8 @@ namespace VRInteraction
                 Quaternion rot = Quaternion.identity;
                 nodeState.TryGetPosition(out pos);
                 nodeState.TryGetRotation(out rot);
-                transform.localPosition = pos;
-                transform.localRotation = rot;
+                transform.localPosition = Vector3.Lerp(transform.localPosition, pos, Time.deltaTime*25);
+                transform.localRotation = Quaternion.Lerp(transform.localRotation, rot, Time.deltaTime*25f);
             }
 #endif
 
